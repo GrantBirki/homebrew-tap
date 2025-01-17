@@ -1,4 +1,4 @@
-class CrystalATOneDotFourteenDotOne < Formula
+class CrystalAT1141 < Formula
   desc "Fast and statically typed, compiled language with Ruby-like syntax"
   homepage "https://crystal-lang.org/"
   license "Apache-2.0"
