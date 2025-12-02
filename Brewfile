@@ -24,3 +24,5 @@ cask "alacritty"
 cask "karabiner-elements"
 # Password manager app
 cask "keepassxc"
+# Window switcher
+cask "alt-tab"

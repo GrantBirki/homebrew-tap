@@ -2,11 +2,38 @@
 set -euo pipefail
 
 # Simple bootstrap script for this tap's Brewfile
-# Usage: ./setup.sh
+# Usage: script/bootstrap
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BREWFILE_PATH="$HERE/Brewfile"
 TAP_NAME="grantbirki/tap"
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is not installed. See https://brew.sh/ to install it first." >&2
+  exit 1
+fi
+
+# Find a Brewfile by searching upwards from the script directory.
+# This lets the script live in `script/` while the Brewfile remains at repo root.
+BREWFILE_PATH=""
+dir="$HERE"
+while true; do
+  if [ -f "$dir/Brewfile" ]; then
+    BREWFILE_PATH="$dir/Brewfile"
+    break
+  fi
+  if [ "$dir" = "/" ] || [ "$dir" = "." ]; then
+    break
+  fi
+  dir=$(dirname "$dir")
+done
+
+if [ -z "${BREWFILE_PATH}" ]; then
+  echo "Brewfile not found (searched from ${HERE} upward)." >&2
+  echo "Place a Brewfile in the repo root or export HOMEBREW_BUNDLE_FILE to point at one." >&2
+  exit 1
+fi
+
+echo "Using Brewfile: ${BREWFILE_PATH}"
 
 echo "Tapping ${TAP_NAME} (if not already tapped)..."
 brew tap "${TAP_NAME}" || true
@@ -14,18 +41,7 @@ brew tap "${TAP_NAME}" || true
 echo "Updating Homebrew..."
 brew update
 
-if [ ! -f "${BREWFILE_PATH}" ]; then
-  echo "Brewfile not found at ${BREWFILE_PATH}"
-  exit 1
-fi
-
 echo "Installing packages from Brewfile..."
-if ! command -v brew >/dev/null 2>&1; then
-  echo "Homebrew is not installed. See https://brew.sh/ to install it first." >&2
-  exit 1
-fi
-
-# Use the explicit 'install' subcommand and read from the Brewfile path.
 brew bundle install --file="${BREWFILE_PATH}"
 
 echo "Bootstrap complete. Run 'brew update' and 'brew upgrade' periodically to keep packages current."
