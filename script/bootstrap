@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Simple bootstrap script for this tap's Brewfile
+# Usage: ./setup.sh
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BREWFILE_PATH="$HERE/Brewfile"
+TAP_NAME="grantbirki/tap"
+
+echo "Tapping ${TAP_NAME} (if not already tapped)..."
+brew tap "${TAP_NAME}" || true
+
+echo "Updating Homebrew..."
+brew update
+
+if [ ! -f "${BREWFILE_PATH}" ]; then
+  echo "Brewfile not found at ${BREWFILE_PATH}"
+  exit 1
+fi
+
+echo "Installing packages from Brewfile..."
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is not installed. See https://brew.sh/ to install it first." >&2
+  exit 1
+fi
+
+# Use the explicit 'install' subcommand and read from the Brewfile path.
+brew bundle install --file="${BREWFILE_PATH}"
+
+echo "Bootstrap complete. Run 'brew update' and 'brew upgrade' periodically to keep packages current."
