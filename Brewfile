@@ -26,3 +26,5 @@ cask "karabiner-elements"
 cask "keepassxc"
 # Window switcher
 cask "alt-tab"
+# https://formulae.brew.sh/cask/imageoptim#default
+cask "imageoptim"
