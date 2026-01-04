@@ -8,6 +8,8 @@ tap "grantbirki/tap"
 brew "gnupg"
 # Go version management
 brew "goenv"
+# Display directories as trees
+brew "tree"
 # Node.js version manager
 brew "nodenv"
 # Pinentry for GPG on Mac
