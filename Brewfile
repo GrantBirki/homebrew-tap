@@ -30,3 +30,5 @@ cask "keepassxc"
 cask "alt-tab"
 # https://formulae.brew.sh/cask/imageoptim#default
 cask "imageoptim"
+# https://formulae.brew.sh/cask/raspberry-pi-imager#default
+cask "raspberry-pi-imager"
