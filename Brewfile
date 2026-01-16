@@ -12,6 +12,8 @@ brew "goenv"
 brew "tree"
 # Node.js version manager
 brew "nodenv"
+# rust and rustup
+brew "rustup"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
 # Python version management
