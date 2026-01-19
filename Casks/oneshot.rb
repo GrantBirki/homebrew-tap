@@ -8,4 +8,9 @@ cask "oneshot" do
   homepage "https://github.com/grantbirki/oneshot"
 
   app "OneShot.app"
+
+  zap trash: [
+    "~/Library/Preferences/com.grantbirki.oneshot.plist",
+    "~/Library/Saved Application State/com.grantbirki.oneshot.savedState",
+  ]
 end
