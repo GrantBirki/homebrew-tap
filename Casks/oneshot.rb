@@ -7,6 +7,13 @@ cask "oneshot" do
   desc "Open source screenshot utility for macOS"
   homepage "https://github.com/grantbirki/oneshot"
 
+  depends_on macos: ">= :sonoma"
+
+  livecheck do
+    url :url
+    strategy :github_latest
+  end
+
   app "OneShot.app"
 
   zap trash: [
