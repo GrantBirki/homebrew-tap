@@ -16,6 +16,17 @@ cask "oneshot" do
 
   app "OneShot.app"
 
+  postflight do
+    result = system_command(
+      "/usr/bin/xattr",
+      args: ["-dr", "com.apple.quarantine", "#{appdir}/OneShot.app"],
+      print_stderr: true,
+    )
+    unless result.success?
+      opoo "Failed to clear quarantine automatically. You can run: `xattr -dr com.apple.quarantine #{appdir}/OneShot.app`"
+    end
+  end
+
   zap trash: [
     "~/Library/Preferences/com.grantbirki.oneshot.plist",
     "~/Library/Saved Application State/com.grantbirki.oneshot.savedState",
