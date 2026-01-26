@@ -4,6 +4,15 @@
 # Ensure the tap is available locally so tap-specific formulae (like pinned crystal) can be installed
 tap "grantbirki/tap"
 
+
+### Personal Tools I Maintain ###
+
+# Fast and statically typed, compiled language with Ruby-like syntax
+brew "grantbirki/tap/crystal"
+# CLI tool for macOS to uninstall an app from your system
+brew "grantbirki/tap/uninstall"
+
+
 # GNU Pretty Good Privacy (PGP) package
 brew "gnupg"
 # Go version management
@@ -20,8 +29,6 @@ brew "pinentry-mac"
 brew "pyenv"
 # Ruby version manager
 brew "rbenv"
-# Fast and statically typed, compiled language with Ruby-like syntax
-brew "grantbirki/tap/crystal"
 # GPU-accelerated terminal emulator
 cask "alacritty"
 # Keyboard customiser
