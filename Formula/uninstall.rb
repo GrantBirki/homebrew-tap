@@ -1,9 +1,9 @@
 class Uninstall < Formula
   desc "CLI tool for macOS to uninstall an app from your system"
   homepage "https://github.com/GrantBirki/uninstall"
-  version "1.0.0"
+  version "1.1.0"
   url "https://github.com/GrantBirki/uninstall/releases/download/v#{version}/uninstall-#{version}.tar.gz"
-  sha256 "6ac087a96c6cfc085c4a2e0257a57f3c9a1e5acb4666b69c8e448a462ece4486"
+  sha256 "942d11b9836de47daa6501fb8d32bac56d4c2c95b0207684ed58952e2a3df5d6"
   license "MIT"
 
   livecheck do
