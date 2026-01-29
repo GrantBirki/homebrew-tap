@@ -4,6 +4,8 @@
 # Ensure the tap is available locally so tap-specific formulae (like pinned crystal) can be installed
 tap "grantbirki/tap"
 
+# Shell
+brew "bash"
 
 ### Personal Tools I Maintain ###
 
