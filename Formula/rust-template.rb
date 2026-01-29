@@ -1,22 +1,22 @@
 class RustTemplate < Formula
   desc "Minimal hello-world Rust CLI template"
   homepage "https://github.com/GrantBirki/rust-template"
-  version "0.1.6"
+  version "0.1.7"
   license "MIT"
 
   on_macos do
     url "https://github.com/GrantBirki/rust-template/releases/download/v#{version}/rust-template_v#{version}_darwin-universal.tar.gz"
-    sha256 "bb0ee285fcbdabbf6f483f39031a18e7b46d62017d4b360570b7e92cc70b86df"
+    sha256 "05398a85be971589099437cc79035ba4306fe9ea3ee52297f5d900ebce8c0b4a"
   end
 
   on_linux do
     on_intel do
       url "https://github.com/GrantBirki/rust-template/releases/download/v#{version}/rust-template_v#{version}_linux-amd64.tar.gz"
-      sha256 "b84607c7b8cccb68ee7453c37c8eeded5c395bb1f02626b84f9e42f09a256b44"
+      sha256 "94d882051083b18e91c66ba88e48f5c12712fbcc212327a117fb397638a485af"
     end
     on_arm do
       url "https://github.com/GrantBirki/rust-template/releases/download/v#{version}/rust-template_v#{version}_linux-arm64.tar.gz"
-      sha256 "d272ede47a3f4bd1931ed92579ca591af4bf9baa19ccac2d3b4c23339f84044c"
+      sha256 "738e48bff7009c6cc60dbef88cd11674eab50c4d3267dc854354680343c736a9"
     end
   end
 
