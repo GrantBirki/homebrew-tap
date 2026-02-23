@@ -21,6 +21,8 @@ brew "gnupg"
 brew "goenv"
 # Display directories as trees
 brew "tree"
+# Modern, maintained replacement for ls
+brew "eza"
 # Node.js version manager
 brew "nodenv"
 # rust and rustup
