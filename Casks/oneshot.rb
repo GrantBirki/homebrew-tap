@@ -1,13 +1,13 @@
 cask "oneshot" do
-  version "0.1.0"
-  sha256 "6c699508cd2174b8f5b3731da81664616cb0000cf0fb037391279c1d904300eb"
+  version "1.0.0"
+  sha256 "77f1cf3bdd044a624f603eda4ea61e01e7fb7f7722ff50c36f8b98ad884c4a49"
 
   url "https://github.com/grantbirki/oneshot/releases/download/v#{version}/OneShot.zip"
   name "OneShot"
   desc "Open source screenshot utility for macOS"
   homepage "https://github.com/grantbirki/oneshot"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: ">= :tahoe"
 
   livecheck do
     url :url
