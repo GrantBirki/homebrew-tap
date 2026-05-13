@@ -8,6 +8,43 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${HERE}/.." && pwd)"
 BREWFILE_PATH="${REPO_ROOT}/Brewfile"
 TAP_NAME="grantbirki/tap"
+TAP_PATH=""
+TAP_RESTORE_BRANCH=""
+TAP_RESTORE_HEAD=""
+
+restore_tap_checkout() {
+  [ -n "${TAP_RESTORE_HEAD}" ] || return 0
+
+  echo "Restoring ${TAP_NAME} tap checkout..."
+  if [ -n "${TAP_RESTORE_BRANCH}" ]; then
+    git -C "${TAP_PATH}" checkout --quiet "${TAP_RESTORE_BRANCH}"
+  else
+    git -C "${TAP_PATH}" checkout --quiet --detach "${TAP_RESTORE_HEAD}"
+  fi
+}
+
+use_current_checkout_for_tap() {
+  TAP_PATH="$(brew --repo "${TAP_NAME}")"
+
+  if [ "${TAP_PATH}" = "${REPO_ROOT}" ]; then
+    return 0
+  fi
+
+  repo_head="$(git -C "${REPO_ROOT}" rev-parse HEAD)"
+  tap_head="$(git -C "${TAP_PATH}" rev-parse HEAD)"
+
+  if [ "${repo_head}" = "${tap_head}" ]; then
+    return 0
+  fi
+
+  TAP_RESTORE_BRANCH="$(git -C "${TAP_PATH}" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+  TAP_RESTORE_HEAD="${tap_head}"
+  trap restore_tap_checkout EXIT
+
+  echo "Using this checkout for ${TAP_NAME} during this install..."
+  git -C "${TAP_PATH}" fetch --quiet "${REPO_ROOT}" HEAD
+  git -C "${TAP_PATH}" checkout --quiet --detach FETCH_HEAD
+}
 
 if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is not installed. See https://brew.sh/ to install it first." >&2
@@ -22,10 +59,12 @@ fi
 echo "Using Brewfile: ${BREWFILE_PATH}"
 
 echo "Tapping ${TAP_NAME} (if not already tapped)..."
-brew tap "${TAP_NAME}"
+brew tap "${TAP_NAME}" "${REPO_ROOT}" 2>/dev/null || brew tap "${TAP_NAME}"
 
 echo "Updating Homebrew..."
 brew update
+
+use_current_checkout_for_tap
 
 echo "Installing packages from Brewfile..."
 brew bundle install --file="${BREWFILE_PATH}"
