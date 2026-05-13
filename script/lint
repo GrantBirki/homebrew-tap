@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Lint Homebrew DSL files, scripts, and workflow pinning.
+# Usage: script/lint
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${HERE}/.." && pwd)"
+
+cd "${REPO_ROOT}"
+
+echo "Checking shell script syntax..."
+for script in script/*; do
+  [ -f "${script}" ] || continue
+  bash -n "${script}"
+done
+
+echo "Checking Ruby syntax..."
+ruby_files=()
+while IFS= read -r ruby_file; do
+  ruby_files+=("${ruby_file}")
+done < <(find Formula Casks -type f -name "*.rb" | sort)
+
+for ruby_file in "${ruby_files[@]}"; do
+  ruby -c "${ruby_file}" >/dev/null
+done
+
+echo "Checking GitHub Actions pins..."
+ruby -ryaml -e '
+  failures = []
+
+  Dir[".github/workflows/*.{yml,yaml}"].sort.each do |path|
+    data = YAML.load_file(path)
+    jobs = data.fetch("jobs", {})
+
+    jobs.each_value do |job|
+      Array(job["steps"]).each do |step|
+        uses = step["uses"]
+        next if uses.nil? || uses.start_with?("./")
+
+        _action, ref = uses.split("@", 2)
+        next if ref&.match?(/\A[0-9a-f]{40}\z/i)
+
+        failures << "#{path}: #{uses} is not pinned to a full commit SHA"
+      end
+    end
+  end
+
+  abort failures.join("\n") unless failures.empty?
+'
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is required for Homebrew style checks." >&2
+  exit 1
+fi
+
+echo "Checking Homebrew style..."
+brew style --except-cops Layout/HashAlignment,FormulaAudit/BottleDigestIndentation "${ruby_files[@]}"
+
+echo "Lint complete."

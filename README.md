@@ -29,10 +29,23 @@ If you want to pin an exact version of a Formula and add it to this repo do the 
 - Ensure the name of the file is `<formula>@<version>.rb` - Example: `foo@1.23.0.rb`
 - Ensure the class name matches the file name - Example: `class FooAT1230 < Formula` ([commit](https://github.com/GrantBirki/homebrew-tap/commit/1dabf7980046740e4f00122f189693013ea47cb5))
 
-## Bootstrap with Brewfile
+## Install with Brewfile
 
-To **bootstrap** a new machine with all GrantBirki's preferred packages, in this repo's `Brewfile`, simply run the following idempotent command:
+To install everything declared in this repo's `Brewfile`, including tap-specific formulae and casks, run:
 
 ```bash
-script/bootstrap
+script/install
 ```
+
+`script/bootstrap` is kept as a backward-compatible alias.
+
+## Development
+
+Run the same checks used by CI:
+
+```bash
+script/lint
+script/test
+```
+
+These commands validate shell/Ruby syntax, Homebrew style, cask parsing, Brewfile parsing, and exact-SHA pinning for GitHub Actions. They do not install formulae or casks.

@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Parse this tap without installing formulae or casks.
+# Usage: script/test
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${HERE}/.." && pwd)"
+BREWFILE_PATH="${REPO_ROOT}/Brewfile"
+
+cd "${REPO_ROOT}"
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is required for tap parse checks." >&2
+  exit 1
+fi
+
+echo "Checking shell script syntax..."
+for script in script/*; do
+  [ -f "${script}" ] || continue
+  bash -n "${script}"
+done
+
+echo "Checking Formula Ruby syntax..."
+while IFS= read -r formula; do
+  ruby -c "${formula}" >/dev/null
+done < <(find Formula -type f -name "*.rb" | sort)
+
+echo "Parsing casks with Homebrew..."
+cask_files=()
+while IFS= read -r cask_file; do
+  cask_files+=("${cask_file}")
+done < <(find Casks -type f -name "*.rb" | sort)
+
+brew ruby -e '
+  require "cask/cask_loader"
+
+  ARGV.each do |path|
+    cask = Cask::CaskLoader::FromContentLoader.new(File.read(path)).load(config: nil)
+    raise "#{path}: missing version" if cask.version.blank?
+    raise "#{path}: missing sha256" if cask.sha256.blank?
+    raise "#{path}: missing URL" if cask.url.to_s.blank?
+
+    puts "#{path}: #{cask.token} #{cask.version}"
+  end
+' "${cask_files[@]}"
+
+echo "Parsing Brewfile with Homebrew..."
+brew ruby -e '
+  require "bundle/dsl"
+
+  brewfile = Pathname(ARGV.fetch(0))
+  dsl = Homebrew::Bundle::Dsl.new(brewfile)
+  entries = dsl.entries
+
+  unless entries.any? { |entry| entry.type == :tap && entry.name == "grantbirki/tap" }
+    raise "Brewfile must tap grantbirki/tap"
+  end
+
+  %w[lulu santa].each do |token|
+    entry = entries.find { |candidate| candidate.type == :cask && candidate.name == token }
+    raise "Brewfile is missing cask #{token}" unless entry
+
+    full_name = entry.options[:full_name]
+    expected = "grantbirki/tap/#{token}"
+    raise "Brewfile cask #{token} must use #{expected}, got #{full_name.inspect}" unless full_name == expected
+  end
+
+  puts "Brewfile entries: #{entries.length}"
+' "${BREWFILE_PATH}"
+
+echo "Test complete."
