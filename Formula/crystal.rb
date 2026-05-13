@@ -94,7 +94,9 @@ class Crystal < Formula
     ENV.append_path "PATH", "boot/bin"
     ENV["LLVM_CONFIG"] = llvm.opt_bin / "llvm-config"
     ENV["CRYSTAL_LIBRARY_PATH"] = ENV["HOMEBREW_LIBRARY_PATHS"]
-    ENV.append_path "CRYSTAL_LIBRARY_PATH", MacOS.sdk_path_if_needed / "usr/lib" if OS.mac? && MacOS.sdk_path_if_needed
+    if OS.mac? && MacOS.sdk_path_if_needed
+      ENV.append_path "CRYSTAL_LIBRARY_PATH", MacOS.sdk_path_if_needed / "usr/lib"
+    end
     non_keg_only_runtime_deps.each do |dep|
       # Our just built `crystal` won't link with some dependents (e.g. `bdw-gc`, `libevent`)
       # unless they're explicitly added to `CRYSTAL_LIBRARY_PATH`. The keg-only dependencies
@@ -113,7 +115,7 @@ class Crystal < Formula
     crystal_build_opts = release_flags + [
       "CRYSTAL_CONFIG_LIBRARY_PATH=#{config_library_path}",
       "CRYSTAL_CONFIG_PATH=#{config_path}",
-      "interpreter=true"
+      "interpreter=true",
     ]
     crystal_build_opts << "CRYSTAL_CONFIG_BUILD_COMMIT=#{Utils.git_short_head}" if build.head?
 
@@ -135,7 +137,7 @@ class Crystal < Formula
 
       shards_build_opts = release_flags + [
         "CRYSTAL=#{buildpath}/bin/crystal",
-        "SHARDS=false"
+        "SHARDS=false",
       ]
       shards_build_opts << "SHARDS_CONFIG_BUILD_COMMIT=#{Utils.git_short_head}" if build.head?
       system "make", "bin/shards", *shards_build_opts
@@ -161,7 +163,7 @@ class Crystal < Formula
     # Wrapper script so that Crystal can find libraries in HOMEBREW_PREFIX
     (bin / "crystal").write_env_script(
       crystal_install_dir / "crystal",
-      LD_RUN_PATH: "${LD_RUN_PATH:+${LD_RUN_PATH}:}#{HOMEBREW_PREFIX}/lib"
+      LD_RUN_PATH: "${LD_RUN_PATH:+${LD_RUN_PATH}:}#{HOMEBREW_PREFIX}/lib",
     )
   end
 

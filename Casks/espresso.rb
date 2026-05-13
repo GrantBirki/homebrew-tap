@@ -4,7 +4,7 @@ cask "espresso" do
 
   url "https://github.com/grantbirki/espresso/releases/download/v#{version}/Espresso.zip"
   name "Espresso"
-  desc "Menu bar app that keeps your Mac awake"
+  desc "Menu bar app that prevents system sleep"
   homepage "https://github.com/grantbirki/espresso"
 
   livecheck do
@@ -12,7 +12,7 @@ cask "espresso" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :tahoe"
+  depends_on macos: :tahoe
 
   app "Espresso.app"
 
