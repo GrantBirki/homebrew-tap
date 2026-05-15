@@ -45,7 +45,5 @@ cask "alt-tab"
 cask "imageoptim"
 # https://formulae.brew.sh/cask/raspberry-pi-imager#default
 cask "raspberry-pi-imager"
-# Pinned LuLu version from this tap
-cask "grantbirki/tap/lulu"
 # Pinned Santa version from this tap
 cask "grantbirki/tap/santa"

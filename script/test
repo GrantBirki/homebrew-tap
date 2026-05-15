@@ -57,7 +57,7 @@ brew ruby -e '
     raise "Brewfile must tap grantbirki/tap"
   end
 
-  %w[lulu santa].each do |token|
+  %w[santa].each do |token|
     entry = entries.find { |candidate| candidate.type == :cask && candidate.name == token }
     raise "Brewfile is missing cask #{token}" unless entry
 

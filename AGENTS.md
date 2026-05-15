@@ -45,7 +45,7 @@ there is Ruby application or helper code that needs it.
 - `Brewfile`
   - New-machine package list.
   - Tap-specific packages must use fully qualified names, for example
-    `brew "grantbirki/tap/crystal"` and `cask "grantbirki/tap/lulu"`.
+    `brew "grantbirki/tap/crystal"` and `cask "grantbirki/tap/santa"`.
   - Use the upstream cask name only when latest upstream is desired.
 
 - `Formula/*.rb`
@@ -264,7 +264,7 @@ This repository is part of machine bootstrap, so be conservative:
   when the cask parses correctly.
 - `brew bundle list` prints sanitized cask names, so use Homebrew's Bundle DSL
   parse if you need to prove `full_name` stayed tap-qualified.
-- Installing casks like Santa or LuLu may prompt for privileges, install system
+- Installing casks like Santa may prompt for privileges, install system
   extensions, or change security posture. Do not install them just to validate
   syntax.
 - Latest upstream Homebrew cask metadata may not match a requested pin. The
