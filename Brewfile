@@ -39,8 +39,6 @@ cask "alacritty"
 cask "grantbirki/tap/karabiner-elements"
 # Password manager app
 cask "keepassxc"
-# Window switcher
-cask "alt-tab"
 # https://formulae.brew.sh/cask/imageoptim#default
 cask "imageoptim"
 # https://formulae.brew.sh/cask/raspberry-pi-imager#default
