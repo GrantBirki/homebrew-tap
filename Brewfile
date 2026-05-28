@@ -74,8 +74,8 @@ cask "grantbirki/tap/cutter"
 cask "grantbirki/tap/karabiner-elements"
 # Password manager app
 cask "grantbirki/tap/keepassxc"
-# https://formulae.brew.sh/cask/imageoptim#default
-cask "imageoptim"
+# Image compression GUI
+cask "grantbirki/tap/imageoptim"
 # https://formulae.brew.sh/cask/raspberry-pi-imager#default
 cask "raspberry-pi-imager"
 # Pinned KnockKnock version from this tap

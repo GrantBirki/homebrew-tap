@@ -88,6 +88,7 @@ brew ruby -e '
   %w[
     alacritty
     cutter
+    imageoptim
     karabiner-elements
     keepassxc
     knockknock
