@@ -23,7 +23,7 @@ done
 
 echo "Checking Formula Ruby syntax..."
 while IFS= read -r formula; do
-  ruby -c "${formula}" >/dev/null
+  brew ruby -- -c "${formula}" >/dev/null
 done < <(find Formula -type f -name "*.rb" | sort)
 
 echo "Parsing casks with Homebrew..."
@@ -57,7 +57,43 @@ brew ruby -e '
     raise "Brewfile must tap grantbirki/tap"
   end
 
-  %w[karabiner-elements knockknock santa].each do |token|
+  %w[
+    ansible
+    bash
+    bat
+    crystal
+    dfu-programmer
+    eza
+    ffmpeg
+    gnupg
+    hugo
+    libyaml
+    nmap
+    pinentry-mac
+    ripgrep
+    rizin
+    rustup
+    swiftformat
+    swiftlint
+    tfenv
+    tree
+    uninstall
+    yq
+  ].each do |token|
+    expected = "grantbirki/tap/#{token}"
+    entry = entries.find { |candidate| candidate.type == :brew && candidate.name == expected }
+    raise "Brewfile is missing brew #{expected}" unless entry
+  end
+
+  %w[
+    alacritty
+    cutter
+    karabiner-elements
+    keepassxc
+    knockknock
+    santa
+    secretive
+  ].each do |token|
     entry = entries.find { |candidate| candidate.type == :cask && candidate.name == token }
     raise "Brewfile is missing cask #{token}" unless entry
 

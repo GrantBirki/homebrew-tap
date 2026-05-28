@@ -5,7 +5,7 @@
 tap "grantbirki/tap"
 
 # Shell
-brew "bash"
+brew "grantbirki/tap/bash"
 
 ### Personal Tools I Maintain ###
 
@@ -14,36 +14,73 @@ brew "grantbirki/tap/crystal"
 # CLI tool for macOS to uninstall an app from your system
 brew "grantbirki/tap/uninstall"
 
+### Pinned CLI Tools ###
 
-# GNU Pretty Good Privacy (PGP) package
-brew "gnupg"
+# Infrastructure automation
+brew "grantbirki/tap/ansible"
+# Display file contents with syntax highlighting
+brew "grantbirki/tap/bat"
+# Device firmware update utility
+brew "grantbirki/tap/dfu-programmer"
+# Modern, maintained replacement for ls
+brew "grantbirki/tap/eza"
+# Audio/video processing toolkit
+brew "grantbirki/tap/ffmpeg"
+# GNU Pretty Good Privacy package
+brew "grantbirki/tap/gnupg"
+# Static site generator
+brew "grantbirki/tap/hugo"
+# YAML parser library
+brew "grantbirki/tap/libyaml"
+# Network discovery and security scanner
+brew "grantbirki/tap/nmap"
+# Pinentry for GPG on Mac
+brew "grantbirki/tap/pinentry-mac"
+# Fast recursive search
+brew "grantbirki/tap/ripgrep"
+# Reverse engineering framework
+brew "grantbirki/tap/rizin"
+# Rust toolchain installer
+brew "grantbirki/tap/rustup"
+# Swift formatter
+brew "grantbirki/tap/swiftformat"
+# Swift linter
+brew "grantbirki/tap/swiftlint"
+# Terraform version manager
+brew "grantbirki/tap/tfenv"
+# Display directories as trees
+brew "grantbirki/tap/tree"
+# YAML processor
+brew "grantbirki/tap/yq"
+
+### Version Managers ###
+
 # Go version management
 brew "goenv"
-# Display directories as trees
-brew "tree"
-# Modern, maintained replacement for ls
-brew "eza"
 # Node.js version manager
 brew "nodenv"
-# rust and rustup
-brew "rustup"
-# Pinentry for GPG on Mac
-brew "pinentry-mac"
 # Python version management
 brew "pyenv"
 # Ruby version manager
 brew "rbenv"
+
+### Casks ###
+
 # GPU-accelerated terminal emulator
-cask "alacritty"
+cask "grantbirki/tap/alacritty"
+# Reverse engineering platform powered by Rizin
+cask "grantbirki/tap/cutter"
 # Pinned keyboard customiser from this tap
 cask "grantbirki/tap/karabiner-elements"
 # Password manager app
-cask "keepassxc"
+cask "grantbirki/tap/keepassxc"
 # https://formulae.brew.sh/cask/imageoptim#default
 cask "imageoptim"
 # https://formulae.brew.sh/cask/raspberry-pi-imager#default
 cask "raspberry-pi-imager"
 # Pinned KnockKnock version from this tap
 cask "grantbirki/tap/knockknock"
+# Secure Enclave SSH agent
+cask "grantbirki/tap/secretive"
 # Pinned Santa version from this tap
 cask "grantbirki/tap/santa"
