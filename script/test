@@ -61,7 +61,6 @@ brew ruby -e '
     ansible
     bash
     bat
-    crystal
     dfu-programmer
     eza
     ffmpeg

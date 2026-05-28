@@ -1,7 +1,7 @@
 # Brewfile for GrantBirki's bootstrap tap
 # Use this with `brew bundle --file=Brewfile`
 
-# Ensure the tap is available locally so tap-specific formulae (like pinned crystal) can be installed
+# Ensure the tap is available locally so tap-specific formulae and casks can be installed
 tap "grantbirki/tap"
 
 # Shell
@@ -9,8 +9,6 @@ brew "grantbirki/tap/bash"
 
 ### Personal Tools I Maintain ###
 
-# Fast and statically typed, compiled language with Ruby-like syntax
-brew "grantbirki/tap/crystal"
 # CLI tool for macOS to uninstall an app from your system
 brew "grantbirki/tap/uninstall"
 

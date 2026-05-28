@@ -45,7 +45,7 @@ there is Ruby application or helper code that needs it.
 - `Brewfile`
   - New-machine package list.
   - Tap-specific packages must use fully qualified names, for example
-    `brew "grantbirki/tap/crystal"` and `cask "grantbirki/tap/santa"`.
+    `brew "grantbirki/tap/bash"` and `cask "grantbirki/tap/santa"`.
   - Use the upstream cask name only when latest upstream is desired.
 
 - `Formula/*.rb`
