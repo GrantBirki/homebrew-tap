@@ -45,5 +45,7 @@ cask "alt-tab"
 cask "imageoptim"
 # https://formulae.brew.sh/cask/raspberry-pi-imager#default
 cask "raspberry-pi-imager"
+# Pinned KnockKnock version from this tap
+cask "grantbirki/tap/knockknock"
 # Pinned Santa version from this tap
 cask "grantbirki/tap/santa"
