@@ -35,8 +35,8 @@ brew "pyenv"
 brew "rbenv"
 # GPU-accelerated terminal emulator
 cask "alacritty"
-# Keyboard customiser
-cask "karabiner-elements"
+# Pinned keyboard customiser from this tap
+cask "grantbirki/tap/karabiner-elements"
 # Password manager app
 cask "keepassxc"
 # Window switcher
