@@ -89,16 +89,45 @@ RSpec.describe HomebrewTap::Installer do
     prefix = File.join(@root, "prefix")
     receipt(prefix, :brew, "bash", body: { "source" => { "tap" => "homebrew/core" } })
     receipt(prefix, :cask, "alacritty", body: { "source" => { "tap" => "homebrew/cask" } })
+    stdout = StringIO.new
     fake = runner(prefix: prefix)
 
-    status = described_class.new(argv: [], runner: fake, out: StringIO.new, err: StringIO.new, repo_root: @root).run
+    status = described_class.new(argv: [], runner: fake, out: stdout, err: StringIO.new, repo_root: @root).run
 
     expect(status).to eq(0)
-    expect(fake.commands).to include(["brew", "tap", "grantbirki/tap", @root])
+    expect(fake.commands).not_to include(["brew", "tap", "grantbirki/tap", @root])
+    expect(stdout.string).to include("grantbirki/tap already tapped")
     expect(fake.commands).to include(["brew", "update"])
     expect(fake.commands).to include(["brew", "reinstall", "--formula", "grantbirki/tap/bash"])
     expect(fake.commands).to include(["brew", "reinstall", "--cask", "grantbirki/tap/alacritty"])
     expect(fake.commands).to include(["brew", "bundle", "install", "--file=#{File.join(@root, "Brewfile")}"])
+  end
+
+  it "taps the current checkout when the tap is missing" do
+    write("Brewfile", %(tap "grantbirki/tap"\n))
+    fake = runner(
+      prefix: File.join(@root, "prefix"),
+      extra_captures: { ["brew", "--repo", "grantbirki/tap"] => ["", @root] }
+    )
+
+    status = described_class.new(argv: ["--no-update"], runner: fake, out: StringIO.new, err: StringIO.new, repo_root: @root).run
+
+    expect(status).to eq(0)
+    expect(fake.commands).to include(["brew", "tap", "grantbirki/tap", @root])
+  end
+
+  it "does not treat a conventional missing tap path as installed" do
+    write("Brewfile", %(tap "grantbirki/tap"\n))
+    missing_tap_path = File.join(@root, "missing", "homebrew-tap")
+    fake = runner(
+      prefix: File.join(@root, "prefix"),
+      extra_captures: { ["brew", "--repo", "grantbirki/tap"] => [missing_tap_path, @root] }
+    )
+
+    status = described_class.new(argv: ["--no-update"], runner: fake, out: StringIO.new, err: StringIO.new, repo_root: @root).run
+
+    expect(status).to eq(0)
+    expect(fake.commands).to include(["brew", "tap", "grantbirki/tap", @root])
   end
 
   it "can skip update and repointing" do
@@ -116,9 +145,13 @@ RSpec.describe HomebrewTap::Installer do
     expect(stdout.string).to include("Skipping brew update", "Skipping repoint for grantbirki/tap/bash")
   end
 
-  it "falls back to tapping by name and reports command failures" do
+  it "falls back to tapping by name when path tapping fails and reports command failures" do
     brewfile
-    fake = runner(prefix: File.join(@root, "prefix"), failures: [["brew", "tap", "grantbirki/tap", @root]])
+    fake = runner(
+      prefix: File.join(@root, "prefix"),
+      extra_captures: { ["brew", "--repo", "grantbirki/tap"] => ["", @root] },
+      failures: [["brew", "tap", "grantbirki/tap", @root]]
+    )
 
     status = described_class.new(argv: [], runner: fake, out: StringIO.new, err: StringIO.new, repo_root: @root).run
 
