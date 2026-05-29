@@ -1,0 +1,3 @@
+# Project scripts are first-party workflow glue, but should not dominate GitHub
+# language statistics for this tap.
+script/** -linguist-detectable
