@@ -66,6 +66,8 @@ brew "rbenv"
 
 # GPU-accelerated terminal emulator
 cask "grantbirki/tap/alacritty"
+# Persistence monitor
+cask "grantbirki/tap/blockblock"
 # Reverse engineering platform powered by Rizin
 cask "grantbirki/tap/cutter"
 # Pinned keyboard customiser from this tap

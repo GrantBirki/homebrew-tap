@@ -17,7 +17,7 @@ module HomebrewTap
       uninstall yq
     ].freeze
     CASK_TOKENS = %w[
-      alacritty cutter imageoptim karabiner-elements keepassxc knockknock santa secretive
+      alacritty blockblock cutter imageoptim karabiner-elements keepassxc knockknock santa secretive
     ].freeze
 
     class BundlerSupplyChain
