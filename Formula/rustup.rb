@@ -49,10 +49,14 @@ class Rustup < Formula
     bin.env_script_all_files libexec/"bin", RUSTUP_OVERRIDE_UNIX_FALLBACK_SETTINGS: pkgetc/"settings.toml"
 
     generate_completions_from_executable(libexec/"bin/rustup", "completions")
-    [:zsh, :bash].each do |shell|
-      generate_completions_from_executable(
-        libexec/"bin/rustup", "completions", shell.to_s, "cargo", shells: [shell], base_name: "cargo",
-        shell_parameter_format: :none
+    {
+      bash: bash_completion/"cargo",
+      zsh:  zsh_completion/"_cargo",
+    }.each do |shell, completion_path|
+      completion_path.dirname.mkpath
+      completion_path.write Utils.safe_popen_read(
+        { "SHELL" => shell.to_s },
+        libexec/"bin/rustup", "completions", shell.to_s, "cargo"
       )
     end
   end

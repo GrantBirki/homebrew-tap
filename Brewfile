@@ -14,6 +14,10 @@ brew "grantbirki/tap/uninstall"
 
 ### Pinned CLI Tools ###
 
+# YAML parser library
+brew "grantbirki/tap/libyaml"
+# Display directories as trees
+brew "grantbirki/tap/tree"
 # Infrastructure automation
 brew "grantbirki/tap/ansible"
 # Display file contents with syntax highlighting
@@ -28,8 +32,6 @@ brew "grantbirki/tap/ffmpeg"
 brew "grantbirki/tap/gnupg"
 # Static site generator
 brew "grantbirki/tap/hugo"
-# YAML parser library
-brew "grantbirki/tap/libyaml"
 # Network discovery and security scanner
 brew "grantbirki/tap/nmap"
 # Pinentry for GPG on Mac
@@ -46,8 +48,6 @@ brew "grantbirki/tap/swiftformat"
 brew "grantbirki/tap/swiftlint"
 # Terraform version manager
 brew "grantbirki/tap/tfenv"
-# Display directories as trees
-brew "grantbirki/tap/tree"
 # YAML processor
 brew "grantbirki/tap/yq"
 
