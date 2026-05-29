@@ -6,13 +6,3 @@ module HomebrewTap
 
   Error = Class.new(StandardError)
 end
-
-require_relative "homebrew_tap/brewfile"
-require_relative "homebrew_tap/commands"
-require_relative "homebrew_tap/ui"
-require_relative "homebrew_tap/installer"
-require_relative "homebrew_tap/receipts"
-require_relative "homebrew_tap/runner"
-require_relative "homebrew_tap/tap_checkout"
-require_relative "homebrew_tap/test_checks"
-require_relative "homebrew_tap/vendor"

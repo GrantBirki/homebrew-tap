@@ -11,7 +11,7 @@ module HomebrewTap
     end
 
     def tap_entries
-      File.readlines(path).filter_map { |line| parse_tap_entry(line) }
+      File.readlines(path).map { |line| parse_tap_entry(line) }.compact
     end
 
     private

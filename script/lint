@@ -2,5 +2,10 @@
 # frozen_string_literal: true
 
 require_relative "../lib/homebrew_tap"
+require_relative "../lib/homebrew_tap/brewfile"
+require_relative "../lib/homebrew_tap/ui"
+require_relative "../lib/homebrew_tap/runner"
+require_relative "../lib/homebrew_tap/test_checks"
+require_relative "../lib/homebrew_tap/commands"
 
 exit HomebrewTap::LintCommand.new(argv: ARGV).run

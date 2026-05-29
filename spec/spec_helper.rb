@@ -19,6 +19,15 @@ require "tmpdir"
 require "rspec"
 
 require_relative "../lib/homebrew_tap"
+require_relative "../lib/homebrew_tap/brewfile"
+require_relative "../lib/homebrew_tap/ui"
+require_relative "../lib/homebrew_tap/runner"
+require_relative "../lib/homebrew_tap/receipts"
+require_relative "../lib/homebrew_tap/tap_checkout"
+require_relative "../lib/homebrew_tap/installer"
+require_relative "../lib/homebrew_tap/vendor"
+require_relative "../lib/homebrew_tap/test_checks"
+require_relative "../lib/homebrew_tap/commands"
 
 SCRIPT_COVERAGE = {}
 

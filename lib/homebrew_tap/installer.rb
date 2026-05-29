@@ -178,10 +178,10 @@ module HomebrewTap
     end
 
     def summary
-      STATUS_ORDER.filter_map do |state|
+      STATUS_ORDER.map do |state|
         count = @status_counts[state]
         "#{count} #{STATUS_LABELS.fetch(state)}" if count.positive?
-      end.join(", ")
+      end.compact.join(", ")
     end
   end
 end
