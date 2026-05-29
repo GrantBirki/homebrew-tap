@@ -28,4 +28,17 @@ RSpec.describe HomebrewTap::ReceiptScanner do
     expect(unknown.error).to be_a(String)
     expect(unknown.error).not_to be_empty
   end
+
+  it "finds versioned cask metadata receipts" do
+    prefix = File.join(@root, "brew")
+    path = File.join(prefix, "Caskroom", "secretive", ".metadata", "3.0.4", "20260529010101.123", "INSTALL_RECEIPT.json")
+    FileUtils.mkdir_p(File.dirname(path))
+    File.write(path, JSON.generate("source" => { "tap" => "homebrew/cask" }))
+
+    status = described_class.new(prefix: prefix).classify(entry(:cask, "secretive"))
+
+    expect(status.state).to eq(:wrong_tap)
+    expect(status.tap).to eq("homebrew/cask")
+    expect(status.path).to eq(path)
+  end
 end

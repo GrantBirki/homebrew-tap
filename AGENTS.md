@@ -11,7 +11,8 @@ machine-bootstrap repository first:
 - `Casks/` contains Homebrew casks written in Ruby DSL.
 - `Brewfile` declares the packages that should be installed on a new machine.
 - `script/install` is the one-shot installer for the Brewfile.
-- `script/bootstrap` is a backward-compatible wrapper around `script/install`.
+- `script/bootstrap` installs vendored Ruby dependencies for local development
+  and CI.
 - `script/lint` and `script/test` are the local CI entrypoints.
 
 The project may grow into more Ruby tooling over time, but the current public
@@ -68,8 +69,8 @@ there is Ruby application or helper code that needs it.
     installed or upgraded on the machine.
 
 - `script/bootstrap`
-  - Compatibility alias. Keep it thin unless the user asks to restore separate
-    bootstrap behavior.
+  - Installs vendored Ruby dependencies with Bundler from `vendor/cache`.
+  - Does not install or repoint Homebrew formulae/casks.
 
 - `.github/workflows/*.yml`
   - CI follows the `ruby-template` shape: workflow names and job names are

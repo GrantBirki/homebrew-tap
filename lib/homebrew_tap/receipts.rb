@@ -35,9 +35,15 @@ module HomebrewTap
       when :brew
         Dir[File.join(prefix, "Cellar", entry.token, "*", "INSTALL_RECEIPT.json")].sort.last
       when :cask
-        path = File.join(prefix, "Caskroom", entry.token, ".metadata", "INSTALL_RECEIPT.json")
-        File.exist?(path) ? path : nil
+        cask_receipts(entry).max_by { |path| [File.mtime(path), path] }
       end
+    end
+
+    def cask_receipts(entry)
+      metadata = File.join(prefix, "Caskroom", entry.token, ".metadata")
+      direct = File.join(metadata, "INSTALL_RECEIPT.json")
+      nested = File.join(metadata, "*", "*", "INSTALL_RECEIPT.json")
+      ([direct] + Dir[nested]).select { |path| File.file?(path) }
     end
   end
 end
