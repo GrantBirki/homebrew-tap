@@ -53,6 +53,10 @@ class FakeRunner
     result
   end
 
+  def run_quiet!(*cmd)
+    run!(*cmd)
+  end
+
   def capture(*cmd, allow_failure: false)
     value = @captures.fetch(cmd) do
       return "" if allow_failure

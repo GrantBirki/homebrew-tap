@@ -112,17 +112,22 @@ module HomebrewTap
     end
 
     class RubySyntax
-      def initialize(root:, runner:)
+      def initialize(root:, runner:, quiet: false)
         @root = root
         @runner = runner
+        @quiet = quiet
       end
 
       def validate
-        ruby_files.each { |path| @runner.run!("ruby", "-c", path) }
+        ruby_files.each { |path| run!("ruby", "-c", path) }
         true
       end
 
       private
+
+      def run!(*cmd)
+        @quiet ? @runner.run_quiet!(*cmd) : @runner.run!(*cmd)
+      end
 
       def ruby_files
         Dir[File.join(@root, "{lib,spec}/**/*.rb")] +
@@ -168,14 +173,15 @@ module HomebrewTap
     end
 
     class HomebrewStyle
-      def initialize(root:, runner:)
+      def initialize(root:, runner:, quiet: false)
         @root = root
         @runner = runner
+        @quiet = quiet
       end
 
       def validate
         files = Dir[File.join(@root, "{Formula,Casks}/**/*.rb")].sort
-        @runner.run!(
+        run!(
           "env",
           *HOMEBREW_ENV,
           "brew",
@@ -186,16 +192,23 @@ module HomebrewTap
         )
         true
       end
+
+      private
+
+      def run!(*cmd)
+        @quiet ? @runner.run_quiet!(*cmd) : @runner.run!(*cmd)
+      end
     end
 
     class RuboCop
-      def initialize(root:, runner:)
+      def initialize(root:, runner:, quiet: false)
         @root = root
         @runner = runner
+        @quiet = quiet
       end
 
       def validate
-        @runner.run!(
+        run!(
           "env",
           "RUBOCOP_CACHE_ROOT=#{File.join(@root, "tmp/rubocop_cache")}",
           "bundle",
@@ -206,6 +219,12 @@ module HomebrewTap
           *RUBOCOP_PATHS.map { |path| File.join(@root, path) },
         )
         true
+      end
+
+      private
+
+      def run!(*cmd)
+        @quiet ? @runner.run_quiet!(*cmd) : @runner.run!(*cmd)
       end
     end
 
