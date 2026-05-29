@@ -3,4 +3,4 @@
 
 require_relative "../lib/homebrew_tap"
 
-exit HomebrewTap::Installer.new(argv: ARGV).run
+exit HomebrewTap::Vendor.new(argv: ARGV).run

@@ -1,0 +1,6 @@
+---
+BUNDLE_BIN: "bin"
+BUNDLE_PATH: "vendor/gems"
+BUNDLE_CACHE_PATH: "vendor/cache"
+BUNDLE_NO_INSTALL: "true"
+BUNDLE_FROZEN: "true"
