@@ -14,6 +14,7 @@ env:
   HOMEBREW_NO_AUTO_UPDATE: "1"
   HOMEBREW_NO_ENV_HINTS: "1"
   HOMEBREW_NO_INSTALL_CLEANUP: "1"
+  HOMEBREW_NO_INSTALL_FROM_API: "1"
 
 jobs:
   test:
@@ -23,6 +24,16 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
+
+      - name: setup ruby
+        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f
+        with:
+          ruby-version: .ruby-version
+          bundler: none
+          bundler-cache: false
+
+      - name: bootstrap
+        run: script/bootstrap
 
       - name: test
         run: script/test

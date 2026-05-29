@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/homebrew_tap"
+require_relative "../lib/homebrew_tap/ui"
+require_relative "../lib/homebrew_tap/runner"
+require_relative "../lib/homebrew_tap/vendor"
+
+exit HomebrewTap::Vendor.new(argv: ARGV).run

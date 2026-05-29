@@ -37,7 +37,8 @@ To install everything declared in this repo's `Brewfile`, including tap-specific
 script/install
 ```
 
-`script/bootstrap` is kept as a backward-compatible alias.
+`script/bootstrap` only prepares the repo's vendored Ruby dependencies for local
+development and CI. Use `script/install` for Homebrew lifecycle management.
 
 ## Development
 

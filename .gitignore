@@ -1,3 +1,8 @@
 tmp/
 .ruby-lsp
 .DS_Store
+.bundle/*
+!.bundle/config
+bin/
+coverage/
+vendor/gems/

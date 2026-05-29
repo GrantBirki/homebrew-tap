@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
+export DIR
+
+export BUNDLE_GEMFILE="$DIR/Gemfile"
+export BUNDLE_APP_CONFIG="$DIR/.bundle"
+
+: "${RUBY_ENV:=development}"
+export RUBY_ENV
+
+if [[ " $* " =~ " --production " ]]; then
+  export RUBY_ENV=production
+  export BUNDLE_WITHOUT="development"
+fi
+
+if [ -f "$DIR/.ruby-version" ]; then
+  export RBENV_VERSION="$(cat "$DIR/.ruby-version")"
+fi
+
+if [ -d "$HOME/.rbenv/shims" ]; then
+  export PATH="$HOME/.rbenv/shims:$PATH"
+fi

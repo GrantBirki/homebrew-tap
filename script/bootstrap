@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Backward-compatible alias for the install command.
+# Install vendored Ruby dependencies locally.
 # Usage: script/bootstrap
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec "${HERE}/install"
+source "${HERE}/env" "$@"
+
+cd "${DIR}"
+bundle install --local
+bundle binstubs --all
