@@ -84,22 +84,42 @@ RSpec.describe HomebrewTap::TestChecks do
 
     expect(described_class::CaskParsing.new(root: @root, runner: fake).validate).to eq(true)
     cask_command = fake.commands.find { |cmd| cmd.any? { |part| part.include?("cask/cask_loader") } }
-    expect(cask_command[0, 2]).to eq(["env", "HOMEBREW_NO_INSTALL_FROM_API=1"])
-    expect(cask_command[2]).to start_with("HOMEBREW_CACHE=")
-    expect(cask_command[3, 2]).to eq(["brew", "ruby"])
+    expect(cask_command[0]).to eq("env")
+    expect(cask_command).to include("HOMEBREW_NO_INSTALL_FROM_API=1")
+    expect(cask_command.any? { |part| part.start_with?("HOMEBREW_CACHE=") }).to eq(true)
+    brew_index = cask_command.index("brew")
+    expect(cask_command[brew_index, 2]).to eq(["brew", "ruby"])
     expect(cask_command.join(" ")).to include("Homebrew::SimulateSystem.with")
 
     expect(described_class::HomebrewStyle.new(root: @root, runner: fake).validate).to eq(true)
     style_command = fake.commands.last
-    expect(style_command[0, 2]).to eq(["env", "HOMEBREW_NO_INSTALL_FROM_API=1"])
-    expect(style_command[2]).to start_with("HOMEBREW_CACHE=")
-    expect(style_command[3, 2]).to eq(["brew", "style"])
+    expect(style_command[0]).to eq("env")
+    expect(style_command).to include("HOMEBREW_NO_INSTALL_FROM_API=1")
+    expect(style_command.any? { |part| part.start_with?("HOMEBREW_CACHE=") }).to eq(true)
+    brew_index = style_command.index("brew")
+    expect(style_command[brew_index, 2]).to eq(["brew", "style"])
+
+    expect(described_class::RuboCop.new(root: @root, runner: fake).validate).to eq(true)
+    rubocop_command = fake.commands.last
+    expect(rubocop_command[0]).to eq("env")
+    expect(rubocop_command[1]).to eq("RUBOCOP_CACHE_ROOT=#{File.join(@root, "tmp/rubocop_cache")}")
+    expect(rubocop_command[2, 5]).to eq(["bundle", "exec", "rubocop", "-c", File.join(@root, ".rubocop.yml")])
+    expect(rubocop_command).to include(File.join(@root, "lib"))
+    expect(rubocop_command).to include(File.join(@root, "spec"))
+    expect(rubocop_command).to include(File.join(@root, "script/install"))
+    expect(rubocop_command).to include(File.join(@root, "script/lint"))
+    expect(rubocop_command).to include(File.join(@root, "script/test"))
+    expect(rubocop_command).to include(File.join(@root, "script/vendor"))
+    expect(rubocop_command).not_to include(File.join(@root, "Formula"))
+    expect(rubocop_command).not_to include(File.join(@root, "Casks"))
 
     expect(described_class::BrewfileParsing.new(root: @root, runner: fake).validate).to eq(true)
     brewfile_command = fake.commands.last
-    expect(brewfile_command[0, 2]).to eq(["env", "HOMEBREW_NO_INSTALL_FROM_API=1"])
-    expect(brewfile_command[2]).to start_with("HOMEBREW_CACHE=")
-    expect(brewfile_command[3, 3]).to eq(["brew", "ruby", "-e"])
+    expect(brewfile_command[0]).to eq("env")
+    expect(brewfile_command).to include("HOMEBREW_NO_INSTALL_FROM_API=1")
+    expect(brewfile_command.any? { |part| part.start_with?("HOMEBREW_CACHE=") }).to eq(true)
+    brew_index = brewfile_command.index("brew")
+    expect(brewfile_command[brew_index, 3]).to eq(["brew", "ruby", "-e"])
     expect(brewfile_command).to include(File.join(@root, "Brewfile"))
     expect(brewfile_command.join(" ")).to include("Homebrew::Bundle::Dsl")
   end

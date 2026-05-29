@@ -46,6 +46,8 @@ RSpec.describe "command objects" do
     expect(HomebrewTap::LintCommand.new(argv: [], runner: fake, out: StringIO.new, err: StringIO.new, root: @root).run).to eq(0)
     style_command = fake.commands.find { |cmd| cmd[3, 2] == ["brew", "style"] }
     expect(style_command).not_to be_nil
+    rubocop_command = fake.commands.find { |cmd| cmd.include?("rubocop") }
+    expect(rubocop_command).not_to be_nil
 
     failing = FakeRunner.new(failures: [style_command])
     expect(HomebrewTap::LintCommand.new(argv: [], runner: failing, out: StringIO.new, err: StringIO.new, root: @root).run).to eq(1)

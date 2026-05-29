@@ -19,6 +19,7 @@ module HomebrewTap
       TestChecks::RubySyntax.new(root: @root, runner: @runner).validate
       TestChecks::WorkflowPins.new(root: @root).validate
       TestChecks::HomebrewStyle.new(root: @root, runner: @runner).validate
+      TestChecks::RuboCop.new(root: @root, runner: @runner).validate
       @out.puts "Lint complete."
       0
     rescue Error => e

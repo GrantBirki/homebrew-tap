@@ -19,6 +19,9 @@ module HomebrewTap
     CASK_TOKENS = %w[
       alacritty blockblock cutter imageoptim karabiner-elements keepassxc knockknock santa secretive
     ].freeze
+    RUBOCOP_PATHS = %w[
+      lib spec script/install script/lint script/test script/vendor
+    ].freeze
 
     class BundlerSupplyChain
       def initialize(root:)
@@ -35,7 +38,12 @@ module HomebrewTap
       private
 
       def validate_config
-        config = YAML.safe_load(File.read(File.join(@root, ".bundle/config")), permitted_classes: [], permitted_symbols: [], aliases: false)
+        config = YAML.safe_load_file(
+          File.join(@root, ".bundle/config"),
+          permitted_classes: [],
+          permitted_symbols: [],
+          aliases: false
+        )
         required = {
           "BUNDLE_FROZEN" => "true",
           "BUNDLE_PATH" => "vendor/gems",
@@ -180,6 +188,27 @@ module HomebrewTap
       end
     end
 
+    class RuboCop
+      def initialize(root:, runner:)
+        @root = root
+        @runner = runner
+      end
+
+      def validate
+        @runner.run!(
+          "env",
+          "RUBOCOP_CACHE_ROOT=#{File.join(@root, "tmp/rubocop_cache")}",
+          "bundle",
+          "exec",
+          "rubocop",
+          "-c",
+          File.join(@root, ".rubocop.yml"),
+          *RUBOCOP_PATHS.map { |path| File.join(@root, path) },
+        )
+        true
+      end
+    end
+
     class BrewfileParsing
       def initialize(root:, runner:)
         @root = root
@@ -187,7 +216,7 @@ module HomebrewTap
       end
 
       def validate
-        script = <<~'RUBY'
+        script = <<~RUBY
           require "bundle/dsl"
           require "pathname"
 

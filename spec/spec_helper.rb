@@ -76,11 +76,12 @@ module FixtureHelpers
   end
 
   def receipt(prefix, type, token, version: "1.0.0", body:)
-    path = if type == :brew
-      File.join(prefix, "Cellar", token, version, "INSTALL_RECEIPT.json")
-    else
-      File.join(prefix, "Caskroom", token, ".metadata", "INSTALL_RECEIPT.json")
-    end
+    path =
+      if type == :brew
+        File.join(prefix, "Cellar", token, version, "INSTALL_RECEIPT.json")
+      else
+        File.join(prefix, "Caskroom", token, ".metadata", "INSTALL_RECEIPT.json")
+      end
     FileUtils.mkdir_p(File.dirname(path))
     File.write(path, body.is_a?(String) ? body : JSON.generate(body))
     path
@@ -97,15 +98,18 @@ module FixtureHelpers
     ARGV.replace(argv)
     $stdout = stdout
     $stderr = stderr
-    load path
-  rescue SystemExit => e
-    status = e.status
-  ensure
-    record_script_coverage(path)
-    ARGV.replace(original_argv)
-    $stdout = original_stdout
-    $stderr = original_stderr
-    return { status: status, stdout: stdout.string, stderr: stderr.string }
+    begin
+      load path
+    rescue SystemExit => e
+      status = e.status
+    ensure
+      record_script_coverage(path)
+      ARGV.replace(original_argv)
+      $stdout = original_stdout
+      $stderr = original_stderr
+    end
+
+    { status: status, stdout: stdout.string, stderr: stderr.string }
   end
 
   def record_script_coverage(path)
