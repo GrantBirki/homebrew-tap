@@ -60,6 +60,7 @@ module HomebrewTap
       TestChecks::WorkflowPins.new(root: @root).validate
       TestChecks::RubySyntax.new(root: @root, runner: @runner).validate
       TestChecks::CaskParsing.new(root: @root, runner: @runner).validate
+      TestChecks::BrewfileParsing.new(root: @root, runner: @runner).validate
       TestChecks::BrewfilePins.new(root: @root).validate
       @runner.run!("bundle", "exec", "rspec", "spec") unless @skip_rspec
       @out.puts "Test complete."

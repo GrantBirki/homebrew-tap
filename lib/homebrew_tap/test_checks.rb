@@ -180,6 +180,37 @@ module HomebrewTap
       end
     end
 
+    class BrewfileParsing
+      def initialize(root:, runner:)
+        @root = root
+        @runner = runner
+      end
+
+      def validate
+        script = <<~'RUBY'
+          require "bundle/dsl"
+          require "pathname"
+
+          brewfile = Pathname(ARGV.fetch(0))
+          entries = Homebrew::Bundle::Dsl.new(brewfile).entries
+
+          unless entries.any? { |entry| entry.type == :tap && entry.name == "grantbirki/tap" }
+            raise "Brewfile must tap grantbirki/tap"
+          end
+        RUBY
+        @runner.run!(
+          "env",
+          *HOMEBREW_ENV,
+          "brew",
+          "ruby",
+          "-e",
+          script,
+          File.join(@root, "Brewfile"),
+        )
+        true
+      end
+    end
+
     class BrewfilePins
       def initialize(root:)
         @root = root

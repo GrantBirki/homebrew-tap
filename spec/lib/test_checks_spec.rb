@@ -68,10 +68,11 @@ RSpec.describe HomebrewTap::TestChecks do
     expect { described_class::WorkflowPins.new(root: @root).validate }.to raise_error(HomebrewTap::Error, /not SHA-pinned/)
   end
 
-  it "runs syntax, cask, and style commands through the injected runner" do
+  it "runs syntax, cask, style, and Brewfile parse commands through the injected runner" do
     write("lib/homebrew_tap/example.rb", "")
     write("Formula/foo.rb", "")
     write("Casks/foo.rb", "")
+    write("Brewfile", %(tap "grantbirki/tap"\n))
     write("script/install", "")
     write("script/lint", "")
     write("script/test", "")
@@ -93,6 +94,14 @@ RSpec.describe HomebrewTap::TestChecks do
     expect(style_command[0, 2]).to eq(["env", "HOMEBREW_NO_INSTALL_FROM_API=1"])
     expect(style_command[2]).to start_with("HOMEBREW_CACHE=")
     expect(style_command[3, 2]).to eq(["brew", "style"])
+
+    expect(described_class::BrewfileParsing.new(root: @root, runner: fake).validate).to eq(true)
+    brewfile_command = fake.commands.last
+    expect(brewfile_command[0, 2]).to eq(["env", "HOMEBREW_NO_INSTALL_FROM_API=1"])
+    expect(brewfile_command[2]).to start_with("HOMEBREW_CACHE=")
+    expect(brewfile_command[3, 3]).to eq(["brew", "ruby", "-e"])
+    expect(brewfile_command).to include(File.join(@root, "Brewfile"))
+    expect(brewfile_command.join(" ")).to include("Homebrew::Bundle::Dsl")
   end
 
   it "validates required Brewfile pins" do
