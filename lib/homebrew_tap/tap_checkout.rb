@@ -2,18 +2,18 @@
 
 module HomebrewTap
   class TapCheckout
-    attr_reader :runner, :repo_root, :tap_name, :out
+    attr_reader :runner, :repo_root, :tap_name, :ui
 
-    def initialize(runner:, repo_root: ROOT, tap_name: TAP_NAME, out: $stdout)
+    def initialize(runner:, repo_root: ROOT, tap_name: TAP_NAME, out: $stdout, ui: nil)
       @runner = runner
       @repo_root = repo_root
       @tap_name = tap_name
-      @out = out
+      @ui = ui || UI.new(out: out)
     end
 
     def with_current_checkout(dry_run:)
       if dry_run
-        out.puts "would use current checkout for #{tap_name} during install"
+        ui.dry_run("use current checkout for #{tap_name} during install")
         yield
         return
       end
@@ -26,13 +26,13 @@ module HomebrewTap
       return yield if repo_head == tap_head
 
       restore_branch = runner.capture("git", "-C", tap_path, "symbolic-ref", "--quiet", "--short", "HEAD", allow_failure: true).strip
-      out.puts "Using this checkout for #{tap_name} during this install..."
+      ui.step("Using this checkout for #{tap_name} during this install")
       runner.run!("git", "-C", tap_path, "fetch", "--quiet", repo_root, "HEAD")
       runner.run!("git", "-C", tap_path, "checkout", "--quiet", "--detach", "FETCH_HEAD")
       begin
         yield
       ensure
-        out.puts "Restoring #{tap_name} tap checkout..."
+        ui.step("Restoring #{tap_name} tap checkout")
         if restore_branch.empty?
           runner.run!("git", "-C", tap_path, "checkout", "--quiet", "--detach", tap_head)
         else

@@ -9,7 +9,7 @@ RSpec.describe HomebrewTap::Runner do
 
     expect(runner.run("ruby", "-e", "exit 0")).to be_success
     expect(runner.run!("ruby", "-e", "exit 0")).to be_success
-    expect(out.string).to include("$ ruby -e exit 0")
+    expect(out.string).to include("$ ruby -e exit\\ 0")
     expect(runner.capture("ruby", "-e", "puts :ok")).to eq("ok\n")
     expect(runner.capture("ruby", "-e", "abort :no", allow_failure: true)).to eq("")
     expect(runner.command_available?("ruby")).to eq(true)

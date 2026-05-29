@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-export OFF=$'\033[0m'
-export RED=$'\033[0;31m'
-export GREEN=$'\033[0;32m'
-export BLUE=$'\033[0;34m'
-export PURPLE=$'\033[0;35m'
-
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
 export DIR
 

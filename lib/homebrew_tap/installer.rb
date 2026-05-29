@@ -18,18 +18,28 @@ module HomebrewTap
       hooks, sudo prompts, or application restarts.
     USAGE
 
-    attr_reader :argv, :runner, :out, :err, :repo_root, :brewfile_path
+    STATUS_ORDER = %i[tap_managed wrong_tap missing unknown_receipt].freeze
+    STATUS_LABELS = {
+      tap_managed: "tap-managed",
+      wrong_tap: "wrong-tap",
+      missing: "missing",
+      unknown_receipt: "unknown-receipt"
+    }.freeze
 
-    def initialize(argv:, runner: Runner.new, out: $stdout, err: $stderr, repo_root: ROOT)
+    attr_reader :argv, :runner, :out, :err, :repo_root, :brewfile_path, :ui
+
+    def initialize(argv:, runner: Runner.new, out: $stdout, err: $stderr, repo_root: ROOT, ui: nil)
       @argv = argv.dup
       @runner = runner
       @out = out
       @err = err
+      @ui = ui || UI.new(out: out, err: err)
       @repo_root = repo_root
       @brewfile_path = File.join(repo_root, "Brewfile")
       @dry_run = false
       @repoint = true
       @update = true
+      @status_counts = Hash.new(0)
     end
 
     def run
@@ -37,17 +47,18 @@ module HomebrewTap
       return help(0) if @help
 
       validate!
-      out.puts "Using Brewfile: #{brewfile_path}"
+      ui.step("Using Brewfile: #{brewfile_path}")
       tap!
       update!
-      TapCheckout.new(runner: runner, repo_root: repo_root, out: out).with_current_checkout(dry_run: dry_run?) do
+      TapCheckout.new(runner: runner, repo_root: repo_root, ui: ui).with_current_checkout(dry_run: dry_run?) do
         repoint!
         bundle_install!
       end
-      out.puts "Install complete."
+      ui.success("Install complete")
+      ui.info("Repoint summary: #{summary}") unless @status_counts.empty?
       0
     rescue Error => e
-      err.puts e.message
+      ui.error(e.message)
       1
     end
 
@@ -85,26 +96,34 @@ module HomebrewTap
 
     def tap!
       if dry_run?
-        out.puts "would tap #{TAP_NAME} from #{repo_root}"
+        ui.dry_run("brew tap #{TAP_NAME} #{repo_root}")
         return
       end
 
+      ui.step("Ensuring #{TAP_NAME} is tapped")
       result = runner.run("brew", "tap", TAP_NAME, repo_root)
       runner.run!("brew", "tap", TAP_NAME) unless result.success?
     end
 
     def update!
       if !@update
-        out.puts "Skipping brew update."
+        ui.skip("Skipping brew update")
       elsif dry_run?
-        out.puts "would run: brew update"
+        ui.dry_run("brew update")
       else
+        ui.step("Updating Homebrew")
         runner.run!("brew", "update")
       end
     end
 
     def repoint!
       entries = Brewfile.new(path: brewfile_path).tap_entries
+      if entries.empty?
+        ui.skip("No #{TAP_NAME} Brewfile entries to inspect")
+        return
+      end
+
+      ui.step("Inspecting #{entries.length} tap-qualified Brewfile entries")
       prefix = runner.capture("brew", "--prefix").strip
       scanner = ReceiptScanner.new(prefix: prefix)
 
@@ -116,39 +135,53 @@ module HomebrewTap
         if @repoint
           reinstall(entry)
         else
-          out.puts "skipping repoint for #{entry.full_name}"
+          ui.skip("Skipping repoint for #{entry.full_name}")
         end
       end
     end
 
     def report_status(status)
+      @status_counts[status.state] += 1
       case status.state
       when :missing
-        out.puts "missing #{status.entry.type}: #{status.entry.full_name}"
+        ui.warning("#{entry_label(status.entry)} is not installed")
       when :tap_managed
-        out.puts "already tap-managed #{status.entry.type}: #{status.entry.full_name}"
+        ui.success("#{entry_label(status.entry)} is already managed by #{TAP_NAME}")
       when :wrong_tap
-        out.puts "wrong tap #{status.entry.type}: #{status.entry.full_name} is from #{status.tap}"
+        ui.warning("#{entry_label(status.entry)} needs repoint from #{status.tap}")
       when :unknown_receipt
-        out.puts "unknown receipt #{status.entry.type}: #{status.entry.full_name}"
+        ui.warning("#{entry_label(status.entry)} has an unknown receipt source")
       end
     end
 
     def reinstall(entry)
       flag = entry.type == :brew ? "--formula" : "--cask"
       if dry_run?
-        out.puts "would run: brew reinstall #{flag} #{entry.full_name}"
+        ui.dry_run("brew reinstall #{flag} #{entry.full_name}")
       else
+        ui.step("Repointing #{entry_label(entry)}")
         runner.run!("brew", "reinstall", flag, entry.full_name)
       end
     end
 
     def bundle_install!
       if dry_run?
-        out.puts "would run: brew bundle install --file=#{brewfile_path}"
+        ui.dry_run("brew bundle install --file=#{brewfile_path}")
       else
+        ui.step("Installing Brewfile packages")
         runner.run!("brew", "bundle", "install", "--file=#{brewfile_path}")
       end
+    end
+
+    def entry_label(entry)
+      "#{entry.type} #{entry.full_name}"
+    end
+
+    def summary
+      STATUS_ORDER.filter_map do |state|
+        count = @status_counts[state]
+        "#{count} #{STATUS_LABELS.fetch(state)}" if count.positive?
+      end.join(", ")
     end
   end
 end

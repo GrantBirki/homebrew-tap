@@ -61,14 +61,27 @@ RSpec.describe HomebrewTap::Installer do
 
     expect(status).to eq(0)
     expect(fake.commands).to eq([])
-    expect(stdout.string).to include("would tap grantbirki/tap")
+    expect(stdout.string).to include("would run: brew tap grantbirki/tap")
     expect(stdout.string).to include("would run: brew update")
-    expect(stdout.string).to include("wrong tap brew: grantbirki/tap/bash is from homebrew/core")
+    expect(stdout.string).to include("brew grantbirki/tap/bash needs repoint from homebrew/core")
     expect(stdout.string).to include("would run: brew reinstall --formula grantbirki/tap/bash")
-    expect(stdout.string).to include("already tap-managed cask: grantbirki/tap/alacritty")
-    expect(stdout.string).to include("missing brew: grantbirki/tap/missing")
-    expect(stdout.string).to include("unknown receipt cask: grantbirki/tap/unknown")
+    expect(stdout.string).to include("cask grantbirki/tap/alacritty is already managed by grantbirki/tap")
+    expect(stdout.string).to include("brew grantbirki/tap/missing is not installed")
+    expect(stdout.string).to include("cask grantbirki/tap/unknown has an unknown receipt source")
     expect(stdout.string).to include("would run: brew bundle install --file=#{File.join(@root, "Brewfile")}")
+    expect(stdout.string).to include("Repoint summary: 1 tap-managed, 1 wrong-tap, 1 missing, 1 unknown-receipt")
+  end
+
+  it "skips receipt inspection when there are no tap-qualified entries" do
+    write("Brewfile", %(brew "gh"\ncask "visual-studio-code"\n))
+    stdout = StringIO.new
+    fake = FakeRunner.new(available: true)
+
+    status = described_class.new(argv: ["--dry-run", "--no-update"], runner: fake, out: stdout, err: StringIO.new, repo_root: @root).run
+
+    expect(status).to eq(0)
+    expect(stdout.string).to include("No grantbirki/tap Brewfile entries to inspect")
+    expect(fake.commands).to eq([])
   end
 
   it "repoints wrong-tap formulae and casks by default" do
@@ -100,7 +113,7 @@ RSpec.describe HomebrewTap::Installer do
     expect(status).to eq(0)
     expect(fake.commands).not_to include(["brew", "update"])
     expect(fake.commands).not_to include(["brew", "reinstall", "--formula", "grantbirki/tap/bash"])
-    expect(stdout.string).to include("Skipping brew update.", "skipping repoint for grantbirki/tap/bash")
+    expect(stdout.string).to include("Skipping brew update", "Skipping repoint for grantbirki/tap/bash")
   end
 
   it "falls back to tapping by name and reports command failures" do

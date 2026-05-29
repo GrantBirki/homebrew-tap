@@ -9,6 +9,7 @@ end
 
 require_relative "homebrew_tap/brewfile"
 require_relative "homebrew_tap/commands"
+require_relative "homebrew_tap/ui"
 require_relative "homebrew_tap/installer"
 require_relative "homebrew_tap/receipts"
 require_relative "homebrew_tap/runner"

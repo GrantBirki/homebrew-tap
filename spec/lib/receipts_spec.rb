@@ -41,4 +41,19 @@ RSpec.describe HomebrewTap::ReceiptScanner do
     expect(status.tap).to eq("homebrew/cask")
     expect(status.path).to eq(path)
   end
+
+  it "uses the newest cask receipt when direct and nested metadata both exist" do
+    prefix = File.join(@root, "brew")
+    direct = receipt(prefix, :cask, "keepassxc", body: { "source" => { "tap" => "homebrew/cask" } })
+    nested = File.join(prefix, "Caskroom", "keepassxc", ".metadata", "2.7.12", "20260529010101.123", "INSTALL_RECEIPT.json")
+    FileUtils.mkdir_p(File.dirname(nested))
+    File.write(nested, JSON.generate("source" => { "tap" => "grantbirki/tap" }))
+    File.utime(Time.now - 60, Time.now - 60, direct)
+    File.utime(Time.now, Time.now, nested)
+
+    status = described_class.new(prefix: prefix).classify(entry(:cask, "keepassxc"))
+
+    expect(status.state).to eq(:tap_managed)
+    expect(status.path).to eq(nested)
+  end
 end

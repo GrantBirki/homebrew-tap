@@ -12,7 +12,7 @@ RSpec.describe HomebrewTap::TapCheckout do
     end
 
     expect(yielded).to eq(true)
-    expect(out.string).to include("would use current checkout")
+    expect(out.string).to include("would run: use current checkout")
   end
 
   it "does nothing when the installed tap path is this checkout" do

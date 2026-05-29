@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "open3"
+require "shellwords"
 
 module HomebrewTap
   CommandResult = Struct.new(:cmd, :stdout, :stderr, :status, keyword_init: true) do
@@ -17,7 +18,7 @@ module HomebrewTap
     end
 
     def run(*cmd)
-      out.puts command_line(cmd)
+      UI.new(out: out).command(cmd)
       success = system(*cmd)
       CommandResult.new(cmd: cmd, stdout: "", stderr: "", status: success ? 0 : 1)
     end
@@ -48,7 +49,7 @@ module HomebrewTap
     private
 
     def command_line(cmd)
-      "$ #{cmd.join(" ")}"
+      "$ #{Shellwords.join(cmd)}"
     end
   end
 end
