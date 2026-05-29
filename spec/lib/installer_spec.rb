@@ -116,6 +116,20 @@ RSpec.describe HomebrewTap::Installer do
     expect(fake.commands).to include(["brew", "tap", "grantbirki/tap", @root])
   end
 
+  it "does not treat a conventional missing tap path as installed" do
+    write("Brewfile", %(tap "grantbirki/tap"\n))
+    missing_tap_path = File.join(@root, "missing", "homebrew-tap")
+    fake = runner(
+      prefix: File.join(@root, "prefix"),
+      extra_captures: { ["brew", "--repo", "grantbirki/tap"] => [missing_tap_path, @root] }
+    )
+
+    status = described_class.new(argv: ["--no-update"], runner: fake, out: StringIO.new, err: StringIO.new, repo_root: @root).run
+
+    expect(status).to eq(0)
+    expect(fake.commands).to include(["brew", "tap", "grantbirki/tap", @root])
+  end
+
   it "can skip update and repointing" do
     brewfile
     prefix = File.join(@root, "prefix")

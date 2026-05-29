@@ -102,7 +102,7 @@ module HomebrewTap
 
       ui.step("Ensuring #{TAP_NAME} is tapped")
       tap_path = runner.capture("brew", "--repo", TAP_NAME, allow_failure: true).strip
-      unless tap_path.empty?
+      if !tap_path.empty? && File.directory?(tap_path)
         ui.success("#{TAP_NAME} already tapped at #{tap_path}")
         return
       end
