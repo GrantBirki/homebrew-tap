@@ -96,11 +96,17 @@ module HomebrewTap
 
     def tap!
       if dry_run?
-        ui.dry_run("brew tap #{TAP_NAME} #{repo_root}")
+        ui.dry_run("brew tap #{TAP_NAME} #{repo_root} if missing")
         return
       end
 
       ui.step("Ensuring #{TAP_NAME} is tapped")
+      tap_path = runner.capture("brew", "--repo", TAP_NAME, allow_failure: true).strip
+      unless tap_path.empty?
+        ui.success("#{TAP_NAME} already tapped at #{tap_path}")
+        return
+      end
+
       result = runner.run("brew", "tap", TAP_NAME, repo_root)
       runner.run!("brew", "tap", TAP_NAME) unless result.success?
     end
