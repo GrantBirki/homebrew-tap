@@ -43,9 +43,14 @@ RSpec.describe "command objects" do
 
     write(".github/workflows/test.yml", "steps:\n  - uses: actions/checkout@#{'a' * 40}\n")
     fake = FakeRunner.new
-    expect(HomebrewTap::LintCommand.new(argv: [], runner: fake, out: StringIO.new, err: StringIO.new, root: @root).run).to eq(0)
+    lint_out = StringIO.new
+    expect(HomebrewTap::LintCommand.new(argv: [], runner: fake, out: lint_out, err: StringIO.new, root: @root).run).to eq(0)
+    expect(lint_out.string).to include("Ruby syntax", "GitHub Actions pins", "Homebrew style", "RuboCop", "Lint complete")
+    expect(lint_out.string).not_to include("$ ruby -c")
     style_command = fake.commands.find { |cmd| cmd[3, 2] == ["brew", "style"] }
     expect(style_command).not_to be_nil
+    rubocop_command = fake.commands.find { |cmd| cmd.include?("rubocop") }
+    expect(rubocop_command).not_to be_nil
 
     failing = FakeRunner.new(failures: [style_command])
     expect(HomebrewTap::LintCommand.new(argv: [], runner: failing, out: StringIO.new, err: StringIO.new, root: @root).run).to eq(1)

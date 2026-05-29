@@ -156,10 +156,12 @@ RSpec.describe HomebrewTap::Installer do
     status = described_class.new(argv: [], runner: fake, out: StringIO.new, err: StringIO.new, repo_root: @root).run
 
     expect(status).to eq(0)
-    expect(fake.commands[0, 2]).to eq([
-      ["brew", "tap", "grantbirki/tap", @root],
-      ["brew", "tap", "grantbirki/tap"]
-    ])
+    expect(fake.commands[0, 2]).to eq(
+      [
+        ["brew", "tap", "grantbirki/tap", @root],
+        ["brew", "tap", "grantbirki/tap"]
+      ]
+    )
 
     stderr = StringIO.new
     failing = runner(prefix: File.join(@root, "prefix"), failures: [["brew", "update"]])

@@ -19,6 +19,9 @@ module HomebrewTap
     CASK_TOKENS = %w[
       alacritty blockblock cutter imageoptim karabiner-elements keepassxc knockknock santa secretive
     ].freeze
+    RUBOCOP_PATHS = %w[
+      lib spec script/install script/lint script/test script/vendor
+    ].freeze
 
     class BundlerSupplyChain
       def initialize(root:)
@@ -35,7 +38,12 @@ module HomebrewTap
       private
 
       def validate_config
-        config = YAML.safe_load(File.read(File.join(@root, ".bundle/config")), permitted_classes: [], permitted_symbols: [], aliases: false)
+        config = YAML.safe_load_file(
+          File.join(@root, ".bundle/config"),
+          permitted_classes: [],
+          permitted_symbols: [],
+          aliases: false
+        )
         required = {
           "BUNDLE_FROZEN" => "true",
           "BUNDLE_PATH" => "vendor/gems",
@@ -104,17 +112,22 @@ module HomebrewTap
     end
 
     class RubySyntax
-      def initialize(root:, runner:)
+      def initialize(root:, runner:, quiet: false)
         @root = root
         @runner = runner
+        @quiet = quiet
       end
 
       def validate
-        ruby_files.each { |path| @runner.run!("ruby", "-c", path) }
+        ruby_files.each { |path| run!("ruby", "-c", path) }
         true
       end
 
       private
+
+      def run!(*cmd)
+        @quiet ? @runner.run_quiet!(*cmd) : @runner.run!(*cmd)
+      end
 
       def ruby_files
         Dir[File.join(@root, "{lib,spec}/**/*.rb")] +
@@ -160,14 +173,15 @@ module HomebrewTap
     end
 
     class HomebrewStyle
-      def initialize(root:, runner:)
+      def initialize(root:, runner:, quiet: false)
         @root = root
         @runner = runner
+        @quiet = quiet
       end
 
       def validate
         files = Dir[File.join(@root, "{Formula,Casks}/**/*.rb")].sort
-        @runner.run!(
+        run!(
           "env",
           *HOMEBREW_ENV,
           "brew",
@@ -178,6 +192,40 @@ module HomebrewTap
         )
         true
       end
+
+      private
+
+      def run!(*cmd)
+        @quiet ? @runner.run_quiet!(*cmd) : @runner.run!(*cmd)
+      end
+    end
+
+    class RuboCop
+      def initialize(root:, runner:, quiet: false)
+        @root = root
+        @runner = runner
+        @quiet = quiet
+      end
+
+      def validate
+        run!(
+          "env",
+          "RUBOCOP_CACHE_ROOT=#{File.join(@root, "tmp/rubocop_cache")}",
+          "bundle",
+          "exec",
+          "rubocop",
+          "-c",
+          File.join(@root, ".rubocop.yml"),
+          *RUBOCOP_PATHS.map { |path| File.join(@root, path) },
+        )
+        true
+      end
+
+      private
+
+      def run!(*cmd)
+        @quiet ? @runner.run_quiet!(*cmd) : @runner.run!(*cmd)
+      end
     end
 
     class BrewfileParsing
@@ -187,7 +235,7 @@ module HomebrewTap
       end
 
       def validate
-        script = <<~'RUBY'
+        script = <<~RUBY
           require "bundle/dsl"
           require "pathname"
 

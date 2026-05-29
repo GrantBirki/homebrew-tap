@@ -30,6 +30,14 @@ module HomebrewTap
       result
     end
 
+    def run_quiet!(*cmd)
+      stdout, stderr, status = Open3.capture3(*cmd)
+      result = CommandResult.new(cmd: cmd, stdout: stdout, stderr: stderr, status: status.exitstatus || 1)
+      raise Error, quiet_failure(result) unless result.success?
+
+      result
+    end
+
     def capture(*cmd, allow_failure: false)
       stdout, stderr, status = Open3.capture3(*cmd)
       if !status.success? && !allow_failure
@@ -50,6 +58,14 @@ module HomebrewTap
 
     def command_line(cmd)
       "$ #{Shellwords.join(cmd)}"
+    end
+
+    def quiet_failure(result)
+      [
+        "command failed: #{command_line(result.cmd)}",
+        result.stdout,
+        result.stderr
+      ].reject(&:empty?).join("\n")
     end
   end
 end

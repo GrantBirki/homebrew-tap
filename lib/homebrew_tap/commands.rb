@@ -16,10 +16,20 @@ module HomebrewTap
       return help(0) if @argv.delete("--help") || @argv.delete("-h")
       return unknown unless @argv.empty?
 
-      TestChecks::RubySyntax.new(root: @root, runner: @runner).validate
+      ui = UI.new(out: @out, err: @err)
+      ui.step("Ruby syntax")
+      TestChecks::RubySyntax.new(root: @root, runner: @runner, quiet: true).validate
+      ui.success("Ruby syntax")
+      ui.step("GitHub Actions pins")
       TestChecks::WorkflowPins.new(root: @root).validate
-      TestChecks::HomebrewStyle.new(root: @root, runner: @runner).validate
-      @out.puts "Lint complete."
+      ui.success("GitHub Actions pins")
+      ui.step("Homebrew style")
+      TestChecks::HomebrewStyle.new(root: @root, runner: @runner, quiet: true).validate
+      ui.success("Homebrew style")
+      ui.step("RuboCop")
+      TestChecks::RuboCop.new(root: @root, runner: @runner, quiet: true).validate
+      ui.success("RuboCop")
+      ui.success("Lint complete.")
       0
     rescue Error => e
       @err.puts e.message
