@@ -22,7 +22,7 @@ while IFS= read -r ruby_file; do
 done < <(find Formula Casks -type f -name "*.rb" | sort)
 
 for ruby_file in "${ruby_files[@]}"; do
-  ruby -c "${ruby_file}" >/dev/null
+  brew ruby -- -c "${ruby_file}" >/dev/null
 done
 
 echo "Checking GitHub Actions pins..."

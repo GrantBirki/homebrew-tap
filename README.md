@@ -12,10 +12,10 @@ brew tap grantbirki/tap
 
 If the Formula has a name clash with a Formula in the homebrew-core repo, you will need to specify the tap name.
 
-For example, I host my own version of the `crystal` formula here to install the exact version that I want to use since the homebrew-core version of `crystal` is not versioned with `crystal@<version>`.
+For example, this tap can host pinned formulae that should not move with upstream Homebrew metadata.
 
 ```bash
-brew install grantbirki/tap/crystal
+brew install grantbirki/tap/bash
 ```
 
 ## Update a Formula
