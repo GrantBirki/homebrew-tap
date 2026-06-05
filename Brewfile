@@ -48,8 +48,10 @@ brew "grantbirki/tap/swiftformat"
 brew "grantbirki/tap/swiftlint"
 # Terraform version manager
 brew "grantbirki/tap/tfenv"
-# Observability data pipeline
-brew "grantbirki/tap/vector"
+# Observability data pipeline (ARM macOS only)
+if OS.mac? && RbConfig::CONFIG["host_cpu"] == "arm64"
+  brew "grantbirki/tap/vector"
+end
 # YAML processor
 brew "grantbirki/tap/yq"
 
