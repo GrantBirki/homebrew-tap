@@ -48,6 +48,8 @@ brew "grantbirki/tap/swiftformat"
 brew "grantbirki/tap/swiftlint"
 # Terraform version manager
 brew "grantbirki/tap/tfenv"
+# Observability data pipeline
+brew "grantbirki/tap/vector"
 # YAML processor
 brew "grantbirki/tap/yq"
 
