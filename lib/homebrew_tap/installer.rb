@@ -53,6 +53,7 @@ module HomebrewTap
       TapCheckout.new(runner: runner, repo_root: repo_root, ui: ui).with_current_checkout(dry_run: dry_run?) do
         repoint!
         bundle_install!
+        refresh_status_counts! unless dry_run?
       end
       ui.success("Install complete")
       ui.info("Repoint summary: #{summary}") unless @status_counts.empty?
@@ -177,6 +178,16 @@ module HomebrewTap
         ui.step("Installing Brewfile packages")
         runner.run!("brew", "bundle", "install", "--file=#{brewfile_path}")
       end
+    end
+
+    def refresh_status_counts!
+      entries = Brewfile.new(path: brewfile_path).tap_entries
+      return if entries.empty?
+
+      prefix = runner.capture("brew", "--prefix").strip
+      scanner = ReceiptScanner.new(prefix: prefix)
+      @status_counts = Hash.new(0)
+      entries.each { |entry| @status_counts[scanner.classify(entry).state] += 1 }
     end
 
     def entry_label(entry)

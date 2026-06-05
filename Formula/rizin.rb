@@ -66,8 +66,8 @@ class Rizin < Formula
     system "meson", "install", "-C", "build"
   end
 
-  def post_install
-    (HOMEBREW_PREFIX/"lib/rizin/plugins").mkpath
+  post_install_steps do
+    mkdir_p "lib/rizin/plugins", base: :homebrew_prefix
   end
 
   def caveats

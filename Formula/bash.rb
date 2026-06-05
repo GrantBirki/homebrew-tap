@@ -80,8 +80,6 @@ class Bash < Formula
     end
   end
 
-  no_autobump! because: :incompatible_version_format
-
   bottle do
     sha256 arm64_tahoe:   "075fd682409ff27a9acbbe88a1456b12826634a1669c0c99fe4d76fda574e0ef"
     sha256 arm64_sequoia: "99ad5486305387ebc826b15f2c8ac0eb5e0c221ee03bc2b8c74902f6478d8627"

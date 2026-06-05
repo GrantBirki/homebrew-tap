@@ -7,8 +7,6 @@ class Swiftlint < Formula
   license "MIT"
   head "https://github.com/realm/SwiftLint.git", branch: "main"
 
-  no_autobump! because: :bumped_by_upstream
-
   bottle do
     sha256 cellar: :any_skip_relocation, arm64_tahoe:   "9543efe7eb3d5c29413789fda02c3f8d70e4df5e3e4c4f8272dc6497be286aab"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "f502ca6c67e466021a7f728016682f61645c60e16402c1f8d5ff9020caa24b91"
