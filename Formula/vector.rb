@@ -17,9 +17,9 @@ class Vector < Formula
     (etc/"vector").install Dir["config/*"]
   end
 
-  def post_install
-    (var/"lib/vector").mkpath
-    (var/"log/vector").mkpath
+  post_install_steps do
+    mkdir_p "lib/vector"
+    mkdir_p "log/vector"
   end
 
   def caveats
