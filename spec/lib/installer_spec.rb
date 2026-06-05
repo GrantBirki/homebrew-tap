@@ -103,6 +103,36 @@ RSpec.describe HomebrewTap::Installer do
     expect(fake.commands).to include(["brew", "bundle", "install", "--file=#{File.join(@root, "Brewfile")}"])
   end
 
+  it "refreshes the final summary after Brewfile installation" do
+    write("Brewfile", <<~BREWFILE)
+      tap "grantbirki/tap"
+      brew "grantbirki/tap/bash"
+      brew "grantbirki/tap/vector"
+    BREWFILE
+    prefix = File.join(@root, "prefix")
+    receipt(prefix, :brew, "bash", body: { "source" => { "tap" => "grantbirki/tap" } })
+    stdout = StringIO.new
+    fake = runner(prefix: prefix)
+    bundle_command = ["brew", "bundle", "install", "--file=#{File.join(@root, "Brewfile")}"]
+    original_run = fake.method(:run)
+    install_vector = proc do
+      receipt(prefix, :brew, "vector", body: { "source" => { "tap" => "grantbirki/tap" } })
+    end
+
+    fake.define_singleton_method(:run) do |*cmd|
+      result = original_run.call(*cmd)
+      install_vector.call if cmd == bundle_command
+      result
+    end
+
+    status = described_class.new(argv: [], runner: fake, out: stdout, err: StringIO.new, repo_root: @root).run
+
+    expect(status).to eq(0)
+    expect(stdout.string).to include("brew grantbirki/tap/vector is not installed")
+    expect(stdout.string).to include("Repoint summary: 2 tap-managed")
+    expect(stdout.string).not_to include("1 missing")
+  end
+
   it "taps the current checkout when the tap is missing" do
     write("Brewfile", %(tap "grantbirki/tap"\n))
     fake = runner(
