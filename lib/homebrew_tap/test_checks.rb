@@ -12,7 +12,7 @@ module HomebrewTap
     ].freeze
 
     FORMULA_TOKENS = %w[
-      ansible bash bat dfu-programmer eza ffmpeg gnupg hugo libyaml nmap
+      ansible bash bat dfu-programmer eza ffmpeg gh gnupg hugo libyaml nmap
       pinentry-mac ripgrep rizin rustup swiftformat swiftlint tfenv tree
       uninstall vector yq
     ].freeze
