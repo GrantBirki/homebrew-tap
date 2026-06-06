@@ -26,6 +26,8 @@ brew "grantbirki/tap/bat"
 brew "grantbirki/tap/dfu-programmer"
 # Modern, maintained replacement for ls
 brew "grantbirki/tap/eza"
+# GitHub command-line tool
+brew "grantbirki/tap/gh"
 # Audio/video processing toolkit
 brew "grantbirki/tap/ffmpeg"
 # GNU Pretty Good Privacy package
