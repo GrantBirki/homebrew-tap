@@ -7,6 +7,7 @@ class OsvScanner < Formula
   head "https://github.com/google/osv-scanner.git", branch: "main"
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any_skip_relocation, arm64_tahoe:   "6c908a40747ea7cbd10f548d5f8edc32e4db31f6ae06a6b3016fb047de1b16c2"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "3eae4ee581c5abb4527366e9a01299acb1337624a8caea87590f3da5d412d42a"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b752628540f57cc390eb4ac0944a790a112c96739b01cad432d70e4b51299f46"
