@@ -36,6 +36,8 @@ brew "grantbirki/tap/gnupg"
 brew "grantbirki/tap/hugo"
 # Network discovery and security scanner
 brew "grantbirki/tap/nmap"
+# Vulnerability scanner backed by OSV
+brew "grantbirki/tap/osv-scanner"
 # Pinentry for GPG on Mac
 brew "grantbirki/tap/pinentry-mac"
 # Fast recursive search
