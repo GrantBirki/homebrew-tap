@@ -74,6 +74,8 @@ brew "rbenv"
 cask "grantbirki/tap/alacritty"
 # Persistence monitor
 cask "grantbirki/tap/blockblock"
+# Endpoint instrumentation and scheduled host queries
+cask "grantbirki/tap/osquery"
 # Reverse engineering platform powered by Rizin
 cask "grantbirki/tap/cutter"
 # Pinned keyboard customiser from this tap
