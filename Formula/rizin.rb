@@ -4,9 +4,9 @@ class Rizin < Formula
   url "https://github.com/rizinorg/rizin/releases/download/v0.8.2/rizin-src-v0.8.2.tar.xz"
   sha256 "1630ca52bae86f2ff37eb220699fc82f951b5b18080edfa3f50dd36a526c2d95"
   license "LGPL-3.0-only"
-  head "https://github.com/rizinorg/rizin.git", branch: "dev"
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     rebuild 1
     sha256 arm64_tahoe:   "b46c736276c060f36dccbb6bafc5216d7010b8ec4d5864b5f4ec8536d611bfde"
     sha256 arm64_sequoia: "72fb388c5879904773c4e4da645ede12114e1c0e678fd20019477256d6b58f1c"

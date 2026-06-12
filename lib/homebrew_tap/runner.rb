@@ -3,6 +3,8 @@
 require "open3"
 require "shellwords"
 
+require_relative "ui"
+
 module HomebrewTap
   CommandResult = Struct.new(:cmd, :stdout, :stderr, :status, keyword_init: true) do
     def success?

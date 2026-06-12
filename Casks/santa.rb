@@ -7,6 +7,11 @@ cask "santa" do
   desc "Binary authorization system"
   homepage "https://github.com/northpolesec/santa"
 
+  livecheck do
+    url :url
+    strategy :github_latest
+  end
+
   depends_on macos: :ventura
 
   pkg "santa-#{version}.pkg"

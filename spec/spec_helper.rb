@@ -5,14 +5,14 @@ require "coverage"
 ROOT = File.expand_path("..", __dir__)
 COVERAGE_TARGETS = (
   Dir[File.join(ROOT, "lib/homebrew_tap*.rb")] +
-  Dir[File.join(ROOT, "lib/homebrew_tap/*.rb")] +
-  %w[script/install script/lint script/test script/vendor].map { |path| File.join(ROOT, path) }
+  Dir[File.join(ROOT, "lib/homebrew_tap/*.rb")]
 ).map { |path| File.realpath(path) }.freeze
 
 Coverage.start(lines: true)
 
 require "fileutils"
 require "json"
+require "open3"
 require "stringio"
 require "tmpdir"
 
@@ -26,10 +26,9 @@ require_relative "../lib/homebrew_tap/receipts"
 require_relative "../lib/homebrew_tap/tap_checkout"
 require_relative "../lib/homebrew_tap/installer"
 require_relative "../lib/homebrew_tap/vendor"
+require_relative "../lib/homebrew_tap/provenance"
 require_relative "../lib/homebrew_tap/test_checks"
 require_relative "../lib/homebrew_tap/commands"
-
-SCRIPT_COVERAGE = {}
 
 class FakeRunner
   attr_reader :commands
@@ -90,48 +89,6 @@ module FixtureHelpers
     File.write(path, body.is_a?(String) ? body : JSON.generate(body))
     path
   end
-
-  def run_script(path, argv = [])
-    original_argv = ARGV.dup
-    original_stdout = $stdout
-    original_stderr = $stderr
-    stdout = StringIO.new
-    stderr = StringIO.new
-    status = 0
-
-    ARGV.replace(argv)
-    $stdout = stdout
-    $stderr = stderr
-    begin
-      load path
-    rescue SystemExit => e
-      status = e.status
-    ensure
-      record_script_coverage(path)
-      ARGV.replace(original_argv)
-      $stdout = original_stdout
-      $stderr = original_stderr
-    end
-
-    { status: status, stdout: stdout.string, stderr: stderr.string }
-  end
-
-  def record_script_coverage(path)
-    target = File.realpath(path)
-    Coverage.peek_result.each do |coverage_path, data|
-      next unless File.realpath(coverage_path) == target
-
-      lines = data.is_a?(Hash) ? data.fetch(:lines) : data
-      aggregate = SCRIPT_COVERAGE[target] ||= []
-      lines.each_with_index do |count, index|
-        next if count.nil?
-
-        aggregate[index] = aggregate[index].to_i + count
-      end
-    rescue Errno::ENOENT
-      next
-    end
-  end
 end
 
 RSpec.configure do |config|
@@ -154,8 +111,6 @@ RSpec.configure do |config|
     rescue Errno::ENOENT
       [File.expand_path(path), data.is_a?(Hash) ? data.fetch(:lines) : data]
     end
-    SCRIPT_COVERAGE.each { |path, lines| coverage_by_path[path] = lines }
-
     uncovered = []
     COVERAGE_TARGETS.each do |path|
       lines = coverage_by_path[path]

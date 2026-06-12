@@ -6,6 +6,7 @@ class DfuProgrammer < Formula
   license "GPL-2.0-or-later"
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     rebuild 1
     sha256 cellar: :any,                 arm64_tahoe:   "6e4e503268ee717e7eb68d2849204d017e4a1cab2094cf80363b92a73dce1adc"
     sha256 cellar: :any,                 arm64_sequoia: "9d8e4b2ed240a48c18c466631c2157e6d7b3d640d205cdda06ddfe86a3751b7f"
@@ -17,17 +18,9 @@ class DfuProgrammer < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux:  "775806218241479471ea7a2b823545e81d898f867f4c887119641aabda2c926a"
   end
 
-  head do
-    url "https://github.com/dfu-programmer/dfu-programmer.git", branch: "master"
-
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-  end
-
   depends_on "libusb"
 
   def install
-    system "./bootstrap.sh" if build.head?
     system "./configure", "--disable-silent-rules", *std_configure_args
     system "make", "install"
   end

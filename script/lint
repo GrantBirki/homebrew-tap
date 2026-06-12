@@ -1,11 +1,15 @@
-#!/usr/bin/env ruby
-# frozen_string_literal: true
+#!/usr/bin/env bash
+set -euo pipefail
 
-require_relative "../lib/homebrew_tap"
-require_relative "../lib/homebrew_tap/brewfile"
-require_relative "../lib/homebrew_tap/ui"
-require_relative "../lib/homebrew_tap/runner"
-require_relative "../lib/homebrew_tap/test_checks"
-require_relative "../lib/homebrew_tap/commands"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${HERE}/env" "$@"
 
-exit HomebrewTap::LintCommand.new(argv: ARGV).run
+cd "${DIR}"
+exec bundle exec ruby \
+  -I"${DIR}/lib" \
+  -rhomebrew_tap \
+  -rhomebrew_tap/runner \
+  -rhomebrew_tap/test_checks \
+  -rhomebrew_tap/commands \
+  -e 'exit HomebrewTap::LintCommand.new(argv: ARGV).run' \
+  -- "$@"

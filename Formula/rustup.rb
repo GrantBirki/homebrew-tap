@@ -6,9 +6,9 @@ class Rustup < Formula
   license any_of: ["Apache-2.0", "MIT"]
   revision 1
   compatibility_version 1
-  head "https://github.com/rust-lang/rustup.git", branch: "main"
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     rebuild 1
     sha256 cellar: :any_skip_relocation, arm64_tahoe:   "1adfcf92959af43b31eb55007ec19dccb0236b9e44804025aeda84f931d7a427"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "39caad94c4db4d5bc3ca121a7dfcdc41281281088b36b11afb24a92de653b5c7"

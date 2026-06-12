@@ -5,7 +5,6 @@ class Ripgrep < Formula
   sha256 "046fa01a216793b8bd2750f9d68d4ad43986eb9c0d6122600f993906012972e8"
   license "Unlicense"
   compatibility_version 1
-  head "https://github.com/BurntSushi/ripgrep.git", branch: "master"
 
   livecheck do
     url :stable
@@ -13,6 +12,7 @@ class Ripgrep < Formula
   end
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any,                 arm64_tahoe:   "f4dc761b07edb8e6438b618d22f7e57252903e2f2b973e2c7aa0da518fc374b9"
     sha256 cellar: :any,                 arm64_sequoia: "0153b06af62b4b8c6ed3f2756dcc4859f74a6128a286f976740468229265cfbe"
     sha256 cellar: :any,                 arm64_sonoma:  "d9c83b35f30d48925b8c573afa83ec32b10aaca8f247bc938650a838d188c5df"

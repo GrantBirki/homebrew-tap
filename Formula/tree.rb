@@ -7,6 +7,7 @@ class Tree < Formula
   compatibility_version 1
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d1967d2ed08717f963addb249ea6b8ca11c26ecb59efba34f2860853a06bedc7"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "ef367d0a5e74970e2f5042479fe4000a8b324ac075520c66f8457f1cb06ca668"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "006880fab518e0dcab2e2c906be4378996138e370199de0898e9dffb701395a9"

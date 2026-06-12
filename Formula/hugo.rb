@@ -4,7 +4,6 @@ class Hugo < Formula
   url "https://github.com/gohugoio/hugo/archive/refs/tags/v0.162.0.tar.gz"
   sha256 "eca552a365606499e3be6c9b7d04d50560825455db5cf0cc070b5af5b8f36573"
   license "Apache-2.0"
-  head "https://github.com/gohugoio/hugo.git", branch: "master"
 
   livecheck do
     url :stable
@@ -12,6 +11,7 @@ class Hugo < Formula
   end
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any_skip_relocation, arm64_tahoe:   "25fb8c74ee4f778f9545cb3b07ea950efe37344992fb762064489decbbe5a5ad"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "6d6aba48e73a0e99ae79a314f34af2405b0df8b81c5b5a59c97270a80698850d"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "51594b6a963c0cd4da1b98d575f67ba592a3f538c8e0459a7eacc8a808153d40"

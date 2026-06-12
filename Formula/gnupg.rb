@@ -18,6 +18,7 @@ class Gnupg < Formula
   end
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 arm64_tahoe:   "97b693dac83b61c9e6e3ec51c2a2dd8e22c70cd51e50aa334bfc64b693005839"
     sha256 arm64_sequoia: "3af7e31aa9d7b338fb5d5829452b66fa303f5914fcb1a974106107a8fa1915e4"
     sha256 arm64_sonoma:  "2fbb4e6a008b159b9733e7e374aaab0d84f94c9d813703a880a04e6f345e24db"

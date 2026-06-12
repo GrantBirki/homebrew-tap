@@ -8,7 +8,8 @@ cask "alacritty" do
   homepage "https://github.com/alacritty/alacritty/"
 
   livecheck do
-    skip "Pinned version for bootstrap reproducibility"
+    url :url
+    strategy :github_latest
   end
 
   disable! date: "2026-09-01", because: :fails_gatekeeper_check

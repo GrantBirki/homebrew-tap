@@ -7,9 +7,9 @@ class Ansible < Formula
   sha256 "ebca5898346963691915bfea19048f5019b4e46f57e856dc1b790bcde3769224"
   license "GPL-3.0-or-later"
   compatibility_version 2
-  head "https://github.com/ansible/ansible.git", branch: "devel"
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any,                 arm64_tahoe:   "3015e788888017b35794146dbe7ac4a192ff287c81e12f75fb2cb73ed1299c33"
     sha256 cellar: :any,                 arm64_sequoia: "06914ab3e073e43d3b70ef5db88697efa0cdae3aa03efb378d2d551bae64087f"
     sha256 cellar: :any,                 arm64_sonoma:  "1ee3ad50a668cd66f29284da2ffc7d4f4d4061edc29497032451506b9586bbb8"

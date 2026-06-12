@@ -4,7 +4,6 @@ class Tfenv < Formula
   url "https://github.com/tfutils/tfenv/archive/refs/tags/v3.2.2.tar.gz"
   sha256 "c9c8b2e2588cf026aafa9803dfdefdfc7aa258577c24ea9624fe53f764edea47"
   license "MIT"
-  head "https://github.com/tfutils/tfenv.git", branch: "master"
 
   livecheck do
     url :stable
@@ -12,6 +11,7 @@ class Tfenv < Formula
   end
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any_skip_relocation, all: "f28386d9f8bcedb39429c6abf417133cd80a10bd1935c6286bcfe4871b8c0887"
   end
 

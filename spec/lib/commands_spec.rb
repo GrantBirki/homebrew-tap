@@ -10,6 +10,7 @@ RSpec.describe "command objects" do
       BUNDLE_CACHE_PATH: "vendor/cache"
       BUNDLE_NO_INSTALL: "true"
       BUNDLE_FROZEN: "true"
+      BUNDLE_DISABLE_SHARED_GEMS: "true"
     YAML
     write("Gemfile.lock", <<~LOCK)
       GEM
@@ -27,9 +28,16 @@ RSpec.describe "command objects" do
          2.7.2
     LOCK
     write(".github/workflows/test.yml", "steps:\n  - uses: actions/checkout@#{'a' * 40}\n")
-    body = (HomebrewTap::TestChecks::FORMULA_TOKENS.map { |token| %(brew "grantbirki/tap/#{token}") } +
-      HomebrewTap::TestChecks::CASK_TOKENS.map { |token| %(cask "grantbirki/tap/#{token}") }).join("\n")
+    body = (["tap \"grantbirki/tap\"", "cask_args require_sha: true"] +
+      HomebrewTap::TestChecks::FORMULA_TOKENS.map { |token| %(brew "grantbirki/tap/#{token}", trusted: true) } +
+      HomebrewTap::TestChecks::CASK_TOKENS.map { |token| %(cask "grantbirki/tap/#{token}", trusted: true) }).join("\n")
     write("Brewfile", body)
+    write("provenance.yml", YAML.dump(
+                              "schema_version" => 1,
+                              "policy_effective_at" => "2026-06-11T00:00:00Z",
+                              "formulae" => {},
+                              "casks" => {},
+                            ))
   end
 
   it "runs lint checks and handles help and unknown options" do
@@ -45,9 +53,9 @@ RSpec.describe "command objects" do
     fake = FakeRunner.new
     lint_out = StringIO.new
     expect(HomebrewTap::LintCommand.new(argv: [], runner: fake, out: lint_out, err: StringIO.new, root: @root).run).to eq(0)
-    expect(lint_out.string).to include("Ruby syntax", "GitHub Actions pins", "Homebrew style", "RuboCop", "Lint complete")
+    expect(lint_out.string).to include("Ruby syntax", "Shell syntax", "GitHub Actions pins", "Homebrew style", "RuboCop", "Lint complete")
     expect(lint_out.string).not_to include("$ ruby -c")
-    style_command = fake.commands.find { |cmd| cmd[3, 2] == ["brew", "style"] }
+    style_command = fake.commands.find { |cmd| cmd.each_cons(2).include?(["brew", "style"]) }
     expect(style_command).not_to be_nil
     rubocop_command = fake.commands.find { |cmd| cmd.include?("rubocop") }
     expect(rubocop_command).not_to be_nil

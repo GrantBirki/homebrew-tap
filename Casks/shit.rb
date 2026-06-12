@@ -16,18 +16,6 @@ cask "shit" do
 
   app "Shit.app"
 
-  postflight do
-    result = system_command(
-      "/usr/bin/xattr",
-      args:         ["-dr", "com.apple.quarantine", "#{appdir}/Shit.app"],
-      print_stderr: true,
-    )
-    unless result.success?
-      opoo "Failed to clear quarantine automatically. " \
-           "You can run: `xattr -dr com.apple.quarantine #{appdir}/Shit.app`"
-    end
-  end
-
   zap trash: [
     "~/Library/Preferences/io.birki.shit.plist",
     "~/Library/Saved Application State/io.birki.shit.savedState",

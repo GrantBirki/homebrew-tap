@@ -4,7 +4,6 @@ class OsvScanner < Formula
   url "https://github.com/google/osv-scanner/archive/refs/tags/v2.3.8.tar.gz"
   sha256 "768e5d38a68b5675cd28a298e6d28973b29170743ae79f5de58be956be4a0c66"
   license "Apache-2.0"
-  head "https://github.com/google/osv-scanner.git", branch: "main"
 
   bottle do
     root_url "https://ghcr.io/v2/homebrew/core"

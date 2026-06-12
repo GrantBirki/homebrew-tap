@@ -5,9 +5,9 @@ class Bat < Formula
   sha256 "4474de87e084953eefc1120cf905a79f72bbbf85091e30cf37c9214eafcaa9c9"
   license any_of: ["Apache-2.0", "MIT"]
   compatibility_version 1
-  head "https://github.com/sharkdp/bat.git", branch: "master"
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any,                 arm64_tahoe:   "d209bb9f1f7eab77b65f9b5573007ce52f39fb90b379ffefeffc2181119991aa"
     sha256 cellar: :any,                 arm64_sequoia: "072537d409b056879cb735bcbc0454562b8bae732fbbfac9242afea736410f88"
     sha256 cellar: :any,                 arm64_sonoma:  "9492e6fd0b1ee200e279476da087bf1cb6b2202c5e4c2507336c583b836c5049"

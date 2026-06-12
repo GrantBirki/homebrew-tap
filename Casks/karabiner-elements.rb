@@ -9,7 +9,8 @@ cask "karabiner-elements" do
   homepage "https://karabiner-elements.pqrs.org/"
 
   livecheck do
-    skip "Pinned version for bootstrap reproducibility"
+    url "https://appcast.pqrs.org/karabiner-elements-appcast.xml"
+    strategy :sparkle
   end
 
   auto_updates true

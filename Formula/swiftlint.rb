@@ -5,9 +5,9 @@ class Swiftlint < Formula
       tag:      "0.63.3",
       revision: "70a5f3225d940d4573d3d2ffcf85b07ab2a6c5de"
   license "MIT"
-  head "https://github.com/realm/SwiftLint.git", branch: "main"
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any_skip_relocation, arm64_tahoe:   "9543efe7eb3d5c29413789fda02c3f8d70e4df5e3e4c4f8272dc6497be286aab"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "f502ca6c67e466021a7f728016682f61645c60e16402c1f8d5ff9020caa24b91"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3e0b17659999384334ff2e9fe91968853e51f563ef1ad64e5971bda1b5840c3e"

@@ -12,7 +12,8 @@ cask "cutter" do
   homepage "https://cutter.re/"
 
   livecheck do
-    skip "Pinned version for bootstrap reproducibility"
+    url :url
+    strategy :github_latest
   end
 
   depends_on :macos
