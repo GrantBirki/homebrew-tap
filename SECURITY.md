@@ -30,9 +30,16 @@ enable `HOMEBREW_SBOM=1` locally when they need a machine-specific snapshot.
 ## Update policy
 
 Ordinary formula and cask releases must age for 14 complete days after their
-primary-source publication time before adoption. Discovery is separate from
-adoption: livecheck may report a release immediately, but it does not change a
-pin.
+primary-source publication time before adoption. The Espresso, OneShot, and
+Shit casks are owner-controlled releases and may be adopted immediately. This
+exemption applies only to those exact cask and upstream-repository pairs; a new
+personal release is not automatically exempt.
+
+Owner-controlled casks still require an immutable tag and commit, primary-source
+release evidence, publication and adoption timestamps, an independently
+verified asset SHA-256, a whole-cask hash, and review of signing, quarantine,
+and installation behavior. Discovery is separate from adoption: livecheck may
+report a release immediately, but it does not change a pin.
 
 A cooldown may be bypassed only for a verified vulnerability fix, compromised
 release response, signing-certificate revocation, invalid attestation, or
@@ -72,7 +79,8 @@ Prefer one formula update per pull request unless formulae are inseparably
 coupled. Do not vendor a transitive dependency merely because a direct root
 uses it.
 
-For a cask update, verify the exact primary-source asset and independently
+For a cask update, apply the cooldown unless it is one of the three exact
+owner-controlled casks. Verify the exact primary-source asset and independently
 calculate its SHA-256. Prefer the GitHub release API digest when available. For
 signed applications, also verify Gatekeeper/notarization, Developer ID, and
 Team ID. Review package signatures, privileged helpers, system extensions,

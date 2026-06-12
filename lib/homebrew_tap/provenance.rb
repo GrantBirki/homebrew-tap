@@ -9,6 +9,11 @@ module HomebrewTap
   class ProvenanceManifest
     SCHEMA_VERSION = 1
     COOLDOWN_SECONDS = 14 * 24 * 60 * 60
+    OWNER_CONTROLLED_CASKS = {
+      "espresso" => "grantbirki/espresso",
+      "oneshot" => "grantbirki/oneshot",
+      "shit" => "grantbirki/shit"
+    }.freeze
     SHA40 = /\A[0-9a-f]{40}\z/i
     SHA256 = /\A[0-9a-f]{64}\z/i
     TOP_LEVEL_KEYS = %w[schema_version policy_effective_at formulae casks].freeze
@@ -133,7 +138,7 @@ module HomebrewTap
       validate_release_evidence(entry["release_evidence"], label, failures)
       validate_sha(entry["local_file_sha256"], SHA256, "#{label}.local_file_sha256", failures)
       validate_local_hash(file, entry, label, failures)
-      validate_dates(entry, label, failures)
+      validate_dates(section, token, entry, label, failures)
       validate_legacy_baseline(entry, label, file, failures) if entry["legacy_baseline"].is_a?(Hash)
       validate_content(file, section, entry, label, failures)
       failures
@@ -190,7 +195,7 @@ module HomebrewTap
       failures << "#{label}.local_file_sha256 does not match #{relative(file)}" unless actual == entry["local_file_sha256"]
     end
 
-    def validate_dates(entry, label, failures)
+    def validate_dates(section, token, entry, label, failures)
       release_time = parse_time(entry["release_published_at"], "#{label}.release_published_at", failures)
       adopted_time = parse_time(entry["adopted_at"], "#{label}.adopted_at", failures)
       effective_time = parse_time(data["policy_effective_at"], "policy_effective_at", failures)
@@ -208,11 +213,19 @@ module HomebrewTap
       end
       failures << "#{label}.legacy_baseline must be a mapping or null" unless entry["legacy_baseline"].nil?
 
+      return if owner_controlled_cask?(section, token, entry)
       return if adopted_time - release_time >= COOLDOWN_SECONDS
 
       return if exception.is_a?(Hash) && present?(exception["reason"]) && https_url?(exception["reference"])
 
       failures << "#{label} violates the 14-day cooldown without a documented exception"
+    end
+
+    def owner_controlled_cask?(section, token, entry)
+      repository = OWNER_CONTROLLED_CASKS[token]
+      section == "casks" && repository &&
+        entry["source_type"] == "personal-release" &&
+        entry["upstream_repository"].to_s.casecmp?(repository)
     end
 
     def validate_legacy_baseline(entry, label, file, failures)

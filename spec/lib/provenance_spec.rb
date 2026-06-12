@@ -101,6 +101,27 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     write("provenance.yml", YAML.dump(data))
   end
 
+  def owner_controlled_cask_data(token, repository)
+    data = base_data
+    FileUtils.rm(File.join(@root, "Casks/app.rb"))
+    source = cask_source
+             .sub('cask "app"', %(cask "#{token}"))
+             .sub("https://example.com/app-2.0.0.zip", "https://github.com/#{repository}/releases/download/v2.0.0/App.zip")
+    cask_path = write("Casks/#{token}.rb", source)
+    entry = data["casks"].delete("app")
+    entry.merge!(
+      "source_type" => "personal-release",
+      "upstream_repository" => repository,
+      "local_file_sha256" => Digest::SHA256.file(cask_path).hexdigest,
+      "release_published_at" => "2026-06-10T00:00:00Z",
+      "adopted_at" => "2026-06-12T00:00:00Z",
+      "cooldown_exception" => nil,
+      "legacy_baseline" => nil,
+    )
+    data["casks"][token] = entry
+    data
+  end
+
   def manifest(data = base_data)
     write_manifest(data)
     described_class.new(root: @root)
@@ -195,6 +216,37 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     entry["legacy_baseline"] = legacy_baseline
     write_manifest(data)
     expect { described_class.new(root: @root).validate }.to raise_error(HomebrewTap::Error, /legacy_baseline/)
+  end
+
+  HomebrewTap::ProvenanceManifest::OWNER_CONTROLLED_CASKS.each do |token, repository|
+    it "allows immediate adoption of the owner-controlled #{token} cask" do
+      expect(manifest(owner_controlled_cask_data(token, repository)).validate).to eq(true)
+    end
+  end
+
+  it "keeps other personal-release casks on the cooldown" do
+    expect { manifest(owner_controlled_cask_data("other", "grantbirki/other")).validate }
+      .to raise_error(HomebrewTap::Error, /14-day cooldown/)
+  end
+
+  it "binds owner-controlled casks to their source type and repository" do
+    wrong_repository = owner_controlled_cask_data("espresso", "example/espresso")
+    expect { manifest(wrong_repository).validate }.to raise_error(HomebrewTap::Error, /14-day cooldown/)
+
+    wrong_source = owner_controlled_cask_data("espresso", "grantbirki/espresso")
+    wrong_source["casks"]["espresso"]["source_type"] = "upstream-release"
+    expect { manifest(wrong_source).validate }.to raise_error(HomebrewTap::Error, /14-day cooldown/)
+  end
+
+  it "keeps timestamp and exception validation for owner-controlled casks" do
+    data = owner_controlled_cask_data("shit", "grantbirki/shit")
+    entry = data["casks"]["shit"]
+    entry["adopted_at"] = "2026-06-09T00:00:00Z"
+    entry["cooldown_exception"] = { "reason" => "", "reference" => "" }
+
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error) do |error|
+      expect(error.message).to include("adopted_at predates", "cooldown_exception must contain")
+    end
   end
 
   it "rejects mutable inputs and formula or cask digest drift" do
