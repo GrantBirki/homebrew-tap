@@ -21,10 +21,12 @@ brew install grantbirki/tap/bash
 ## Update a Formula
 
 Formulae in this tap are vendored direct roots. They do not move automatically
-with `homebrew/core`; transitive dependencies still do. Formula and cask
-updates use a 14-day release cooldown, exact upstream provenance, and explicit
-adoption reasons. See [SECURITY.md](SECURITY.md) before changing a version,
-checksum, resource, or bottle.
+with `homebrew/core`; transitive dependencies still do. Formula and most cask
+updates use a 14-day release cooldown. The owner-controlled Espresso, OneShot,
+and Shit casks may be adopted immediately, but still require exact upstream
+provenance, checksums, and explicit adoption reasons. See
+[SECURITY.md](SECURITY.md) before changing a version, checksum, resource, or
+bottle.
 
 ## Vendor a Formula
 

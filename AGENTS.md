@@ -275,6 +275,18 @@ Do not promote that setting to the workflow or installer environment generally.
 The policy took effect on June 11, 2026. Ordinary formula and cask releases
 must age for 14 complete days between primary-source publication and adoption.
 
+The exact owner-controlled casks **espresso**, **oneshot**, and **shit** may be
+adopted immediately. The executable policy binds each exemption to its cask
+token, **personal-release** source type, and matching **GrantBirki/<token>**
+repository. A new personal release is not automatically exempt and requires an
+explicit policy, code, test, and documentation change.
+
+Owner-controlled casks still require exact tags and commits, primary-source
+release evidence, publication and adoption timestamps, independent artifact
+checksums, whole-cask hashes, signing and installation review, and preserved
+quarantine. Their normal updates keep **cooldown_exception** empty because this
+is a standing ownership policy, not an incident exception.
+
 Permitted exceptions are narrow:
 
 - A verified vulnerability fix
@@ -420,7 +432,8 @@ For a pinned cask:
    Homebrew cask recipe commit/blob and primary artifact metadata instead.
    ImageOptim 1.9.3 is the current example. Never invent a tag or commit.
 4. Confirm the primary-source publication time.
-5. Apply the 14-day cooldown unless a valid exception exists.
+5. Apply the 14-day cooldown unless this is one of the three exact
+   owner-controlled casks or a valid incident exception exists.
 6. Prefer the GitHub release API digest when available.
 7. Independently calculate the downloaded asset SHA-256.
 8. Review the cask diff, install artifacts, uninstall behavior, and zap paths.
