@@ -19,7 +19,7 @@ env:
 jobs:
   lint:
     name: lint
-    runs-on: macos-26
+    runs-on: macos-latest
     timeout-minutes: 20
 
     steps:

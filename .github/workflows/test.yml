@@ -19,7 +19,7 @@ env:
 jobs:
   test:
     name: test
-    runs-on: macos-26
+    runs-on: macos-latest
     timeout-minutes: 20
 
     steps:

@@ -782,7 +782,10 @@ State what passed or what could not be run.
 CI is intentionally non-installing.
 
 - Workflows and jobs are named lint and test.
-- Jobs run on the OS-major macos-26 label.
+- Jobs intentionally run on GitHub's moving macos-latest label. The runner OS
+  may change during GitHub's announced migration windows; keep the explicit
+  stable Homebrew 6 update, exact project Ruby, local content parsing, and
+  SHA-pinned Actions as the reproducibility boundary.
 - Jobs have a 20-minute timeout.
 - Workflow permissions are read-only contents.
 - Checkout does not persist credentials.
