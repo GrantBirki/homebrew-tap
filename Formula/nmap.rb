@@ -5,7 +5,6 @@ class Nmap < Formula
   sha256 "df512492ffd108e53a27a06f26d8635bbe89e0e569455dc8ffef058c035d51b2"
   license :cannot_represent
   compatibility_version 1
-  head "https://svn.nmap.org/nmap/"
 
   livecheck do
     url "https://nmap.org/download"
@@ -13,6 +12,7 @@ class Nmap < Formula
   end
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 arm64_tahoe:   "610785e4dd545c5f71d3af2d221f8a92951714710cf98ac4ed10f6fd0d0c5153"
     sha256 arm64_sequoia: "5840513b1bcc8c8e20b68a1a9e71977d424827ba9e26c157e79760dc218fb55e"
     sha256 arm64_sonoma:  "47740d854f1669dc68deabbfd6f5d54036c99ddb606ba39d70e747f7632f4f85"

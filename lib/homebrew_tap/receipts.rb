@@ -3,7 +3,7 @@
 require "json"
 
 module HomebrewTap
-  ReceiptStatus = Struct.new(:entry, :state, :source_tap, :path, :error, keyword_init: true) do
+  ReceiptStatus = Struct.new(:entry, :state, :source_tap, :installed_version, :path, :error, keyword_init: true) do
     def tap
       source_tap
     end
@@ -25,10 +25,25 @@ module HomebrewTap
       return ReceiptStatus.new(entry: entry, state: :missing) unless path
 
       data = JSON.parse(File.read(path))
-      tap = data.dig("source", "tap")
-      state = receipt_state(tap)
-      ReceiptStatus.new(entry: entry, state: state, source_tap: tap, path: path)
-    rescue JSON::ParserError => e
+      return unknown(entry, path, "receipt root is not an object") unless data.is_a?(Hash)
+
+      source = data["source"]
+      return unknown(entry, path, "receipt source is not an object") unless source.is_a?(Hash)
+
+      tap = source["tap"]
+      return unknown(entry, path, "receipt source.tap is missing") unless present_string?(tap)
+
+      version = installed_version(entry, source, path)
+      return unknown(entry, path, "receipt source version is missing") unless present_string?(version)
+
+      ReceiptStatus.new(
+        entry: entry,
+        state: receipt_state(tap),
+        source_tap: tap,
+        installed_version: version,
+        path: path
+      )
+    rescue JSON::ParserError, Errno::ENOENT => e
       ReceiptStatus.new(entry: entry, state: :unknown_receipt, path: path, error: e.message)
     end
 
@@ -44,9 +59,29 @@ module HomebrewTap
     end
 
     def receipt_state(tap)
-      return :unknown_receipt if tap.nil?
-
       tap == TAP_NAME ? :tap_managed : :wrong_tap
+    end
+
+    def installed_version(entry, source, path)
+      version = entry.type == :brew ? version_from_path(entry, path) : source["version"]
+      return version if present_string?(version)
+
+      version_from_path(entry, path)
+    end
+
+    def version_from_path(entry, path)
+      return File.basename(File.dirname(path)) if entry.type == :brew
+
+      match = path.match(%r{/\.metadata/([^/]+)/})
+      match&.[](1)
+    end
+
+    def present_string?(value)
+      value.is_a?(String) && !value.empty?
+    end
+
+    def unknown(entry, path, error)
+      ReceiptStatus.new(entry: entry, state: :unknown_receipt, path: path, error: error)
     end
 
     def cask_receipts(entry)

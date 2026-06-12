@@ -1,12 +1,30 @@
-#!/usr/bin/env ruby
-# frozen_string_literal: true
+#!/usr/bin/env bash
+set -euo pipefail
 
-require_relative "../lib/homebrew_tap"
-require_relative "../lib/homebrew_tap/brewfile"
-require_relative "../lib/homebrew_tap/ui"
-require_relative "../lib/homebrew_tap/runner"
-require_relative "../lib/homebrew_tap/receipts"
-require_relative "../lib/homebrew_tap/tap_checkout"
-require_relative "../lib/homebrew_tap/installer"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-exit HomebrewTap::Installer.new(argv: ARGV).run
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is not installed. See https://brew.sh/ to install it first." >&2
+  exit 1
+fi
+
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_REQUIRE_TAP_TRUST=1
+readonly TAP_BREW_BIN="$(command -v brew)"
+
+readonly RUBY_ENTRYPOINT='ENV.delete("HOMEBREW_NO_INSTALL_FROM_API")
+root = ARGV.shift
+brew_bin = ARGV.shift
+ENV["PATH"] = "#{File.dirname(brew_bin)}:#{ENV.fetch("PATH")}"
+%w[
+  homebrew_tap
+  homebrew_tap/brewfile
+  homebrew_tap/ui
+  homebrew_tap/runner
+  homebrew_tap/receipts
+  homebrew_tap/tap_checkout
+  homebrew_tap/installer
+].each { |file| require File.join(root, "lib", file) }
+exit HomebrewTap::Installer.new(argv: ARGV).run'
+
+exec env HOMEBREW_NO_INSTALL_FROM_API=1 "$TAP_BREW_BIN" ruby -e "$RUBY_ENTRYPOINT" -- "$ROOT" "$TAP_BREW_BIN" "$@"

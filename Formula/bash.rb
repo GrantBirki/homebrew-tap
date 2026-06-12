@@ -1,46 +1,42 @@
 class Bash < Formula
   desc "Bourne-Again SHell, a UNIX command interpreter"
   homepage "https://www.gnu.org/software/bash/"
+  url "https://ftpmirror.gnu.org/gnu/bash/bash-5.3.tar.gz"
+  mirror "https://ftp.gnu.org/gnu/bash/bash-5.3.tar.gz"
+  mirror "https://mirrors.kernel.org/gnu/bash/bash-5.3.tar.gz"
+  mirror "https://mirrors.ocf.berkeley.edu/gnu/bash/bash-5.3.tar.gz"
+  version "5.3.9"
+  sha256 "0d5cd86965f869a26cf64f4b71be7b96f90a3ba8b3d74e27e8e9d9d5550f31ba"
   license "GPL-3.0-or-later"
   compatibility_version 1
-  head "https://git.savannah.gnu.org/git/bash.git", branch: "master"
 
-  stable do
-    url "https://ftpmirror.gnu.org/gnu/bash/bash-5.3.tar.gz"
-    mirror "https://ftp.gnu.org/gnu/bash/bash-5.3.tar.gz"
-    mirror "https://mirrors.kernel.org/gnu/bash/bash-5.3.tar.gz"
-    mirror "https://mirrors.ocf.berkeley.edu/gnu/bash/bash-5.3.tar.gz"
-    sha256 "0d5cd86965f869a26cf64f4b71be7b96f90a3ba8b3d74e27e8e9d9d5550f31ba"
-    version "5.3.9"
+  # Add new patches using this format:
+  #
+  # patch_checksum_pairs = %w[
+  #   001 <checksum for 5.3.1>
+  #   002 <checksum for 5.3.2>
+  #   ...
+  # ]
 
-    # Add new patches using this format:
-    #
-    # patch_checksum_pairs = %w[
-    #   001 <checksum for 5.3.1>
-    #   002 <checksum for 5.3.2>
-    #   ...
-    # ]
+  patch_checksum_pairs = %w[
+    001 1f608434364af86b9b45c8b0ea3fb3b165fb830d27697e6cdfc7ac17dee3287f
+    002 e385548a00130765ec7938a56fbdca52447ab41fabc95a25f19ade527e282001
+    003 f245d9c7dc3f5a20d84b53d249334747940936f09dc97e1dcb89fc3ab37d60ed
+    004 9591d245045529f32f0812f94180b9d9ce9023f5a765c039b852e5dfc99747d0
+    005 cca1ef52dbbf433bc98e33269b64b2c814028efe2538be1e2c9a377da90bc99d
+    006 29119addefed8eff91ae37fd51822c31780ee30d4a28376e96002706c995ff10
+    007 c0976bbfffa1453c7cfdd62058f206a318568ff2d690f5d4fa048793fa3eb299
+    008 097cd723cbfb8907674ac32214063a3fd85282657ec5b4e544d2c0f719653fb4
+    009 eee30fe78a4b0cb2fe20e010e00308899cfc613e0774ebb3c8557a1552f24f8c
+  ]
 
-    patch_checksum_pairs = %w[
-      001 1f608434364af86b9b45c8b0ea3fb3b165fb830d27697e6cdfc7ac17dee3287f
-      002 e385548a00130765ec7938a56fbdca52447ab41fabc95a25f19ade527e282001
-      003 f245d9c7dc3f5a20d84b53d249334747940936f09dc97e1dcb89fc3ab37d60ed
-      004 9591d245045529f32f0812f94180b9d9ce9023f5a765c039b852e5dfc99747d0
-      005 cca1ef52dbbf433bc98e33269b64b2c814028efe2538be1e2c9a377da90bc99d
-      006 29119addefed8eff91ae37fd51822c31780ee30d4a28376e96002706c995ff10
-      007 c0976bbfffa1453c7cfdd62058f206a318568ff2d690f5d4fa048793fa3eb299
-      008 097cd723cbfb8907674ac32214063a3fd85282657ec5b4e544d2c0f719653fb4
-      009 eee30fe78a4b0cb2fe20e010e00308899cfc613e0774ebb3c8557a1552f24f8c
-    ]
-
-    patch_checksum_pairs.each_slice(2) do |p, checksum|
-      patch :p0 do
-        url "https://ftpmirror.gnu.org/gnu/bash/bash-5.3-patches/bash53-#{p}"
-        mirror "https://ftp.gnu.org/gnu/bash/bash-5.3-patches/bash53-#{p}"
-        mirror "https://mirrors.kernel.org/gnu/bash/bash-5.3-patches/bash53-#{p}"
-        mirror "https://mirrors.ocf.berkeley.edu/gnu/bash/bash-5.3-patches/bash53-#{p}"
-        sha256 checksum
-      end
+  patch_checksum_pairs.each_slice(2) do |p, checksum|
+    patch :p0 do
+      url "https://ftpmirror.gnu.org/gnu/bash/bash-5.3-patches/bash53-#{p}"
+      mirror "https://ftp.gnu.org/gnu/bash/bash-5.3-patches/bash53-#{p}"
+      mirror "https://mirrors.kernel.org/gnu/bash/bash-5.3-patches/bash53-#{p}"
+      mirror "https://mirrors.ocf.berkeley.edu/gnu/bash/bash-5.3-patches/bash53-#{p}"
+      sha256 checksum
     end
   end
 
@@ -81,6 +77,7 @@ class Bash < Formula
   end
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 arm64_tahoe:   "075fd682409ff27a9acbbe88a1456b12826634a1669c0c99fe4d76fda574e0ef"
     sha256 arm64_sequoia: "99ad5486305387ebc826b15f2c8ac0eb5e0c221ee03bc2b8c74902f6478d8627"
     sha256 arm64_sonoma:  "6de5e01ff6246712ee5f78dbe2828bdffffd4bd91539963dfa6d0eb10b0dcd0f"

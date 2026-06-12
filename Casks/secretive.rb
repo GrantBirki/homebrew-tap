@@ -22,7 +22,8 @@ cask "secretive" do
     sha256 "696d07812e4431075234a900a0136dbad3131a91086e535fc2b07d69a1d084ba"
 
     livecheck do
-      skip "Pinned version for bootstrap reproducibility"
+      url :url
+      strategy :github_latest
     end
   end
 

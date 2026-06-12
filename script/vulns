@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd "${HERE}/.." && pwd)"
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is required." >&2
+  exit 2
+fi
+
+if ! brew command vulns >/dev/null 2>&1; then
+  echo "brew vulns is not installed; install Homebrew/homebrew-brew-vulns explicitly before using this command." >&2
+  exit 2
+fi
+
+cat >&2 <<'NOTICE'
+This scan covers supported formula source repositories. Skipped packages are a
+coverage gap, and cask checksums or signatures are not verified by brew-vulns.
+NOTICE
+
+exec brew vulns --brewfile "${ROOT}/Brewfile" --deps --severity high

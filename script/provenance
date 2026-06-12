@@ -9,6 +9,7 @@ exec bundle exec ruby \
   -I"${DIR}/lib" \
   -rhomebrew_tap \
   -rhomebrew_tap/runner \
-  -rhomebrew_tap/vendor \
-  -e 'exit HomebrewTap::Vendor.new(argv: ARGV).run' \
+  -rhomebrew_tap/test_checks \
+  -rhomebrew_tap/provenance \
+  -e 'exit HomebrewTap::ProvenanceCommand.new(argv: ARGV).run' \
   -- "$@"

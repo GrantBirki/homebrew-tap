@@ -8,7 +8,8 @@ cask "imageoptim" do
   homepage "https://imageoptim.com/mac"
 
   livecheck do
-    skip "Pinned version for bootstrap reproducibility"
+    url "https://imageoptim.com/appcast.xml"
+    strategy :sparkle
   end
 
   auto_updates true

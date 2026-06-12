@@ -4,9 +4,9 @@ class PinentryMac < Formula
   url "https://github.com/GPGTools/pinentry/archive/refs/tags/v1.3.1.1.tar.gz"
   sha256 "ba929dd1c57b102fbfca12bc2d784be441498e7c82ee97a1231cbe03dcda7ae9"
   license all_of: ["GPL-2.0-or-later", "GPL-3.0-or-later"]
-  head "https://github.com/GPGTools/pinentry.git", branch: "master"
 
   bottle do
+    root_url "https://ghcr.io/v2/homebrew/core"
     sha256 cellar: :any, arm64_tahoe:   "784844f7e5ccb8be3b5eeb567318c8948f492c57e70289189a296dcdaa31cb7d"
     sha256 cellar: :any, arm64_sequoia: "f0cacdc9497edf7391983fe84573ddfd826d0315680847a3f78ec020b6d145e5"
     sha256 cellar: :any, arm64_sonoma:  "6c879dba2621079072e566b95c00f96e7731a164dc6206054933058375df7014"

@@ -12,7 +12,8 @@ cask "keepassxc" do
   homepage "https://keepassxc.org/"
 
   livecheck do
-    skip "Pinned version for bootstrap reproducibility"
+    url :url
+    strategy :github_latest
   end
 
   conflicts_with cask: [

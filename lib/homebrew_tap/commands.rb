@@ -20,6 +20,9 @@ module HomebrewTap
       ui.step("Ruby syntax")
       TestChecks::RubySyntax.new(root: @root, runner: @runner, quiet: true).validate
       ui.success("Ruby syntax")
+      ui.step("Shell syntax")
+      TestChecks::ShellSyntax.new(root: @root, runner: @runner, quiet: true).validate
+      ui.success("Shell syntax")
       ui.step("GitHub Actions pins")
       TestChecks::WorkflowPins.new(root: @root).validate
       ui.success("GitHub Actions pins")
@@ -67,8 +70,11 @@ module HomebrewTap
       return help(0) if @help
 
       TestChecks::BundlerSupplyChain.new(root: @root).validate
+      ProvenanceManifest.new(root: @root).validate
       TestChecks::WorkflowPins.new(root: @root).validate
       TestChecks::RubySyntax.new(root: @root, runner: @runner).validate
+      TestChecks::ShellSyntax.new(root: @root, runner: @runner).validate
+      TestChecks::FormulaParsing.new(root: @root, runner: @runner).validate
       TestChecks::CaskParsing.new(root: @root, runner: @runner).validate
       TestChecks::BrewfileParsing.new(root: @root, runner: @runner).validate
       TestChecks::BrewfilePins.new(root: @root).validate
