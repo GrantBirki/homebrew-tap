@@ -75,7 +75,7 @@ formulae:
     recipe_commit: af83feacfdb6ac6b1ddbdc92298e93bb93e45569
     recipe_path: Formula/b/bat.rb
     recipe_blob: b5b26894e25f30f1eb7390b1cbb0dbc662854860
-    local_file_sha256: 5890638e9b0cdf7392abcee42388457f479075c6e899e26403226e2779494c05
+    local_file_sha256: eeca68e8557d99710fa3363e31d0340173ba36932c8fcf1b6bc6f2e7f5806cd3
     version: 0.26.1
     release_published_at: '2025-12-02T20:48:10Z'
     release_evidence:
@@ -92,6 +92,7 @@ formulae:
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    - Updated dependency path references to Homebrew's current formula helper DSL.
     bottles:
       repository: Homebrew/homebrew-core
       verified_at: '2026-06-12T03:30:03Z'
@@ -144,7 +145,7 @@ formulae:
     recipe_commit: 16d6c1aa02caed7bb4935164e44402ace95c0ce5
     recipe_path: Formula/e/eza.rb
     recipe_blob: 8d8972de6d93a05324adb90cba0d2b2d49ff34a8
-    local_file_sha256: b9019a32f38adb948f26f8e6dc5d6d5d154b757438a1c537e73e51b73ba5dc5c
+    local_file_sha256: fe906b255b8998875ed5af29edd593836ced7ea99eaabc5c98e50c0dc55a9a5b
     version: 0.23.4
     release_published_at: '2025-10-03T20:44:49Z'
     release_evidence:
@@ -161,6 +162,7 @@ formulae:
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    - Updated dependency path references to Homebrew's current formula helper DSL.
     bottles:
       repository: Homebrew/homebrew-core
       verified_at: '2026-06-12T03:30:03Z'
@@ -233,7 +235,7 @@ formulae:
     recipe_commit: de036adbf416f03a4441b377c4ba99273a00e8ed
     recipe_path: Formula/g/gnupg.rb
     recipe_blob: 45e7a85439823a94c975728f1213af94fd2bc8a7
-    local_file_sha256: 74bd6518c11c375e35421aa8b88d45c9708b85e57c3d7b9cc987119e3039bee7
+    local_file_sha256: ce33ae696905d4fb1c15612aa3da7e7c696774a7a61760c84c1e6d93e2255bec
     version: 2.5.20
     release_published_at: '2026-05-13T12:55:28Z'
     release_evidence:
@@ -249,6 +251,7 @@ formulae:
       artifact_fingerprint_sha256: ce459cc3f7f3c26a1e9bcd0be4f30828c9f878f5b794f77c0e2ed79ccf8376cf
     local_changes:
     - Pinned the Homebrew core bottle root explicitly.
+    - Updated dependency path references to Homebrew's current formula helper DSL.
     bottles:
       repository: Homebrew/homebrew-core
       verified_at: '2026-06-12T03:30:03Z'
@@ -330,7 +333,7 @@ formulae:
     recipe_commit: 6616270a3082fd101102b62ef68ddab1b09c5412
     recipe_path: Formula/n/nmap.rb
     recipe_blob: fb94ebfbc9b4d38d9d45bb403e498cae3563650b
-    local_file_sha256: 33a8a31816ab80d9e1f2211db7c5fca414fd1d9919859bbbe66b8b5b167af41c
+    local_file_sha256: d20a5d98f93bd0b8e1328225ba992baa5b006f6e797c1e2e419944f65356b673
     version: '7.99'
     release_published_at: '2026-03-26T15:55:55Z'
     release_evidence:
@@ -347,6 +350,7 @@ formulae:
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    - Updated dependency path references to Homebrew's current formula helper DSL.
     bottles:
       repository: Homebrew/homebrew-core
       verified_at: '2026-06-12T03:30:03Z'
@@ -587,7 +591,7 @@ formulae:
     recipe_commit: 9575844975483201ef76c92100804d0fc54210f9
     recipe_path: Formula/s/swiftlint.rb
     recipe_blob: d061e85644f766cd848a99ec973b80a93ac04d70
-    local_file_sha256: 18ca2c1b451398bdcc4369200c05cec061a0b95499c020917af6620eece5a9f7
+    local_file_sha256: 15d95304b803de2a0f1caa0ff8a8551af38fce614db6b2b1f8992e29ba633a28
     version: 0.63.3
     release_published_at: '2026-05-27T15:12:03Z'
     release_evidence:
@@ -604,6 +608,7 @@ formulae:
     local_changes:
     - Removed the mutable head spec and upstream autobump metadata.
     - Pinned the Homebrew core bottle root explicitly.
+    - Updated dependency path references to Homebrew's current formula helper DSL.
     bottles:
       repository: Homebrew/homebrew-core
       verified_at: '2026-06-12T03:30:03Z'
