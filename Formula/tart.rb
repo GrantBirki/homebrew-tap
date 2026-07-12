@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Tart < Formula
   desc "Run macOS and Linux VMs on Apple hardware"
   homepage "https://github.com/openai/tart"
