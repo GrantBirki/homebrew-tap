@@ -15,7 +15,7 @@ module HomebrewTap
 
     FORMULA_TOKENS = %w[
       ansible bash bat dfu-programmer eza ffmpeg gh gnupg hugo libyaml nmap
-      osv-scanner pinentry-mac ripgrep rizin rustup swiftformat swiftlint tfenv tree
+      osv-scanner pinentry-mac ripgrep rizin rustup swiftformat swiftlint tart tfenv tree
       uninstall vector yq
     ].freeze
     CASK_TOKENS = %w[

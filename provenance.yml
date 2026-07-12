@@ -619,6 +619,28 @@ formulae:
         sonoma: 6e454ebe3fcdecdfbda9c2801af0db33e54b71453814edd97fa3a1ba9a07fd7b
         arm64_linux: 2b94207f2c97ffc84d535fe21cd6fcc64162231e4f8dc153165f82ff817bcb42
         x86_64_linux: cc9c5d46560ec79f8c1d6eaaa683ac555184328657eb70a80db4a9409b940dea
+  tart:
+    source_type: upstream-release
+    upstream_repository: openai/tart
+    upstream_tag: 2.32.1
+    upstream_commit: 8aa377b71ebfd90b2df9803d3e20033f58d6800c
+    local_file_sha256: 67c056328ca90627fd0ce031a22eef1c17958949ca1439c9bd39e7ce733824d1
+    version: 2.32.1
+    release_published_at: '2026-04-12T02:36:00Z'
+    release_evidence:
+      description: GitHub release published_at and release-asset digest
+      reference: https://github.com/openai/tart/releases/tag/2.32.1
+    adopted_at: '2026-07-12T22:53:04Z'
+    adoption_commit: a7b0dd0d6365c7483353127de9528e3679bca213
+    adoption_reason: Vendor the reviewed Tart 2.32.1 release for Apple Virtualization.framework-based macOS and Linux virtual machines.
+    cooldown_exception:
+    legacy_baseline:
+    local_changes:
+    - Updated the release and homepage URLs to the canonical repository after its transfer from Cirrus Labs to OpenAI.
+    - Omitted the optional qualified Softnet dependency so installing Tart does not broaden trust to another tap or install a separate setuid-capable networking tool.
+    - Added a focused version test and caveat documenting the intentional Softnet limitation.
+    artifacts:
+      tart.tar.gz: 8554ab4f7fc12afe52f9b7e3093a935673cbac737a83973d2db7a0683c814529
   tfenv:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core

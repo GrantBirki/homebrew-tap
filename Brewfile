@@ -54,6 +54,8 @@ brew "grantbirki/tap/rustup", trusted: true
 brew "grantbirki/tap/swiftformat", trusted: true
 # Swift linter
 brew "grantbirki/tap/swiftlint", trusted: true
+# macOS and Linux virtual machines on Apple hardware
+brew "grantbirki/tap/tart", trusted: true
 # Terraform version manager
 brew "grantbirki/tap/tfenv", trusted: true
 # Observability data pipeline (ARM macOS only)
