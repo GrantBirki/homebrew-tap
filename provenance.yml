@@ -823,6 +823,27 @@ casks:
     artifacts:
       arm: 172d364bb4d3bdbd7cedc12f32721003b3630536a96d1e6c382d9a453f483ea9
       intel: b88d772cbcce0186d36beca0e49ec58573e8c1d9af4be77dc3225467748f29ab
+  darktable:
+    source_type: homebrew-cask
+    recipe_repository: Homebrew/homebrew-cask
+    recipe_commit: d07e03843ed2b1ea966f534080159070baf9da6c
+    recipe_path: Casks/d/darktable.rb
+    recipe_blob: 1b6941a53e2e26379bee69473fcd21de5173a095
+    local_file_sha256: 7a47a434149cb8b3de203d3428413af620ab78c0d3c9fc6eeefd3832af2c50ff
+    version: 5.6.0
+    release_published_at: '2026-06-21T09:18:30Z'
+    release_evidence:
+      description: GitHub release published_at
+      reference: https://github.com/darktable-org/darktable/releases/tag/release-5.6.0
+    adopted_at: '2026-07-12T19:58:22Z'
+    adoption_commit: f4416c24614e39c9a1ddc5ab2d4cf208be81c567
+    adoption_reason: Vendor the owner-selected darktable 5.6.0 cask after its release cooldown and preserve Homebrew's Gatekeeper-failure disable declaration.
+    cooldown_exception:
+    legacy_baseline:
+    local_changes: []
+    artifacts:
+      arm: 49aec447e891ab481e436b4c0231fc3c8d0001aad220762ae8e765d3bda5d102
+      intel: 24c83655af0d81c2f8cb78b97531a03bb6a650349b7fd49c1679080db675cbcb
   espresso:
     source_type: personal-release
     upstream_repository: grantbirki/espresso
