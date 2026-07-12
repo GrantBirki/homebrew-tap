@@ -84,8 +84,6 @@ cask "grantbirki/tap/blockblock", trusted: true
 cask "grantbirki/tap/osquery", trusted: true
 # Reverse engineering platform powered by Rizin
 cask "grantbirki/tap/cutter", trusted: true
-# Photography workflow application and raw developer
-cask "grantbirki/tap/darktable", trusted: true
 # Pinned keyboard customiser from this tap
 cask "grantbirki/tap/karabiner-elements", trusted: true
 # Password manager app
