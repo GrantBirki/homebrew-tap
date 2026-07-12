@@ -92,9 +92,10 @@ This tap does not clear `com.apple.quarantine` or otherwise bypass Gatekeeper.
 The personal Espresso, OneShot, and Shit casks are not part of the default
 Brewfile and require explicit macOS approval after installation.
 
-Alacritty remains scheduled for Homebrew disablement on September 1, 2026
-because its current artifact fails Gatekeeper checks. The disable declaration
-must remain unless upstream fixes its signing.
+Alacritty and darktable remain scheduled for Homebrew disablement on September
+1, 2026 because their current artifacts fail Gatekeeper checks. Their disable
+declarations must remain unless upstream fixes their signing and a replacement
+artifact is reviewed under the normal adoption policy.
 
 Some applications can move independently of their cask pin:
 
