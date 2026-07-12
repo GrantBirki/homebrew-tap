@@ -89,11 +89,12 @@ The current formula provenance families are:
 The default Brewfile contains 23 tap formulae. **rust-template** remains
 available from the tap but intentionally stays outside the default Brewfile.
 
-The ten tap casks in the default Brewfile are:
+The eleven tap casks in the default Brewfile are:
 
 - alacritty
 - blockblock
 - cutter
+- darktable
 - imageoptim
 - karabiner-elements
 - keepassxc
@@ -119,7 +120,7 @@ When the intentional inventory changes, update all relevant policy surfaces:
 - Tests and documentation that describe the boundary.
 
 The Brewfile policy rejects missing, extra, or duplicate tap entries so the
-33-item trust boundary cannot widen silently.
+34-item trust boundary cannot widen silently.
 
 ## Sources of Truth
 
@@ -502,10 +503,10 @@ The repository preserves macOS security decisions:
 - Do not replace those hooks with no-quarantine or another bypass.
 - Personal unsigned casks require explicit operator approval after install.
 
-Alacritty's September 1, 2026 disable declaration is intentional because the
-current pinned artifact fails Gatekeeper checks. Do not remove the declaration
-unless upstream signing is fixed and the new artifact is reviewed under the
-normal adoption policy.
+Alacritty's and darktable's September 1, 2026 disable declarations are
+intentional because their current pinned artifacts fail Gatekeeper checks. Do
+not remove either declaration unless upstream signing is fixed and the new
+artifact is reviewed under the normal adoption policy.
 
 ## Brewfile Trust Model
 
