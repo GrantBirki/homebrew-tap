@@ -624,7 +624,7 @@ formulae:
     upstream_repository: openai/tart
     upstream_tag: 2.32.1
     upstream_commit: 8aa377b71ebfd90b2df9803d3e20033f58d6800c
-    local_file_sha256: 0ab4747c9bae2a4e7bb4499a00a8c193929080dddaaf2540d004a1cbd904dffb
+    local_file_sha256: e6cb51be70885ff56cca09a65ad4c2f4d704efab466a0a66b55fa3c21a10faa5
     version: 2.32.1
     release_published_at: '2026-04-12T02:36:00Z'
     release_evidence:
