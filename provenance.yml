@@ -704,25 +704,22 @@ formulae:
   uninstall:
     source_type: personal-release
     upstream_repository: GrantBirki/uninstall
-    upstream_tag: v1.2.0
-    upstream_commit: 2c479c6fba8cbd4aa4a49d1ae81871173c234f2e
-    local_file_sha256: fce4cec0e0cbfe6c66395c7982bd9e5f497765b8869a28ea81f19facf4f90a34
-    version: 1.2.0
-    release_published_at: '2026-01-26T06:25:27Z'
+    upstream_tag: v1.3.0
+    upstream_commit: dd5ab4b2f9d6a7f7c7665466c7d95029f9106f57
+    local_file_sha256: a9a47a217549d6baf5700f2b076652e0fd50d3eef6dad1d371165f9b17bce2ec
+    version: 1.3.0
+    release_published_at: '2026-07-16T18:03:41Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/uninstall/releases/tag/v1.2.0
-    adopted_at: '2026-01-26T06:28:21Z'
-    adoption_commit: 8810fceac9b68b0af487bcd321e23a09d16a4004
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
+      reference: https://github.com/GrantBirki/uninstall/releases/tag/v1.3.0
+    adopted_at: '2026-07-16T18:17:01Z'
+    adoption_commit: 453a297bd470a1282a77c60029c5a2b73a902359
+    adoption_reason: Adopt the reviewed owner-controlled v1.3.0 release with application discovery, name resolution, and release workflow hardening.
     cooldown_exception:
     legacy_baseline:
-      version: 1.2.0
-      artifact_fingerprint_sha256: 5c13ba982afb44d91a2a1baae3709655de0046ff9fd0c8f9db43dd3bf12600d0
     local_changes: []
     artifacts:
-      asset_01: ab9f58dfdac6d5d3413a260c1b59c17f5fca63e3b9ec4535abf28ae73bc6941f
+      asset_01: 11d43cbd698d21972f67e99f7ecf20e0b56e20204de2846a41520a836f542046
   vector:
     source_type: upstream-release
     upstream_repository: vectordotdev/vector

@@ -275,17 +275,9 @@ Do not promote that setting to the workflow or installer environment generally.
 The policy took effect on June 11, 2026. Ordinary formula and cask releases
 must age for 14 complete days between primary-source publication and adoption.
 
-The exact owner-controlled casks **espresso**, **oneshot**, and **shit** may be
-adopted immediately. The executable policy binds each exemption to its cask
-token, **personal-release** source type, and matching **GrantBirki/<token>**
-repository. A new personal release is not automatically exempt and requires an
-explicit policy, code, test, and documentation change.
+The owner-controlled **uninstall** formula and **espresso**, **oneshot**, and **shit** casks may be adopted immediately. The executable policy binds each exemption to an explicit formula or cask token, the **personal-release** source type, and its exact **GrantBirki/<repository>** pair. Other personal releases are not automatically exempt and require an explicit policy, code, test, and documentation change.
 
-Owner-controlled casks still require exact tags and commits, primary-source
-release evidence, publication and adoption timestamps, independent artifact
-checksums, whole-cask hashes, signing and installation review, and preserved
-quarantine. Their normal updates keep **cooldown_exception** empty because this
-is a standing ownership policy, not an incident exception.
+Owner-controlled releases still require exact tags and commits, primary-source release evidence, publication and adoption timestamps, independent artifact checksums, whole-file hashes, and installation review. Casks additionally require signing review and preserved quarantine. Their normal updates keep **cooldown_exception** empty because this is a standing ownership policy, not an incident exception.
 
 Permitted exceptions are narrow:
 
@@ -316,7 +308,7 @@ For a core-derived vendored formula:
 1. Read the current formula, manifest entry, and **SECURITY.md**.
 2. Identify the exact upstream software release.
 3. Record its publication time from a primary source.
-4. Wait 14 complete days unless a valid documented exception applies.
+4. Wait 14 complete days unless the formula is an explicitly allowlisted owner-controlled personal release or a valid documented exception applies.
 5. Identify the exact historical Homebrew core recipe commit whose version,
    sources, resources, patches, and bottles correspond to the candidate.
 6. Fetch the recipe by full commit, never from main, master, or HEAD.
@@ -432,8 +424,7 @@ For a pinned cask:
    Homebrew cask recipe commit/blob and primary artifact metadata instead.
    ImageOptim 1.9.3 is the current example. Never invent a tag or commit.
 4. Confirm the primary-source publication time.
-5. Apply the 14-day cooldown unless this is one of the three exact
-   owner-controlled casks or a valid incident exception exists.
+5. Apply the 14-day cooldown unless this is an explicitly allowlisted owner-controlled personal release or a valid incident exception exists.
 6. Prefer the GitHub release API digest when available.
 7. Independently calculate the downloaded asset SHA-256.
 8. Review the cask diff, install artifacts, uninstall behavior, and zap paths.
