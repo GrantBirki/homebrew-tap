@@ -122,6 +122,39 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     data
   end
 
+  def owner_controlled_formula_data(token, repository)
+    data = base_data
+    FileUtils.rm(File.join(@root, "Formula/foo.rb"))
+    source = <<~RUBY
+      class OwnerControlled < Formula
+        url "https://github.com/#{repository}/releases/download/v1.0.0/#{token}-1.0.0.tar.gz"
+        sha256 "#{'e' * 64}"
+      end
+    RUBY
+    formula_path = write("Formula/#{token}.rb", source)
+    entry = data["formulae"].delete("foo")
+    entry.delete("recipe_repository")
+    entry.delete("recipe_commit")
+    entry.delete("recipe_path")
+    entry.delete("recipe_blob")
+    entry.delete("bottles")
+    entry.merge!(
+      "source_type" => "personal-release",
+      "upstream_repository" => repository,
+      "upstream_tag" => "v1.0.0",
+      "upstream_commit" => ProvenanceSpecFixtures::COMMIT,
+      "local_file_sha256" => Digest::SHA256.file(formula_path).hexdigest,
+      "release_published_at" => "2026-06-10T00:00:00Z",
+      "adopted_at" => "2026-06-12T00:00:00Z",
+      "cooldown_exception" => nil,
+      "legacy_baseline" => nil,
+      "local_changes" => [],
+      "artifacts" => { "asset_01" => "e" * 64 },
+    )
+    data["formulae"][token] = entry
+    data
+  end
+
   def manifest(data = base_data)
     write_manifest(data)
     described_class.new(root: @root)
@@ -218,29 +251,28 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     expect { described_class.new(root: @root).validate }.to raise_error(HomebrewTap::Error, /legacy_baseline/)
   end
 
-  HomebrewTap::ProvenanceManifest::OWNER_CONTROLLED_CASKS.each do |token, repository|
-    it "allows immediate adoption of the owner-controlled #{token} cask" do
-      expect(manifest(owner_controlled_cask_data(token, repository)).validate).to eq(true)
-    end
+  it "allows immediate adoption of owner-controlled personal formulae and casks" do
+    expect(manifest(owner_controlled_formula_data("uninstall", "GrantBirki/uninstall")).validate).to eq(true)
+    expect(manifest(owner_controlled_cask_data("espresso", "GrantBirki/espresso")).validate).to eq(true)
   end
 
-  it "keeps other personal-release casks on the cooldown" do
-    expect { manifest(owner_controlled_cask_data("other", "grantbirki/other")).validate }
+  it "keeps personal releases outside the owner-controlled account on the cooldown" do
+    expect { manifest(owner_controlled_formula_data("uninstall", "example/uninstall")).validate }
       .to raise_error(HomebrewTap::Error, /14-day cooldown/)
   end
 
-  it "binds owner-controlled casks to their source type and repository" do
-    wrong_repository = owner_controlled_cask_data("espresso", "example/espresso")
+  it "binds owner-controlled personal releases to their source type and matching token" do
+    wrong_repository = owner_controlled_formula_data("uninstall", "GrantBirki/renamed-uninstall")
     expect { manifest(wrong_repository).validate }.to raise_error(HomebrewTap::Error, /14-day cooldown/)
 
-    wrong_source = owner_controlled_cask_data("espresso", "grantbirki/espresso")
-    wrong_source["casks"]["espresso"]["source_type"] = "upstream-release"
+    wrong_source = owner_controlled_formula_data("uninstall", "GrantBirki/uninstall")
+    wrong_source["formulae"]["uninstall"]["source_type"] = "upstream-release"
     expect { manifest(wrong_source).validate }.to raise_error(HomebrewTap::Error, /14-day cooldown/)
   end
 
-  it "keeps timestamp and exception validation for owner-controlled casks" do
-    data = owner_controlled_cask_data("shit", "grantbirki/shit")
-    entry = data["casks"]["shit"]
+  it "keeps timestamp and exception validation for owner-controlled personal releases" do
+    data = owner_controlled_formula_data("uninstall", "GrantBirki/uninstall")
+    entry = data["formulae"]["uninstall"]
     entry["adopted_at"] = "2026-06-09T00:00:00Z"
     entry["cooldown_exception"] = { "reason" => "", "reference" => "" }
 
