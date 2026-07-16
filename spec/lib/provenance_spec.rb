@@ -251,8 +251,11 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     expect { described_class.new(root: @root).validate }.to raise_error(HomebrewTap::Error, /legacy_baseline/)
   end
 
-  it "allows immediate adoption of owner-controlled personal formulae and casks" do
+  it "allows immediate adoption of owner-controlled personal formulae" do
     expect(manifest(owner_controlled_formula_data("uninstall", "GrantBirki/uninstall")).validate).to eq(true)
+  end
+
+  it "allows immediate adoption of owner-controlled personal casks" do
     expect(manifest(owner_controlled_cask_data("espresso", "GrantBirki/espresso")).validate).to eq(true)
   end
 
