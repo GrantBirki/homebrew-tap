@@ -29,7 +29,7 @@ enable `HOMEBREW_SBOM=1` locally when they need a machine-specific snapshot.
 
 ## Update policy
 
-Ordinary formula and cask releases must age for 14 complete days after their primary-source publication time before adoption. Owner-controlled personal releases may be adopted immediately only when the provenance source type is `personal-release` and the upstream repository is exactly `GrantBirki/<token>` for the matching formula or cask token.
+Ordinary formula and cask releases must age for 14 complete days after their primary-source publication time before adoption. The `uninstall` formula and the `espresso`, `oneshot`, and `shit` casks are explicitly owner-controlled and may be adopted immediately only when the provenance source type is `personal-release` and the upstream repository matches the exact token-to-repository pair in the executable allowlist. Other personal releases are not automatically exempt.
 
 Owner-controlled releases still require an immutable tag and commit, primary-source release evidence, publication and adoption timestamps, an independently verified asset SHA-256, a whole-file hash, and review of installation behavior. Casks additionally require review of signing and quarantine behavior. Discovery is separate from adoption: livecheck may report a release immediately, but it does not change a pin. Their normal updates keep `cooldown_exception` empty because this is a standing ownership policy, not an incident exception.
 
@@ -71,7 +71,7 @@ Prefer one formula update per pull request unless formulae are inseparably
 coupled. Do not vendor a transitive dependency merely because a direct root
 uses it.
 
-For a cask update, apply the cooldown unless it is an owner-controlled personal release under the exact token-to-repository rule. Verify the exact primary-source asset and independently calculate its SHA-256. Prefer the GitHub release API digest when available. For signed applications, also verify Gatekeeper/notarization, Developer ID, and Team ID. Review package signatures, privileged helpers, system extensions, launch daemons, and uninstall behavior for privileged casks.
+For a cask update, apply the cooldown unless it is one of the explicitly allowlisted owner-controlled personal releases. Verify the exact primary-source asset and independently calculate its SHA-256. Prefer the GitHub release API digest when available. For signed applications, also verify Gatekeeper/notarization, Developer ID, and Team ID. Review package signatures, privileged helpers, system extensions, launch daemons, and uninstall behavior for privileged casks.
 
 ## Gatekeeper and application updates
 

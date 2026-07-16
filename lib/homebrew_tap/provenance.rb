@@ -9,7 +9,14 @@ module HomebrewTap
   class ProvenanceManifest
     SCHEMA_VERSION = 1
     COOLDOWN_SECONDS = 14 * 24 * 60 * 60
-    OWNER_CONTROLLED_ACCOUNT = "GrantBirki"
+    OWNER_CONTROLLED_FORMULAE = {
+      "uninstall" => "grantbirki/uninstall"
+    }.freeze
+    OWNER_CONTROLLED_CASKS = {
+      "espresso" => "grantbirki/espresso",
+      "oneshot" => "grantbirki/oneshot",
+      "shit" => "grantbirki/shit"
+    }.freeze
     SHA40 = /\A[0-9a-f]{40}\z/i
     SHA256 = /\A[0-9a-f]{64}\z/i
     TOP_LEVEL_KEYS = %w[schema_version policy_effective_at formulae casks].freeze
@@ -209,7 +216,7 @@ module HomebrewTap
       end
       failures << "#{label}.legacy_baseline must be a mapping or null" unless entry["legacy_baseline"].nil?
 
-      return if owner_controlled_personal_release?(token, entry)
+      return if owner_controlled_personal_release?(section, token, entry)
       return if adopted_time - release_time >= COOLDOWN_SECONDS
 
       return if exception.is_a?(Hash) && present?(exception["reason"]) && https_url?(exception["reference"])
@@ -217,9 +224,10 @@ module HomebrewTap
       failures << "#{label} violates the 14-day cooldown without a documented exception"
     end
 
-    def owner_controlled_personal_release?(token, entry)
-      repository = "#{OWNER_CONTROLLED_ACCOUNT}/#{token}"
-      entry["source_type"] == "personal-release" &&
+    def owner_controlled_personal_release?(section, token, entry)
+      repositories = section == "formulae" ? OWNER_CONTROLLED_FORMULAE : OWNER_CONTROLLED_CASKS
+      repository = repositories[token]
+      repository && entry["source_type"] == "personal-release" &&
         entry["upstream_repository"].to_s.casecmp?(repository)
     end
 

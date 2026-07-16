@@ -259,8 +259,11 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     expect(manifest(owner_controlled_cask_data("espresso", "GrantBirki/espresso")).validate).to eq(true)
   end
 
-  it "keeps personal releases outside the owner-controlled account on the cooldown" do
+  it "keeps unlisted personal releases on the cooldown" do
     expect { manifest(owner_controlled_formula_data("uninstall", "example/uninstall")).validate }
+      .to raise_error(HomebrewTap::Error, /14-day cooldown/)
+
+    expect { manifest(owner_controlled_formula_data("rust-template", "GrantBirki/rust-template")).validate }
       .to raise_error(HomebrewTap::Error, /14-day cooldown/)
   end
 
