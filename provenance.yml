@@ -973,27 +973,24 @@ casks:
   oneshot:
     source_type: personal-release
     upstream_repository: grantbirki/oneshot
-    upstream_tag: v1.1.0
-    upstream_commit: e76db4a031b63e9d93f9859a5c89847fec0fb75f
-    local_file_sha256: 9523ee8e4377da886d1bd585fc4dd747fb6b733e552db2125afbadb07dcc9bf4
-    version: 1.1.0
-    release_published_at: '2026-04-24T01:07:10Z'
+    upstream_tag: v1.2.0
+    upstream_commit: a2e98f64303b9753dbb65bbe832ada91455bbbdb
+    local_file_sha256: d7d3273c7b515cbebea6dc8ce72b67d44fd1862bafc29897178ef5fa5ff2f680
+    version: 1.2.0
+    release_published_at: '2026-07-17T22:56:20Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.1.0
-    adopted_at: '2026-04-25T05:03:24Z'
-    adoption_commit: 17f5e94928c7301b7326dbf6f4c0e6f58a5e5407
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
+      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.0
+    adopted_at: '2026-07-17T22:59:46Z'
+    adoption_commit: 8825505346f0f6a251db35e58b203c4d93f371f7
+    adoption_reason: Adopt OneShot v1.2.0 with hardened screenshot capture and output recovery, improved native macOS behavior, and reproducible release packaging.
     cooldown_exception:
     legacy_baseline:
-      version: 1.1.0
-      artifact_fingerprint_sha256: 416584abce9d267eb3696c9805a4a75ca1b8dd9b8726fad89a7fc9cf3a8379d9
     local_changes:
     - Removed the quarantine-clearing postflight hook; installation now preserves
       Gatekeeper and quarantine.
     artifacts:
-      default: c5f0baba9f68fb382c0f1e4a19b09eb9b1b116f4fd98efc834556d161d94bf84
+      default: ddbacffdf7ff4e9ffa9c1e15c611840d5598967402725d44e9aa4bfccd4b3631
   osquery:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
