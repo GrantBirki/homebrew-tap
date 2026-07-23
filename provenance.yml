@@ -459,40 +459,6 @@ formulae:
         sonoma: ab382b4ae86aba1b7e6acab3bc50eb64be7bb08cf33a37a32987edb8bc6affe4
         arm64_linux: bbdef955d5752e53473be06b698c45ce31682cd47d75e7c706365450bd08ff44
         x86_64_linux: 349bc55db5ad4b4e8935b889d44c745ae23605c1d57d6eb639dbd5c86d573a88
-  rizin:
-    source_type: homebrew-core
-    recipe_repository: Homebrew/homebrew-core
-    recipe_commit: bb61c8a49c53e87578215f42332a8cffd83acdeb
-    recipe_path: Formula/r/rizin.rb
-    recipe_blob: ae7d8d89451df4f994fa1c97f8ff2c22873be6b6
-    local_file_sha256: 0f4bdddfaeaa4d41aea95b46a629cb91216302d53ef8f7dfd27d0cf26c0575b6
-    version: 0.8.2
-    release_published_at: '2026-02-01T20:29:21Z'
-    release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/rizinorg/rizin/releases/tag/v0.8.2
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 0.8.2
-      artifact_fingerprint_sha256: 694708a45852c4cbfbbcb03cc4e6bfd8e4e70b467529af997ef8bccb9b781b03
-    local_changes:
-    - Removed the mutable head spec.
-    - Pinned the Homebrew core bottle root explicitly.
-    - Retained the Homebrew 5.1-compatible post_install_steps implementation.
-    bottles:
-      repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
-      digests:
-        arm64_tahoe: b46c736276c060f36dccbb6bafc5216d7010b8ec4d5864b5f4ec8536d611bfde
-        arm64_sequoia: 72fb388c5879904773c4e4da645ede12114e1c0e678fd20019477256d6b58f1c
-        arm64_sonoma: 9fe0bec7ad14cf2256eb8161792dc4e7c7652e7356d404726c19b2eea0c645d1
-        sonoma: 4af3b7d816afea6cd2c8410faed4ba8b4239820b1927eb599f4633a7d3f6318c
-        arm64_linux: c7546ce2d1464e6f8650a589e503466e789aacf59c368ba076ea9d66021fd12e
-        x86_64_linux: 07d86a1c8573f66cc6b7f0f76a7cc04dc98a1d46d4788986ad8a644458ee6be0
   rust-template:
     source_type: personal-release
     upstream_repository: GrantBirki/rust-template
@@ -823,30 +789,6 @@ casks:
     - Added an active GitHub release livecheck without changing the pin.
     artifacts:
       default: e2eb6ab6acef0e4fc563d5596e7dcee8c3d2797896f0d976a8ae27e5faea8ccf
-  cutter:
-    source_type: homebrew-cask
-    recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: 4a8173137a60a3a3bcab04ec58056e6ea878605c
-    recipe_path: Casks/c/cutter.rb
-    recipe_blob: 15607ca74bdb6e4c49b1cdadb4b3d197b860ead2
-    local_file_sha256: 1f3c200f9ddffb52df5a19a6b0e6793783b73a61e0d9dafbe75256c62c674209
-    version: 2.4.1
-    release_published_at: '2025-05-11T14:58:19Z'
-    release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/rizinorg/cutter/releases/tag/v2.4.1
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 2.4.1
-      artifact_fingerprint_sha256: 2280d4d089ddf876711e32c1a8d51763122135af4a06ab4d84758365e96eb7aa
-    local_changes: []
-    artifacts:
-      arm: 172d364bb4d3bdbd7cedc12f32721003b3630536a96d1e6c382d9a453f483ea9
-      intel: b88d772cbcce0186d36beca0e49ec58573e8c1d9af4be77dc3225467748f29ab
   espresso:
     source_type: personal-release
     upstream_repository: grantbirki/espresso

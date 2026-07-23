@@ -15,11 +15,11 @@ module HomebrewTap
 
     FORMULA_TOKENS = %w[
       ansible bash bat dfu-programmer eza ffmpeg gh gnupg hugo libyaml nmap
-      osv-scanner pinentry-mac ripgrep rizin rustup swiftformat swiftlint tart tfenv tree
+      osv-scanner pinentry-mac ripgrep rustup swiftformat swiftlint tart tfenv tree
       uninstall vector yq
     ].freeze
     CASK_TOKENS = %w[
-      alacritty blockblock cutter imageoptim karabiner-elements keepassxc knockknock osquery santa secretive
+      alacritty blockblock imageoptim karabiner-elements keepassxc knockknock osquery santa secretive
     ].freeze
     RUBOCOP_PATHS = %w[lib spec].freeze
 
