@@ -79,21 +79,20 @@ The current formula provenance families are:
 
 - Core recipe snapshots:
   ansible, bash, bat, dfu-programmer, eza, ffmpeg, gnupg, hugo, libyaml,
-  nmap, osv-scanner, pinentry-mac, ripgrep, rizin, rustup, swiftformat,
+  nmap, osv-scanner, pinentry-mac, ripgrep, rustup, swiftformat,
   swiftlint, tfenv, tree, and yq.
 - Direct upstream release assets:
   gh, tart, and vector.
 - Personal upstream release assets:
   uninstall and rust-template.
 
-The default Brewfile contains 24 tap formulae. **rust-template** remains
+The default Brewfile contains 23 tap formulae. **rust-template** remains
 available from the tap but intentionally stays outside the default Brewfile.
 
-The ten tap casks in the default Brewfile are:
+The nine tap casks in the default Brewfile are:
 
 - alacritty
 - blockblock
-- cutter
 - imageoptim
 - karabiner-elements
 - keepassxc
@@ -119,7 +118,7 @@ When the intentional inventory changes, update all relevant policy surfaces:
 - Tests and documentation that describe the boundary.
 
 The Brewfile policy rejects missing, extra, or duplicate tap entries so the
-34-item trust boundary cannot widen silently.
+32-item trust boundary cannot widen silently.
 
 ## Sources of Truth
 

@@ -128,7 +128,7 @@ The source-based scan also does not establish the safety of cask binaries;
 checksum, signature, Gatekeeper, and release review remain separate controls.
 
 For the June 2026 baseline scan, `pcre2` was a Homebrew-managed transitive of
-selected roots including ripgrep, Rizin, and Nmap, while `p11-kit` was
+selected roots including ripgrep and Nmap, while `p11-kit` was
 Homebrew-managed through the GnuPG/GnuTLS dependency path. No fixed stable
 release was identified for either reported issue during that audit, so neither
 dependency is vendored here. The reported `icu4c@78`, OpenJPEG, Boost, jq, and

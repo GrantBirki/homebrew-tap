@@ -46,8 +46,6 @@ brew "grantbirki/tap/osv-scanner", trusted: true
 brew "grantbirki/tap/pinentry-mac", trusted: true
 # Fast recursive search
 brew "grantbirki/tap/ripgrep", trusted: true
-# Reverse engineering framework
-brew "grantbirki/tap/rizin", trusted: true
 # Rust toolchain installer
 brew "grantbirki/tap/rustup", trusted: true
 # Swift formatter
@@ -84,8 +82,6 @@ cask "grantbirki/tap/alacritty", trusted: true
 cask "grantbirki/tap/blockblock", trusted: true
 # Endpoint instrumentation and scheduled host queries
 cask "grantbirki/tap/osquery", trusted: true
-# Reverse engineering platform powered by Rizin
-cask "grantbirki/tap/cutter", trusted: true
 # Pinned keyboard customiser from this tap
 cask "grantbirki/tap/karabiner-elements", trusted: true
 # Password manager app
