@@ -94,39 +94,43 @@ module HomebrewTap
       def validate
         failures = []
         Dir[File.join(@root, ".github/workflows/*.{yml,yaml}")].sort.each do |path|
-          lines = File.readlines(path)
-          text = lines.join
-
-          failures << "#{relative(path)} uses pull_request_target" if text.match?(/^\s*pull_request_target:/)
-          failures << "#{relative(path)} uses the shared GitHub Actions cache" if text.match?(/\buses:\s*['"]?actions\/cache@/)
-          if lines.any? { |line| line.match?(/^\s+(?:bundler-)?cache:\s*(?!false\s*$)\S/) }
-            failures << "#{relative(path)} enables an implicit setup-action cache"
+          workflow = YAML.safe_load_file(
+            path,
+            permitted_classes: [],
+            permitted_symbols: [],
+            aliases: false
+          )
+          unless workflow.is_a?(Hash)
+            failures << "#{relative(path)} must contain a workflow mapping"
+            next
           end
-          unless text.match?(/^permissions:\s*\n\s{2}contents:\s*read\s*$/)
-            failures << "#{relative(path)} must use read-only workflow permissions"
+
+          triggers = workflow.key?("on") ? workflow["on"] : workflow[true]
+          failures << "#{relative(path)} uses pull_request_target" if trigger?(triggers, "pull_request_target")
+          validate_permissions(failures, path, workflow["permissions"])
+
+          jobs = workflow["jobs"]
+          unless jobs.is_a?(Hash)
+            failures << "#{relative(path)} must contain a jobs mapping"
+            next
           end
 
-          lines.each_with_index do |line, index|
-            match = line.match(/\buses:\s*['"]?(?<uses>[^'"\s#]+)['"]?/)
-            next unless match
-
-            uses = match[:uses]
-            next if uses.start_with?("./")
-
-            action = uses.split("@", 2).first
-            unless ALLOWED_ACTIONS.include?(action)
-              failures << "#{relative(path)}:#{index + 1} action is not allowed: #{action}"
+          jobs.each do |job_name, job|
+            unless job.is_a?(Hash)
+              failures << "#{relative(path)} job #{job_name} must be a mapping"
               next
             end
 
-            unless uses.match?(/@[0-9a-f]{40}\z/i) || uses.match?(/@sha256:[0-9a-f]{64}\z/i)
-              failures << "#{relative(path)}:#{index + 1} action is not SHA-pinned: #{uses}"
+            validate_permissions(failures, path, job["permissions"], job_name:) if job.key?("permissions")
+            validate_uses(failures, path, job["uses"], "job #{job_name}") if job.key?("uses")
+
+            Array(job["steps"]).each_with_index do |step, index|
+              next unless step.is_a?(Hash)
+
+              location = "job #{job_name} step #{index + 1}"
+              validate_uses(failures, path, step["uses"], location, step:)
+              validate_cache(failures, path, step)
             end
-
-            next unless action == "actions/checkout"
-            next if lines[index + 1, 8]&.any? { |candidate| candidate.match?(/^\s+persist-credentials:\s*false\s*$/) }
-
-            failures << "#{relative(path)}:#{index + 1} checkout must disable persisted credentials"
           end
         end
         raise Error, failures.join("\n") unless failures.empty?
@@ -135,6 +139,67 @@ module HomebrewTap
       end
 
       private
+
+      def trigger?(triggers, name)
+        case triggers
+        when String
+          triggers == name
+        when Array
+          triggers.include?(name)
+        when Hash
+          triggers.key?(name)
+        else
+          false
+        end
+      end
+
+      def validate_permissions(failures, path, permissions, job_name: nil)
+        return if permissions == { "contents" => "read" }
+        return if job_name && permissions == {}
+
+        location = job_name ? " job #{job_name}" : ""
+        failures << "#{relative(path)}#{location} must use read-only contents permissions"
+      end
+
+      def validate_uses(failures, path, uses, location, step: nil)
+        return if uses.nil?
+
+        unless uses.is_a?(String)
+          failures << "#{relative(path)} #{location} has an invalid action reference"
+          return
+        end
+        return if uses.start_with?("./")
+
+        action = uses.split("@", 2).first
+        unless ALLOWED_ACTIONS.include?(action)
+          failures << "#{relative(path)} #{location} action is not allowed: #{action}"
+          return
+        end
+
+        unless uses.match?(/@[0-9a-f]{40}\z/i) || uses.match?(/@sha256:[0-9a-f]{64}\z/i)
+          failures << "#{relative(path)} #{location} action is not SHA-pinned: #{uses}"
+        end
+
+        return unless action == "actions/checkout"
+
+        with = step&.fetch("with", nil)
+        return if with.is_a?(Hash) && with["persist-credentials"] == false
+
+        failures << "#{relative(path)} #{location} checkout must disable persisted credentials"
+      end
+
+      def validate_cache(failures, path, step)
+        uses = step["uses"]
+        if uses.is_a?(String) && uses.split("@", 2).first == "actions/cache"
+          failures << "#{relative(path)} uses the shared GitHub Actions cache"
+        end
+
+        with = step["with"]
+        return unless with.is_a?(Hash)
+        return unless with.any? { |key, value| %w[cache bundler-cache].include?(key) && value != false }
+
+        failures << "#{relative(path)} enables an implicit setup-action cache"
+      end
 
       def relative(path)
         path.delete_prefix("#{@root}/")

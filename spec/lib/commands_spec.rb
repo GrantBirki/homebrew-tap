@@ -30,10 +30,12 @@ RSpec.describe "command objects" do
     write(".github/workflows/test.yml", <<~YAML)
       permissions:
         contents: read
-      steps:
-        - uses: actions/checkout@#{'a' * 40}
-          with:
-            persist-credentials: false
+      jobs:
+        test:
+          steps:
+            - uses: actions/checkout@#{'a' * 40}
+              with:
+                persist-credentials: false
     YAML
     body = (["tap \"grantbirki/tap\"", "cask_args require_sha: true"] +
       HomebrewTap::TestChecks::FORMULA_TOKENS.map { |token| %(brew "grantbirki/tap/#{token}", trusted: true) } +
@@ -59,10 +61,12 @@ RSpec.describe "command objects" do
     write(".github/workflows/test.yml", <<~YAML)
       permissions:
         contents: read
-      steps:
-        - uses: actions/checkout@#{'a' * 40}
-          with:
-            persist-credentials: false
+      jobs:
+        test:
+          steps:
+            - uses: actions/checkout@#{'a' * 40}
+              with:
+                persist-credentials: false
     YAML
     fake = FakeRunner.new
     lint_out = StringIO.new
