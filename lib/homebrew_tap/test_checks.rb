@@ -82,6 +82,11 @@ module HomebrewTap
     end
 
     class WorkflowPins
+      ALLOWED_ACTIONS = %w[
+        actions/checkout
+        ruby/setup-ruby
+      ].freeze
+
       def initialize(root:)
         @root = root
       end
@@ -89,15 +94,39 @@ module HomebrewTap
       def validate
         failures = []
         Dir[File.join(@root, ".github/workflows/*.{yml,yaml}")].sort.each do |path|
-          File.readlines(path).each_with_index do |line, index|
+          lines = File.readlines(path)
+          text = lines.join
+
+          failures << "#{relative(path)} uses pull_request_target" if text.match?(/^\s*pull_request_target:/)
+          failures << "#{relative(path)} uses the shared GitHub Actions cache" if text.match?(/\buses:\s*['"]?actions\/cache@/)
+          if lines.any? { |line| line.match?(/^\s+(?:bundler-)?cache:\s*(?!false\s*$)\S/) }
+            failures << "#{relative(path)} enables an implicit setup-action cache"
+          end
+          unless text.match?(/^permissions:\s*\n\s{2}contents:\s*read\s*$/)
+            failures << "#{relative(path)} must use read-only workflow permissions"
+          end
+
+          lines.each_with_index do |line, index|
             match = line.match(/\buses:\s*['"]?(?<uses>[^'"\s#]+)['"]?/)
             next unless match
 
             uses = match[:uses]
             next if uses.start_with?("./")
-            next if uses.match?(/@[0-9a-f]{40}\z/i) || uses.match?(/@sha256:[0-9a-f]{64}\z/i)
 
-            failures << "#{relative(path)}:#{index + 1} action is not SHA-pinned: #{uses}"
+            action = uses.split("@", 2).first
+            unless ALLOWED_ACTIONS.include?(action)
+              failures << "#{relative(path)}:#{index + 1} action is not allowed: #{action}"
+              next
+            end
+
+            unless uses.match?(/@[0-9a-f]{40}\z/i) || uses.match?(/@sha256:[0-9a-f]{64}\z/i)
+              failures << "#{relative(path)}:#{index + 1} action is not SHA-pinned: #{uses}"
+            end
+
+            next unless action == "actions/checkout"
+            next if lines[index + 1, 8]&.any? { |candidate| candidate.match?(/^\s+persist-credentials:\s*false\s*$/) }
+
+            failures << "#{relative(path)}:#{index + 1} checkout must disable persisted credentials"
           end
         end
         raise Error, failures.join("\n") unless failures.empty?
