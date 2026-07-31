@@ -1012,22 +1012,21 @@ casks:
   shit:
     source_type: personal-release
     upstream_repository: grantbirki/shit
-    upstream_tag: v0.2.0
-    upstream_commit: 1b893190f50f3e110cdf0bc57a78bbab7026b855
-    local_file_sha256: 27e5a4388bad9a3fbaa36873e647bbcbdb3172b218527961fabc16c65585dc3c
-    version: 0.2.0
-    release_published_at: '2026-06-12T15:39:55Z'
+    upstream_tag: v0.2.6
+    upstream_commit: b653a4f49377051dac804b2ef283f3abb2980174
+    local_file_sha256: bdaa6dd3c5b0d4ec6c2b3fd271caa762d2d96b3d9f808db9c5985057cdbb99a5
+    version: 0.2.6
+    release_published_at: '2026-07-31T17:21:28Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.0
-    adopted_at: '2026-06-12T16:18:42Z'
-    adoption_commit: 4704f8b17154d307bdcbb49498b6e835622c8fb7
-    adoption_reason: Adopt Shit v0.2.0 with staggered meeting alerts and reorganized
-      settings.
+      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.6
+    adopted_at: '2026-07-31T17:32:03Z'
+    adoption_commit: a784bdde7213830d2b7927a8dbb00fa171b6b409
+    adoption_reason: Adopt Shit v0.2.6 with Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
     cooldown_exception:
     legacy_baseline:
     local_changes:
     - Removed the quarantine-clearing postflight hook; installation now preserves
       Gatekeeper and quarantine.
     artifacts:
-      default: e568efd850c75986db8ce7c341bf275e670b4b9d18a54025ffa89f30c604e7c5
+      default: e58b371cc5bf69b3ecc35df761a35a8dcc796f395cb6fd9f958479078777ef7d
