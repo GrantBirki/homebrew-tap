@@ -1012,21 +1012,21 @@ casks:
   shit:
     source_type: personal-release
     upstream_repository: grantbirki/shit
-    upstream_tag: v0.2.6
-    upstream_commit: b653a4f49377051dac804b2ef283f3abb2980174
-    local_file_sha256: bdaa6dd3c5b0d4ec6c2b3fd271caa762d2d96b3d9f808db9c5985057cdbb99a5
-    version: 0.2.6
-    release_published_at: '2026-07-31T17:21:28Z'
+    upstream_tag: v0.2.7
+    upstream_commit: 36f7626fe7ce6f888372639247c632ee46b77f3b
+    local_file_sha256: 0103f36cde73cb6a0a83a7ff8064ee81dd8695e42e84ccfd29d5a813b424b772
+    version: 0.2.7
+    release_published_at: '2026-08-01T00:52:41Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.6
-    adopted_at: '2026-07-31T17:32:03Z'
-    adoption_commit: a784bdde7213830d2b7927a8dbb00fa171b6b409
-    adoption_reason: Adopt Shit v0.2.6 with Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
+      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.7
+    adopted_at: '2026-08-01T01:30:15Z'
+    adoption_commit: 3f4d3fa530c7f6615df998e5594777e309d121f6
+    adoption_reason: Adopt Shit v0.2.7 with corrected Calendar consent metadata while preserving Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
     cooldown_exception:
     legacy_baseline:
     local_changes:
     - Removed the quarantine-clearing postflight hook; installation now preserves
       Gatekeeper and quarantine.
     artifacts:
-      default: e58b371cc5bf69b3ecc35df761a35a8dcc796f395cb6fd9f958479078777ef7d
+      default: a0e68822801705480fd191b2e3baf97b8598c216cf7ce35f24bcf20c8640fb3e
