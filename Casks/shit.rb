@@ -1,6 +1,6 @@
 cask "shit" do
-  version "0.2.6"
-  sha256 "e58b371cc5bf69b3ecc35df761a35a8dcc796f395cb6fd9f958479078777ef7d"
+  version "0.2.7"
+  sha256 "a0e68822801705480fd191b2e3baf97b8598c216cf7ce35f24bcf20c8640fb3e"
 
   url "https://github.com/grantbirki/shit/releases/download/v#{version}/Shit.zip"
   name "Shit"
