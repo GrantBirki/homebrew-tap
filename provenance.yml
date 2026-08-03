@@ -912,24 +912,25 @@ casks:
   oneshot:
     source_type: personal-release
     upstream_repository: grantbirki/oneshot
-    upstream_tag: v1.2.0
-    upstream_commit: a2e98f64303b9753dbb65bbe832ada91455bbbdb
-    local_file_sha256: d7d3273c7b515cbebea6dc8ce72b67d44fd1862bafc29897178ef5fa5ff2f680
-    version: 1.2.0
-    release_published_at: '2026-07-17T22:56:20Z'
+    upstream_tag: v1.2.9
+    upstream_commit: e9e98ab7dba73c0ada4f5ae6b04a6ec610a976b3
+    local_file_sha256: 61c9f419f5c3cdf043f42daf15f59f451cbc162b9bca3c3d867f43a1695e4db2
+    version: 1.2.9
+    release_published_at: '2026-07-31T16:51:53Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.0
-    adopted_at: '2026-07-17T22:59:46Z'
-    adoption_commit: 8825505346f0f6a251db35e58b203c4d93f371f7
-    adoption_reason: Adopt OneShot v1.2.0 with hardened screenshot capture and output recovery, improved native macOS behavior, and reproducible release packaging.
+      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.9
+    adopted_at: '2026-07-31T17:27:15Z'
+    adoption_commit: ffcc17a99d9243fad31a6aa8c8d7f5466bf6ef42
+    adoption_reason: Adopt OneShot v1.2.9 with Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
     cooldown_exception:
     legacy_baseline:
     local_changes:
     - Removed the quarantine-clearing postflight hook; installation now preserves
       Gatekeeper and quarantine.
+    - Restricted installation to Apple silicon.
     artifacts:
-      default: ddbacffdf7ff4e9ffa9c1e15c611840d5598967402725d44e9aa4bfccd4b3631
+      default: 9b35936fc745931196aae2940127f6c5f66dcdd6ba3b62838042934d17cd86ae
   osquery:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
@@ -1012,22 +1013,22 @@ casks:
   shit:
     source_type: personal-release
     upstream_repository: grantbirki/shit
-    upstream_tag: v0.2.0
-    upstream_commit: 1b893190f50f3e110cdf0bc57a78bbab7026b855
-    local_file_sha256: 27e5a4388bad9a3fbaa36873e647bbcbdb3172b218527961fabc16c65585dc3c
-    version: 0.2.0
-    release_published_at: '2026-06-12T15:39:55Z'
+    upstream_tag: v0.2.7
+    upstream_commit: 36f7626fe7ce6f888372639247c632ee46b77f3b
+    local_file_sha256: 6fad5aab6fd8165e8170b9cc2ca605640c08ce0253d313262e2b4a9fb14d99bf
+    version: 0.2.7
+    release_published_at: '2026-08-01T00:52:41Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.0
-    adopted_at: '2026-06-12T16:18:42Z'
-    adoption_commit: 4704f8b17154d307bdcbb49498b6e835622c8fb7
-    adoption_reason: Adopt Shit v0.2.0 with staggered meeting alerts and reorganized
-      settings.
+      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.7
+    adopted_at: '2026-08-01T01:30:15Z'
+    adoption_commit: 3f4d3fa530c7f6615df998e5594777e309d121f6
+    adoption_reason: Adopt Shit v0.2.7 with corrected Calendar consent metadata while preserving Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
     cooldown_exception:
     legacy_baseline:
     local_changes:
     - Removed the quarantine-clearing postflight hook; installation now preserves
       Gatekeeper and quarantine.
+    - Restricted installation to Apple silicon.
     artifacts:
-      default: e568efd850c75986db8ce7c341bf275e670b4b9d18a54025ffa89f30c604e7c5
+      default: a0e68822801705480fd191b2e3baf97b8598c216cf7ce35f24bcf20c8640fb3e

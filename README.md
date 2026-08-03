@@ -45,9 +45,7 @@ the one-time migration in [SECURITY.md](SECURITY.md).
 `script/bootstrap` only prepares the repo's vendored Ruby dependencies for local
 development and CI. Use `script/install` for Homebrew lifecycle management.
 
-Personal unsigned casks such as Espresso, OneShot, and Shit are intentionally
-outside the default Brewfile. They preserve macOS quarantine and require manual
-approval when installed.
+Personal casks such as Espresso, OneShot, and Shit are intentionally outside the default Brewfile and preserve macOS quarantine. OneShot and Shit are Apple silicon-only, Developer ID signed, and notarized, so they pass Gatekeeper normally; unsigned releases require manual approval.
 
 ## Development
 
