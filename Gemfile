@@ -4,5 +4,5 @@ source "https://rubygems.org"
 
 group :development do
   gem "rspec", "3.13.2"
-  gem "rubocop", "1.86.1"
+  gem "rubocop", "1.88.0"
 end

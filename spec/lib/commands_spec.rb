@@ -27,7 +27,16 @@ RSpec.describe "command objects" do
       BUNDLED WITH
          2.7.2
     LOCK
-    write(".github/workflows/test.yml", "steps:\n  - uses: actions/checkout@#{'a' * 40}\n")
+    write(".github/workflows/test.yml", <<~YAML)
+      permissions:
+        contents: read
+      jobs:
+        test:
+          steps:
+            - uses: actions/checkout@#{'a' * 40}
+              with:
+                persist-credentials: false
+    YAML
     body = (["tap \"grantbirki/tap\"", "cask_args require_sha: true"] +
       HomebrewTap::TestChecks::FORMULA_TOKENS.map { |token| %(brew "grantbirki/tap/#{token}", trusted: true) } +
       HomebrewTap::TestChecks::CASK_TOKENS.map { |token| %(cask "grantbirki/tap/#{token}", trusted: true) }).join("\n")
@@ -49,11 +58,20 @@ RSpec.describe "command objects" do
     expect(HomebrewTap::LintCommand.new(argv: ["--wat"], out: StringIO.new, err: stderr).run).to eq(2)
     expect(stderr.string).to include("Unknown option")
 
-    write(".github/workflows/test.yml", "steps:\n  - uses: actions/checkout@#{'a' * 40}\n")
+    write(".github/workflows/test.yml", <<~YAML)
+      permissions:
+        contents: read
+      jobs:
+        test:
+          steps:
+            - uses: actions/checkout@#{'a' * 40}
+              with:
+                persist-credentials: false
+    YAML
     fake = FakeRunner.new
     lint_out = StringIO.new
     expect(HomebrewTap::LintCommand.new(argv: [], runner: fake, out: lint_out, err: StringIO.new, root: @root).run).to eq(0)
-    expect(lint_out.string).to include("Ruby syntax", "Shell syntax", "GitHub Actions pins", "Homebrew style", "RuboCop", "Lint complete")
+    expect(lint_out.string).to include("Ruby syntax", "Shell syntax", "GitHub Actions policy", "Homebrew style", "RuboCop", "Lint complete")
     expect(lint_out.string).not_to include("$ ruby -c")
     style_command = fake.commands.find { |cmd| cmd.each_cons(2).include?(["brew", "style"]) }
     expect(style_command).not_to be_nil

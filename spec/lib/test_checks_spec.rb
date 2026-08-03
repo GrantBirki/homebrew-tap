@@ -62,11 +62,95 @@ RSpec.describe HomebrewTap::TestChecks do
   end
 
   it "validates workflow pins" do
-    write(".github/workflows/test.yml", "steps:\n  - uses: actions/checkout@#{'a' * 40}\n")
+    write(".github/workflows/test.yml", <<~YAML)
+      permissions:
+        contents: read
+      jobs:
+        test:
+          steps:
+            - uses: actions/checkout@#{'a' * 40}
+              with:
+                persist-credentials: false
+    YAML
     expect(described_class::WorkflowPins.new(root: @root).validate).to eq(true)
 
-    write(".github/workflows/lint.yml", "steps:\n  - uses: actions/checkout@v6\n")
+    write(".github/workflows/lint.yml", <<~YAML)
+      permissions:
+        contents: read
+      jobs:
+        lint:
+          steps:
+            - uses: actions/checkout@v6
+              with:
+                persist-credentials: false
+    YAML
     expect { described_class::WorkflowPins.new(root: @root).validate }.to raise_error(HomebrewTap::Error, /not SHA-pinned/)
+  end
+
+  it "rejects unsafe workflow triggers, caches, actions, and checkout credentials" do
+    write(".github/workflows/test.yml", <<~YAML)
+      on: [pull_request_target]
+      permissions:
+        contents: read
+        issues: write
+      jobs:
+        test:
+          steps:
+            - uses: actions/cache@#{'a' * 40}
+            - uses: actions/checkout@#{'a' * 40}
+            - "uses": example/action@main
+            - uses: actions/checkout@#{'a' * 40}
+              with:
+                persist-credentials: false
+            - uses: ruby/setup-ruby@#{'a' * 40}
+              with:
+                bundler-cache: true
+    YAML
+
+    expect { described_class::WorkflowPins.new(root: @root).validate }.to raise_error(HomebrewTap::Error) do |error|
+      expect(error.message).to include(
+        "uses pull_request_target",
+        "uses the shared GitHub Actions cache",
+        "enables an implicit setup-action cache",
+        "must use read-only contents permissions",
+        "checkout must disable persisted credentials",
+        "action is not allowed: actions/cache",
+        "action is not allowed: example/action",
+      )
+    end
+  end
+
+  it "rejects malformed workflow structures and action references" do
+    write(".github/workflows/invalid.yml", "[]\n")
+    write(".github/workflows/missing-jobs.yml", <<~YAML)
+      on: pull_request_target
+      permissions:
+        contents: read
+    YAML
+    write(".github/workflows/bad-job.yml", <<~YAML)
+      on:
+        pull_request_target:
+      permissions:
+        contents: read
+      jobs:
+        broken: nope
+    YAML
+    write(".github/workflows/bad-uses.yml", <<~YAML)
+      permissions:
+        contents: read
+      jobs:
+        test:
+          uses: 123
+    YAML
+
+    expect { described_class::WorkflowPins.new(root: @root).validate }.to raise_error(HomebrewTap::Error) do |error|
+      expect(error.message).to include(
+        "must contain a workflow mapping",
+        "must contain a jobs mapping",
+        "job broken must be a mapping",
+        "has an invalid action reference",
+      )
+    end
   end
 
   it "runs syntax, formula, cask, style, and Brewfile parse commands through the injected runner" do

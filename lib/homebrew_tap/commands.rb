@@ -23,9 +23,9 @@ module HomebrewTap
       ui.step("Shell syntax")
       TestChecks::ShellSyntax.new(root: @root, runner: @runner, quiet: true).validate
       ui.success("Shell syntax")
-      ui.step("GitHub Actions pins")
+      ui.step("GitHub Actions policy")
       TestChecks::WorkflowPins.new(root: @root).validate
-      ui.success("GitHub Actions pins")
+      ui.success("GitHub Actions policy")
       ui.step("Homebrew style")
       TestChecks::HomebrewStyle.new(root: @root, runner: @runner, quiet: true).validate
       ui.success("Homebrew style")
