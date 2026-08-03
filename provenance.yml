@@ -914,7 +914,7 @@ casks:
     upstream_repository: grantbirki/oneshot
     upstream_tag: v1.2.9
     upstream_commit: e9e98ab7dba73c0ada4f5ae6b04a6ec610a976b3
-    local_file_sha256: 2fa341bdcc402bb5e38d53bce52136d97a3e3f185b64f5375c32024a60883bd7
+    local_file_sha256: 61c9f419f5c3cdf043f42daf15f59f451cbc162b9bca3c3d867f43a1695e4db2
     version: 1.2.9
     release_published_at: '2026-07-31T16:51:53Z'
     release_evidence:
@@ -928,6 +928,7 @@ casks:
     local_changes:
     - Removed the quarantine-clearing postflight hook; installation now preserves
       Gatekeeper and quarantine.
+    - Restricted installation to Apple silicon.
     artifacts:
       default: 9b35936fc745931196aae2940127f6c5f66dcdd6ba3b62838042934d17cd86ae
   osquery:
@@ -1014,7 +1015,7 @@ casks:
     upstream_repository: grantbirki/shit
     upstream_tag: v0.2.7
     upstream_commit: 36f7626fe7ce6f888372639247c632ee46b77f3b
-    local_file_sha256: 0103f36cde73cb6a0a83a7ff8064ee81dd8695e42e84ccfd29d5a813b424b772
+    local_file_sha256: 6fad5aab6fd8165e8170b9cc2ca605640c08ce0253d313262e2b4a9fb14d99bf
     version: 0.2.7
     release_published_at: '2026-08-01T00:52:41Z'
     release_evidence:
@@ -1028,5 +1029,6 @@ casks:
     local_changes:
     - Removed the quarantine-clearing postflight hook; installation now preserves
       Gatekeeper and quarantine.
+    - Restricted installation to Apple silicon.
     artifacts:
       default: a0e68822801705480fd191b2e3baf97b8598c216cf7ce35f24bcf20c8640fb3e
