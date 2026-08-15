@@ -1,6 +1,6 @@
 cask "espresso" do
-  version "0.1.1"
-  sha256 "25ee16c0b9eab824749278473be9d7478ae2b08d4d8863c29ffa71cdf2d7e7c9"
+  version "0.1.2"
+  sha256 "a1bdc059e50c255922a201fe65b0ac5105d979604aa3b5248d2502c93b53213e"
 
   url "https://github.com/grantbirki/espresso/releases/download/v#{version}/Espresso.zip"
   name "Espresso"
@@ -12,6 +12,7 @@ cask "espresso" do
     strategy :github_latest
   end
 
+  depends_on arch: :arm64
   depends_on macos: :tahoe
 
   app "Espresso.app"
