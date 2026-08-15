@@ -75,7 +75,7 @@ For a cask update, apply the cooldown unless it is one of the explicitly allowli
 
 ## Gatekeeper and application updates
 
-This tap does not clear `com.apple.quarantine` or otherwise bypass Gatekeeper. The personal Espresso, OneShot, and Shit casks are not part of the default Brewfile. OneShot and Shit are Apple silicon-only, Developer ID signed, and notarized, and must pass Gatekeeper normally; unsigned releases require explicit macOS approval after installation.
+This tap does not clear `com.apple.quarantine` or otherwise bypass Gatekeeper. The personal Espresso, OneShot, and Shit casks are not part of the default Brewfile. All three are restricted by this tap to Apple silicon, Developer ID signed, and notarized, and must pass Gatekeeper normally.
 
 Alacritty remains scheduled for Homebrew disablement on September 1, 2026 because its current artifact fails Gatekeeper checks. The disable declaration must remain unless upstream fixes its signing and a replacement artifact is reviewed under the normal adoption policy.
 
