@@ -691,7 +691,7 @@ formulae:
     upstream_repository: vectordotdev/vector
     upstream_tag: v0.56.0
     upstream_commit: 6817c0218e1af8efc484c3a74317fc1192a5a450
-    local_file_sha256: a0fb155a9340a1d5c74355d33d07d74e74c3722f913e46997f0102407f16da8e
+    local_file_sha256: f723f1e3c30f149faec3b1d00a2692249ebf820a4683d532ec79777e81246e0f
     version: 0.56.0
     release_published_at: '2026-06-03T15:26:05Z'
     release_evidence:
@@ -705,7 +705,8 @@ formulae:
     legacy_baseline:
       version: 0.56.0
       artifact_fingerprint_sha256: 6574cc6adf9ffc2f3a82212bf95fbeae0946c5b5c4326bac20ee43916468551a
-    local_changes: []
+    local_changes:
+    - Made post-install directories explicitly relative to Homebrew's var directory.
     artifacts:
       asset_01: 9aa8b6772d7c887734d38c84eb721d3a067e08a4aa4dc0dcc809365da242ec16
   yq:
