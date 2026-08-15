@@ -792,27 +792,25 @@ casks:
   espresso:
     source_type: personal-release
     upstream_repository: grantbirki/espresso
-    upstream_tag: v0.1.1
-    upstream_commit: 868d04049e74bfffe5fb0cc73a79890751cfa2b7
-    local_file_sha256: 1ac333f85279433707fa3ea07d3f20aa79d4c7d0f5fb89a6d247ff6e9f750c3e
-    version: 0.1.1
-    release_published_at: '2026-05-07T05:32:41Z'
+    upstream_tag: v0.1.2
+    upstream_commit: 84935d1efaefa89bb2aff8cca9e3051b37c8b6e1
+    local_file_sha256: 7b2061bc0dfaba75c5446b7f0991626562eee69a6b109add9d6680406f69f5c5
+    version: 0.1.2
+    release_published_at: '2026-08-04T15:32:27Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/espresso/releases/tag/v0.1.1
-    adopted_at: '2026-05-07T05:34:47Z'
-    adoption_commit: 56ad61a97d329603af8c1eb87914c447f25d057e
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
+      reference: https://github.com/GrantBirki/espresso/releases/tag/v0.1.2
+    adopted_at: '2026-08-15T17:16:57Z'
+    adoption_commit: d34bc12c64f5d98ea9ad69831a742dcf7c010c2c
+    adoption_reason: Adopt Espresso v0.1.2 with Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
     cooldown_exception:
     legacy_baseline:
-      version: 0.1.1
-      artifact_fingerprint_sha256: df6e0d2eb46d967c901082d752ce9cea089a51de9ce117d8f74d4b9a967cb3b8
     local_changes:
     - Removed the quarantine-clearing postflight hook; installation now preserves
       Gatekeeper and quarantine.
+    - Restricted installation to Apple silicon.
     artifacts:
-      default: 25ee16c0b9eab824749278473be9d7478ae2b08d4d8863c29ffa71cdf2d7e7c9
+      default: a1bdc059e50c255922a201fe65b0ac5105d979604aa3b5248d2502c93b53213e
   imageoptim:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
