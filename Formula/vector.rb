@@ -18,8 +18,8 @@ class Vector < Formula
   end
 
   post_install_steps do
-    mkdir_p "lib/vector"
-    mkdir_p "log/vector"
+    mkdir_p "lib/vector", base: :var
+    mkdir_p "log/vector", base: :var
   end
 
   def caveats
