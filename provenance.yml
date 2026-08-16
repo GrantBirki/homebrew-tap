@@ -911,17 +911,17 @@ casks:
   oneshot:
     source_type: personal-release
     upstream_repository: grantbirki/oneshot
-    upstream_tag: v1.2.9
-    upstream_commit: e9e98ab7dba73c0ada4f5ae6b04a6ec610a976b3
-    local_file_sha256: 61c9f419f5c3cdf043f42daf15f59f451cbc162b9bca3c3d867f43a1695e4db2
-    version: 1.2.9
-    release_published_at: '2026-07-31T16:51:53Z'
+    upstream_tag: v1.2.10
+    upstream_commit: 13119a4c6bbb2201c31d064d455d643253b1a2b5
+    local_file_sha256: f06f60473bbe514fa63006d2b7cc4f13547ceccac46d1fed2ed02c5a5dd515c1
+    version: 1.2.10
+    release_published_at: '2026-08-16T15:56:51Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.9
-    adopted_at: '2026-07-31T17:27:15Z'
-    adoption_commit: ffcc17a99d9243fad31a6aa8c8d7f5466bf6ef42
-    adoption_reason: Adopt OneShot v1.2.9 with Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
+      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.10
+    adopted_at: '2026-08-16T21:28:19Z'
+    adoption_commit: d666f9298f2a7f3b48bf0e35ab64823583969b75
+    adoption_reason: Adopt OneShot v1.2.10 to fix a preview-drag crash, with Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -929,7 +929,7 @@ casks:
       Gatekeeper and quarantine.
     - Restricted installation to Apple silicon.
     artifacts:
-      default: 9b35936fc745931196aae2940127f6c5f66dcdd6ba3b62838042934d17cd86ae
+      default: 2dafa4d9565e15885735c9d01a55da9c56923a04e5ccc76682215ba04511cad4
   osquery:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
