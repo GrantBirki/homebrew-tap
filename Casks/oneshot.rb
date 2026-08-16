@@ -1,6 +1,6 @@
 cask "oneshot" do
-  version "1.2.9"
-  sha256 "9b35936fc745931196aae2940127f6c5f66dcdd6ba3b62838042934d17cd86ae"
+  version "1.2.10"
+  sha256 "2dafa4d9565e15885735c9d01a55da9c56923a04e5ccc76682215ba04511cad4"
 
   url "https://github.com/grantbirki/oneshot/releases/download/v#{version}/OneShot.zip"
   name "OneShot"
