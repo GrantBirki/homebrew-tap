@@ -957,27 +957,28 @@ casks:
   santa:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: a2e79f67f4ed8e516ac44650a321d056e681edca
+    recipe_commit: 299f1d98cab64608458e5872beb8555b4cf98d51
     recipe_path: Casks/s/santa.rb
-    recipe_blob: 2e5baf35bb463c91e2f07127395d8ff4933a635e
-    local_file_sha256: 9e53f16c25ed1896a1e71235bcec5d04423efedcdc294e2170087d1a42502292
-    version: '2026.4'
-    release_published_at: '2026-05-20T19:57:42Z'
+    recipe_blob: a930b3014cafe52417b2e2ebf6365e3e869e8e51
+    local_file_sha256: 3027c4d9af9a19bddd1d055026e64f26e812593809d75260420fea4568738c32
+    version: '2026.7'
+    release_published_at: '2026-08-04T15:10:36Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/northpolesec/santa/releases/tag/2026.4
-    adopted_at: '2026-05-28T06:12:50Z'
-    adoption_commit: d9da65d8486898bb1376d4042d5d0eed9400fc8a
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
+      reference: https://github.com/northpolesec/santa/releases/tag/2026.7
+    adopted_at: '2026-08-18T03:45:19Z'
+    adoption_commit: c3c4ce97d206e038d837934bf86da8368d5345ed
+    adoption_reason: Adopt Santa 2026.7 to fix the critical telemetry-buffer overflow
+      affecting JSON event logging and the other security issues fixed in this release.
     cooldown_exception:
+      reason: Santa 2026.7 fixes a critical root santad heap overflow affecting JSON
+        event logging, which is enabled on the target Mac.
+      reference: https://github.com/northpolesec/santa/security/advisories/GHSA-xcpp-qvv3-r3xf
     legacy_baseline:
-      version: '2026.4'
-      artifact_fingerprint_sha256: 838f48094d9c90871215e9e5f85e70265cb8137ff061f5c9156acef0b1d1785c
     local_changes:
     - Added an active GitHub release livecheck without changing the pin.
     artifacts:
-      default: e2c3d1695a3570c2b184a11379288f28ed5028073a043a960128752d9a88670a
+      default: 8504918fb6c00e23980f4c6d6037db07f4928e424181550d9c16b2a550b893ad
   secretive:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
