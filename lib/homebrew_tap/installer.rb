@@ -302,7 +302,7 @@ module HomebrewTap
       return unless url
 
       filename = url.split("?").first.split("/").last
-      filename.scan(/\d+(?:\.\d+)+/).last
+      filename.scan(/\d+(?:\.\d+)+(?:-\d+)?/).last
     end
 
     def target_version_for(entry)

@@ -12,11 +12,11 @@ RSpec.describe HomebrewTap::Installer do
     RUBY
   end
 
-  def write_url_formula(token, version, revision: nil)
+  def write_url_formula(token, version, revision: nil, extension: "tar.gz")
     revision_line = "  revision #{revision}\n" if revision
     write("Formula/#{token}.rb", <<~RUBY)
       class #{token.capitalize} < Formula
-        url "https://example.com/#{token}-#{version}.tar.gz"
+        url "https://example.com/#{token}-#{version}.#{extension}"
       #{revision_line}end
     RUBY
   end
@@ -408,5 +408,24 @@ RSpec.describe HomebrewTap::Installer do
 
     expect(status).to eq(0)
     expect(stdout.string).to include("grantbirki/tap 1.29.0_1 -> grantbirki/tap 1.29.0_1")
+  end
+
+  it "reports numeric dash suffixes before numeric archive extensions" do
+    write("Brewfile", %(brew "grantbirki/tap/imagemagick"\n))
+    write_url_formula("imagemagick", "7.1.2-29", extension: "7z")
+    prefix = File.join(@root, "prefix")
+    receipt(prefix, :brew, "imagemagick", version: "7.1.2-29", body: formula_receipt("grantbirki/tap", "7.1.2-29"))
+    stdout = StringIO.new
+
+    status = described_class.new(
+      argv: ["--dry-run", "--no-update"],
+      runner: runner(prefix: prefix),
+      out: stdout,
+      err: StringIO.new,
+      repo_root: @root
+    ).run
+
+    expect(status).to eq(0)
+    expect(stdout.string).to include("grantbirki/tap 7.1.2-29 -> grantbirki/tap 7.1.2-29")
   end
 end
