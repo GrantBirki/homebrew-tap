@@ -34,6 +34,8 @@ brew "grantbirki/tap/eza", trusted: true
 brew "grantbirki/tap/gh", trusted: true
 # Audio/video processing toolkit
 brew "grantbirki/tap/ffmpeg", trusted: true
+# Image manipulation toolkit
+brew "grantbirki/tap/imagemagick", trusted: true
 # GNU Pretty Good Privacy package
 brew "grantbirki/tap/gnupg", trusted: true
 # Static site generator

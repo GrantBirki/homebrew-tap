@@ -295,6 +295,37 @@ formulae:
         sonoma: 6a78cdc30976644d60b310834387a0d25e2baa8888458b0ae0e7b8bb8e5fd427
         arm64_linux: e965f43173e024cd255f562c160d67c997d180ef52f3c4819c594cf0dc657528
         x86_64_linux: 70a184cb20ef00856c710354af368837de2ab7c7f16b952c7bcc2c8a0dddd9a8
+  imagemagick:
+    source_type: homebrew-core
+    recipe_repository: Homebrew/homebrew-core
+    recipe_commit: 2181cb882725e8bf507eb36c826791f0e01fc87e
+    recipe_path: Formula/i/imagemagick.rb
+    recipe_blob: 7538de82800db2bd4f3d3f2808537f137e7a8afe
+    local_file_sha256: 1b4407fd2c284464266542d6a7ef5e941140befb7a46298734e63b761102d0cc
+    version: 7.1.2-29
+    release_published_at: '2026-07-27T19:00:27Z'
+    release_evidence:
+      description: GitHub release published_at
+      reference: https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.2-29
+    adopted_at: '2026-08-22T17:06:18Z'
+    adoption_commit: 0e881b91c0422ea17d8caccf8dad1e530e877867
+    adoption_reason: Add ImageMagick 7.1.2-29 as an explicitly selected image-processing
+      tool after reviewing the upstream source and Homebrew bottles.
+    cooldown_exception:
+    legacy_baseline:
+    local_changes:
+    - Removed the mutable head spec.
+    - Pinned the Homebrew core bottle root explicitly.
+    bottles:
+      repository: Homebrew/homebrew-core
+      verified_at: '2026-08-22T18:07:50Z'
+      digests:
+        arm64_tahoe: 4a6d4f8d0762e1203ec0cd37de10e0d964b5a31fe6889413e0f34fd4c3d57983
+        arm64_sequoia: 269586f2eea931ed78d5e160be50c14395885f56cad69378c7e7a97c4caeed97
+        arm64_sonoma: dfb889ae2338549bc7382adc6bd18f6ce7234f90e7a2e16d028e11d7a0b948f4
+        sonoma: 0c053f8259a6981ca83c6aa09113bcbcdd3d3688c4d9527f50a25a94f4912e5b
+        arm64_linux: 4ce9e6c2a0c5a250cb96449195b1e9e9abd2d1534d371da1abe86ddc232940c1
+        x86_64_linux: 2f9dfb0c932ef80ad775f6daabf095788e057dd38f8e1d31e2e53ddadf4be56d
   libyaml:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
