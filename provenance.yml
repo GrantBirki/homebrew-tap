@@ -1044,17 +1044,17 @@ casks:
   shit:
     source_type: personal-release
     upstream_repository: grantbirki/shit
-    upstream_tag: v0.2.7
-    upstream_commit: 36f7626fe7ce6f888372639247c632ee46b77f3b
-    local_file_sha256: 6fad5aab6fd8165e8170b9cc2ca605640c08ce0253d313262e2b4a9fb14d99bf
-    version: 0.2.7
-    release_published_at: '2026-08-01T00:52:41Z'
+    upstream_tag: v0.2.8
+    upstream_commit: e269c9e372e391b45c6b3bb712d2df5431a80fb8
+    local_file_sha256: 37abad8c0efd4a7f503a2907f14c0cc8c8b85732cbfeb57133dd9aa71e0e44fc
+    version: 0.2.8
+    release_published_at: '2026-09-02T19:03:03Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.7
-    adopted_at: '2026-08-01T01:30:15Z'
-    adoption_commit: 3f4d3fa530c7f6615df998e5594777e309d121f6
-    adoption_reason: Adopt Shit v0.2.7 with corrected Calendar consent metadata while preserving Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
+      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.8
+    adopted_at: '2026-09-02T19:06:01Z'
+    adoption_commit: 7fde0c180d19c41d0da43a1b46eb686050ec3fac
+    adoption_reason: Adopt Shit v0.2.8 so displayed meeting times follow system timezone changes, with verified Developer ID signing, notarization, a stapled ticket, hardened runtime, and release provenance.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -1062,4 +1062,4 @@ casks:
       Gatekeeper and quarantine.
     - Restricted installation to Apple silicon.
     artifacts:
-      default: a0e68822801705480fd191b2e3baf97b8598c216cf7ce35f24bcf20c8640fb3e
+      default: a4bc40b16e298f10fe0a9142d7bd8f8392a2b05f0f7877a2f3e0aa9368ee666a
