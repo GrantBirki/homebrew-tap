@@ -942,17 +942,17 @@ casks:
   oneshot:
     source_type: personal-release
     upstream_repository: grantbirki/oneshot
-    upstream_tag: v1.2.10
-    upstream_commit: 13119a4c6bbb2201c31d064d455d643253b1a2b5
-    local_file_sha256: f06f60473bbe514fa63006d2b7cc4f13547ceccac46d1fed2ed02c5a5dd515c1
-    version: 1.2.10
-    release_published_at: '2026-08-16T15:56:51Z'
+    upstream_tag: v1.2.11
+    upstream_commit: 43e43e29aa9ef25eee83d68bd17c9b726aa14b71
+    local_file_sha256: f6a7e5aa41eb94770a303054985049969016975641553f6b6e631bd938efceca
+    version: 1.2.11
+    release_published_at: '2026-09-03T18:20:45Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.10
-    adopted_at: '2026-08-16T21:28:19Z'
-    adoption_commit: d666f9298f2a7f3b48bf0e35ab64823583969b75
-    adoption_reason: Adopt OneShot v1.2.10 to fix a preview-drag crash, with Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
+      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.11
+    adopted_at: '2026-09-03T18:22:52Z'
+    adoption_commit: e3fdfc30ddec0b82f98597d178a3350f51642f76
+    adoption_reason: Adopt OneShot v1.2.11 to preserve Retina sizing in clipboard copies, with verified Developer ID signing, notarization, a stapled ticket, hardened runtime, and artifact provenance.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -960,7 +960,7 @@ casks:
       Gatekeeper and quarantine.
     - Restricted installation to Apple silicon.
     artifacts:
-      default: 2dafa4d9565e15885735c9d01a55da9c56923a04e5ccc76682215ba04511cad4
+      default: d7dd0db92d458f69ea2d285a6c27fd7f2b0afedf8c1a8d94d8b91e5e9fd92782
   osquery:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
