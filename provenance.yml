@@ -942,17 +942,17 @@ casks:
   oneshot:
     source_type: personal-release
     upstream_repository: grantbirki/oneshot
-    upstream_tag: v1.2.11
-    upstream_commit: 43e43e29aa9ef25eee83d68bd17c9b726aa14b71
-    local_file_sha256: f6a7e5aa41eb94770a303054985049969016975641553f6b6e631bd938efceca
-    version: 1.2.11
-    release_published_at: '2026-09-03T18:20:45Z'
+    upstream_tag: v1.2.12
+    upstream_commit: da0d0825dbcb748dd22a6c51b1f30045169fe442
+    local_file_sha256: 273d4d0e91ca4bee3fe3da3b7837ae13d8c383ed810a146321673cc02f905bc6
+    version: 1.2.12
+    release_published_at: '2026-09-06T15:58:43Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.11
-    adopted_at: '2026-09-03T18:22:52Z'
-    adoption_commit: e3fdfc30ddec0b82f98597d178a3350f51642f76
-    adoption_reason: Adopt OneShot v1.2.11 to preserve Retina sizing in clipboard copies, with verified Developer ID signing, notarization, a stapled ticket, hardened runtime, and artifact provenance.
+      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.12
+    adopted_at: '2026-09-06T16:19:11Z'
+    adoption_commit: 30de61e3d87e1de28174fb2c8a8c276640425743
+    adoption_reason: Adopt OneShot v1.2.12 to fix invalid volume crashes and speed up long filename truncation, with verified Developer ID signing, notarization, a stapled ticket, hardened runtime, and artifact provenance.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -960,7 +960,7 @@ casks:
       Gatekeeper and quarantine.
     - Restricted installation to Apple silicon.
     artifacts:
-      default: d7dd0db92d458f69ea2d285a6c27fd7f2b0afedf8c1a8d94d8b91e5e9fd92782
+      default: 7818d61530ed0dfabff8c78b1c91fb00da6e5ac0b698b5c069db874d603c784c
   osquery:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
