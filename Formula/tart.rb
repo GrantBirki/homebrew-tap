@@ -18,13 +18,13 @@ class Tart < Formula
   post_install_steps do
     run "tart.app/Contents/MacOS/tart", base: :libexec,
         args: ["--generate-completion-script", "bash"], env: { "SHELL" => "bash" },
-        stdout_path: "etc/bash_completion.d/tart"
+        stdout_path: "{{bash_completion}}/tart"
     run "tart.app/Contents/MacOS/tart", base: :libexec,
         args: ["--generate-completion-script", "zsh"], env: { "SHELL" => "zsh" },
-        stdout_path: "share/zsh/site-functions/_tart"
+        stdout_path: "{{zsh_completion}}/_tart"
     run "tart.app/Contents/MacOS/tart", base: :libexec,
         args: ["--generate-completion-script", "fish"], env: { "SHELL" => "fish" },
-        stdout_path: "share/fish/vendor_completions.d/tart.fish"
+        stdout_path: "{{fish_completion}}/tart.fish"
   end
 
   def caveats
