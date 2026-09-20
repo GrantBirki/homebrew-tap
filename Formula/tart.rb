@@ -15,8 +15,16 @@ class Tart < Formula
     bin.write_exec_script libexec/"tart.app/Contents/MacOS/tart"
   end
 
-  def post_install
-    generate_completions_from_executable(libexec/"tart.app/Contents/MacOS/tart", "--generate-completion-script")
+  post_install_steps do
+    run "tart.app/Contents/MacOS/tart", base: :libexec,
+        args: ["--generate-completion-script", "bash"], env: { "SHELL" => "bash" },
+        stdout_path: "etc/bash_completion.d/tart"
+    run "tart.app/Contents/MacOS/tart", base: :libexec,
+        args: ["--generate-completion-script", "zsh"], env: { "SHELL" => "zsh" },
+        stdout_path: "share/zsh/site-functions/_tart"
+    run "tart.app/Contents/MacOS/tart", base: :libexec,
+        args: ["--generate-completion-script", "fish"], env: { "SHELL" => "fish" },
+        stdout_path: "share/fish/vendor_completions.d/tart.fish"
   end
 
   def caveats

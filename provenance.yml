@@ -235,7 +235,7 @@ formulae:
     recipe_commit: de036adbf416f03a4441b377c4ba99273a00e8ed
     recipe_path: Formula/g/gnupg.rb
     recipe_blob: 45e7a85439823a94c975728f1213af94fd2bc8a7
-    local_file_sha256: ce33ae696905d4fb1c15612aa3da7e7c696774a7a61760c84c1e6d93e2255bec
+    local_file_sha256: 9fb758bc22da806625b4c216481244fa5f8b7c8a944eea7b41160e779ccdeefd
     version: 2.5.20
     release_published_at: '2026-05-13T12:55:28Z'
     release_evidence:
@@ -250,6 +250,7 @@ formulae:
       version: 2.5.20
       artifact_fingerprint_sha256: ce459cc3f7f3c26a1e9bcd0be4f30828c9f878f5b794f77c0e2ed79ccf8376cf
     local_changes:
+    - Migrated the post-install hook to Homebrew's declarative install steps without changing package artifacts.
     - Pinned the Homebrew core bottle root explicitly.
     - Updated dependency path references to Homebrew's current formula helper DSL.
     bottles:
@@ -521,7 +522,7 @@ formulae:
     recipe_commit: 8cad0865b9cb085555f51a0eedf4292f229d8ed1
     recipe_path: Formula/r/rustup.rb
     recipe_blob: 4aa8fa8973621e16a6769ecc94304879ba44634a
-    local_file_sha256: 7d7a4466a8a131a2c181798af953e7fa4fe3f76c3070b85b56539f59bd72002d
+    local_file_sha256: 8d7525bfcc611a931035a425177ae42bad9a1ed58c1ed6e5f6a1eebfbb3a024d
     version: 1.29.0_1
     release_published_at: '2026-03-05T06:31:28Z'
     release_evidence:
@@ -536,6 +537,7 @@ formulae:
       version: 1.29.0_1
       artifact_fingerprint_sha256: e72d97b4f8d45a0223727e4aceecbfddb95b138df341506c8640d46d66e53051
     local_changes:
+    - Migrated the post-install hook to Homebrew's declarative install steps without changing package artifacts.
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
     - Retained the local cargo shell-completion generation implementation.
@@ -621,7 +623,7 @@ formulae:
     upstream_repository: openai/tart
     upstream_tag: 2.32.1
     upstream_commit: 8aa377b71ebfd90b2df9803d3e20033f58d6800c
-    local_file_sha256: 67c056328ca90627fd0ce031a22eef1c17958949ca1439c9bd39e7ce733824d1
+    local_file_sha256: bde909d48824879a5ff37532a307445f7352c06045c12ef558e9e732b558569b
     version: 2.32.1
     release_published_at: '2026-04-12T02:36:00Z'
     release_evidence:
@@ -633,6 +635,7 @@ formulae:
     cooldown_exception:
     legacy_baseline:
     local_changes:
+    - Migrated the post-install hook to Homebrew's declarative install steps without changing package artifacts.
     - Updated the release and homepage URLs to the canonical repository after its transfer from Cirrus Labs to OpenAI.
     - Omitted the optional qualified Softnet dependency so installing Tart does not broaden trust to another tap or install a separate setuid-capable networking tool.
     - Added a focused version test and caveat documenting the intentional Softnet limitation.
@@ -921,7 +924,7 @@ casks:
     recipe_commit: '0281c09c3a2fc054f858087d74f9fbfffa534404'
     recipe_path: Casks/k/knockknock.rb
     recipe_blob: c0a7a7fe9e79816f0888a7801a618dd754d6795e
-    local_file_sha256: edfe1eea0ca518ac5063e21d1b5b461df83abb5c5274913fa4cdd73ff7a407c8
+    local_file_sha256: 75f72164a1658179f0205d8c4b2dfb321e96b71a95f7bf528e5058d9ab01b672
     version: 4.0.3
     release_published_at: '2025-12-18T05:44:28Z'
     release_evidence:
@@ -936,7 +939,7 @@ casks:
       version: 4.0.3
       artifact_fingerprint_sha256: d2a0265cafed21fc62f61f5e55296a32e1db182051dedeb16e6fd399c40dfbc0
     local_changes:
-    - Retained the explicit Catalina minimum supported macOS version.
+    - Require Big Sur or newer because current Homebrew no longer accepts Catalina requirements.
     artifacts:
       default: 1e1371ff6eb62e0866266a0744e90aa3bdc6b22cca0599afbd330ddf52663c69
   oneshot:

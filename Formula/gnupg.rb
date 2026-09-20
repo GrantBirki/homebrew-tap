@@ -82,9 +82,9 @@ class Gnupg < Formula
     end
   end
 
-  def post_install
-    (var/"run").mkpath
-    quiet_system "killall", "gpg-agent"
+  post_install_steps do
+    mkdir_p "run", base: :var
+    run "killall", args: ["gpg-agent"], must_succeed: false, print_stderr: false
   end
 
   test do
