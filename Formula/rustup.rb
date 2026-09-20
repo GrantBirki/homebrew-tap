@@ -61,13 +61,12 @@ class Rustup < Formula
     end
   end
 
-  def post_install
-    (HOMEBREW_PREFIX/"bin").install_symlink bin/"rustup"
+  post_install_steps do
+    symlink "rustup", "bin/rustup", source_base: :bin, target_base: :homebrew_prefix, overwrite: true
 
-    # Remove the old Homebrew-created symlink during upgrades, but leave any
-    # user-managed `rustup-init` file alone.
-    rustup_init = HOMEBREW_PREFIX/"bin/rustup-init"
-    rustup_init.unlink if rustup_init.symlink? && rustup_init.readlink.to_s.match?(%r{(?:Cellar|opt)/rustup/})
+    # Remove only the old Homebrew-created link, preserving user-managed files.
+    remove "bin/rustup-init", base: :homebrew_prefix, symlink_target_contains: "Cellar/rustup/"
+    remove "bin/rustup-init", base: :homebrew_prefix, symlink_target_contains: "opt/rustup/"
   end
 
   def caveats
