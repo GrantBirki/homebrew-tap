@@ -706,7 +706,7 @@ formulae:
     upstream_repository: GrantBirki/uninstall
     upstream_tag: v1.3.5
     upstream_commit: d9ddfd25ad12ed6509b71bdce4a10a480b5ef970
-    local_file_sha256: c9f3ec17305a713c8c46bc0183d72b92c3a600db878df024fb3cfe7d628b67f0
+    local_file_sha256: c5bdb79f375ee76c13d379c0c7dc6867cd823bbda4d4bcb9b2a47abb0317fb24
     version: 1.3.5
     release_published_at: '2026-09-28T18:03:33Z'
     release_evidence:
