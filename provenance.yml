@@ -704,22 +704,22 @@ formulae:
   uninstall:
     source_type: personal-release
     upstream_repository: GrantBirki/uninstall
-    upstream_tag: v1.3.0
-    upstream_commit: dd5ab4b2f9d6a7f7c7665466c7d95029f9106f57
-    local_file_sha256: a9a47a217549d6baf5700f2b076652e0fd50d3eef6dad1d371165f9b17bce2ec
-    version: 1.3.0
-    release_published_at: '2026-07-16T18:03:41Z'
+    upstream_tag: v1.3.5
+    upstream_commit: d9ddfd25ad12ed6509b71bdce4a10a480b5ef970
+    local_file_sha256: c9f3ec17305a713c8c46bc0183d72b92c3a600db878df024fb3cfe7d628b67f0
+    version: 1.3.5
+    release_published_at: '2026-09-28T18:03:33Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/uninstall/releases/tag/v1.3.0
-    adopted_at: '2026-07-16T18:17:01Z'
-    adoption_commit: 453a297bd470a1282a77c60029c5a2b73a902359
-    adoption_reason: Adopt the reviewed owner-controlled v1.3.0 release with application discovery, name resolution, and release workflow hardening.
+      reference: https://github.com/GrantBirki/uninstall/releases/tag/v1.3.5
+    adopted_at: '2026-09-28T11:14:16-07:00'
+    adoption_commit: 461cd6495a79ffd087a1ba3b656390f208fc57cd
+    adoption_reason: Adopt the owner-controlled v1.3.5 release to fix Finder Trash moves and reject symlink apps before removing their data.
     cooldown_exception:
     legacy_baseline:
     local_changes: []
     artifacts:
-      asset_01: 11d43cbd698d21972f67e99f7ecf20e0b56e20204de2846a41520a836f542046
+      asset_01: fcfa8a55f835a5bffebedf11f2e0cde56880825d3c1539d81d5e5f148bae5dba
   vector:
     source_type: upstream-release
     upstream_repository: vectordotdev/vector
