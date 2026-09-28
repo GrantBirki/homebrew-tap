@@ -783,7 +783,7 @@ casks:
     recipe_commit: d6bb4173c6760bd96921bb6cbf7ca44e78786c61
     recipe_path: Casks/a/alacritty.rb
     recipe_blob: 1ebc85a8ee74401e557e2fe6fc184a0bd1c04a06
-    local_file_sha256: 581efb26c2c763061873d2f63b0ed340a5e2369c5b3f7db553071fe4c1ff9d00
+    local_file_sha256: e4c907b25e68f3bdb334aa79742c2d4ed30ce8127fdf46c1233691a5264b55ae
     version: 0.17.0
     release_published_at: '2026-04-06T19:24:18Z'
     release_evidence:
@@ -797,7 +797,8 @@ casks:
     legacy_baseline:
       version: 0.17.0
       artifact_fingerprint_sha256: f4702d7dda5a8f543fff92164ddeafa87ed8999980ffd41c6dea7591bf7f73b2
-    local_changes: []
+    local_changes:
+    - Use Homebrew's supported macOS requirement instead of its redundant Big Sur minimum.
     artifacts:
       default: ad8d7de35fb38e43184776cac6dfee05ca325caa0b6639a06a55e54e4b026620
   blockblock:
@@ -852,7 +853,7 @@ casks:
     recipe_commit: 2e2c1f5e33e98b550a25f7b800a22f24ec66ad17
     recipe_path: Casks/i/imageoptim.rb
     recipe_blob: 230823e6693dfe03c8378dbb4e44dfe272b7ea48
-    local_file_sha256: cbf890a9f4180171e0334572e9dccdd33f3509e3a6b2f9f184cab3e8e5a6a679
+    local_file_sha256: 81f0e62635a5b34951af3c3d8db7b1adf2c31977247a546ef32d963165a4aba5
     version: 1.9.3
     release_published_at: '2023-10-29T16:23:46Z'
     release_evidence:
@@ -866,7 +867,8 @@ casks:
     legacy_baseline:
       version: 1.9.3
       artifact_fingerprint_sha256: 2db85e73ad131d13ba8f5f1910a01759a1c2081bd632372ea5b6e36733e4f991
-    local_changes: []
+    local_changes:
+    - Use Homebrew's supported macOS requirement instead of its redundant Big Sur minimum.
     artifacts:
       default: d4e453bbb55b6491d519a30e0e6de5beb7ce1a929e8f835767b638ef6ffd371d
   karabiner-elements:
@@ -924,7 +926,7 @@ casks:
     recipe_commit: '0281c09c3a2fc054f858087d74f9fbfffa534404'
     recipe_path: Casks/k/knockknock.rb
     recipe_blob: c0a7a7fe9e79816f0888a7801a618dd754d6795e
-    local_file_sha256: 75f72164a1658179f0205d8c4b2dfb321e96b71a95f7bf528e5058d9ab01b672
+    local_file_sha256: b41c550d1d25f1a5f7031ff8ea804d07ea1ceafa48d089b6b034ce3f3ecd890f
     version: 4.0.3
     release_published_at: '2025-12-18T05:44:28Z'
     release_evidence:
@@ -939,7 +941,7 @@ casks:
       version: 4.0.3
       artifact_fingerprint_sha256: d2a0265cafed21fc62f61f5e55296a32e1db182051dedeb16e6fd399c40dfbc0
     local_changes:
-    - Require Big Sur or newer because current Homebrew no longer accepts Catalina requirements.
+    - Use Homebrew's supported macOS requirement instead of an obsolete Catalina or Big Sur minimum.
     artifacts:
       default: 1e1371ff6eb62e0866266a0744e90aa3bdc6b22cca0599afbd330ddf52663c69
   oneshot:
