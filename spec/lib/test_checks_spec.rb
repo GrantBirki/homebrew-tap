@@ -221,6 +221,34 @@ RSpec.describe HomebrewTap::TestChecks do
     expect(brewfile_command.join(" ")).to include("Homebrew::Bundle::Dsl")
   end
 
+  it "checks Secretive's retained Sonoma version, exact digest, and release URL" do
+    manifest = YAML.safe_load_file(File.join(ROOT, "provenance.yml"))
+    write("provenance.yml", YAML.dump("casks" => { "secretive" => manifest.fetch("casks").fetch("secretive") }))
+    content = File.read(File.join(ROOT, "Casks/secretive.rb"))
+    path = write("Casks/secretive.rb", content)
+    fake = FakeRunner.new
+    described_class::CaskParsing.new(root: @root, runner: fake).validate
+    command = fake.commands.last
+
+    stdout, stderr, status = Open3.capture3(*command)
+    expect(status.success?).to eq(true), "#{stdout}\n#{stderr}"
+
+    mutations = {
+      content.sub('version "3.0.4"', 'version "3.0.3"') => "selected version does not match",
+      content.sub(
+        manifest.fetch("casks").fetch("secretive").fetch("artifacts").fetch("sonoma_3.0.4"),
+        manifest.fetch("casks").fetch("secretive").fetch("artifacts").fetch("sequoia_or_newer_4.0.0")
+      ) => "selected sha256 does not match",
+      content.sub("v\#{version}/Secretive.zip", "v4.0.0/Secretive.zip") => "selected URL does not match sonoma"
+    }
+    mutations.each do |mutated, error|
+      File.write(path, mutated)
+      _stdout, stderr, status = Open3.capture3(*command)
+      expect(status.success?).to eq(false)
+      expect(stderr).to include(error)
+    end
+  end
+
   it "validates required Brewfile pins" do
     body = (["tap \"grantbirki/tap\"", "cask_args require_sha: true"] +
       described_class::FORMULA_TOKENS.map { |token| %(brew "grantbirki/tap/#{token}", trusted: true) } +

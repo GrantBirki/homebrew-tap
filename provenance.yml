@@ -1032,6 +1032,7 @@ casks:
       reference: https://github.com/GrantBirki/homebrew-tap/blob/e19eb734668f94536de62f5dca1ae65b51f49692/SECURITY.md#one-time-secretive-400-override
     legacy_baseline:
     local_changes:
+    - Legacy versions 1.0.3, 2.3.1, 2.4.1, and 3.0.4 retain the reviewed Homebrew/homebrew-cask recipe at https://github.com/Homebrew/homebrew-cask/blob/efe202a25512f9fcd5fdec53ed1954d3d3a08f86/Casks/s/secretive.rb (Git blob d24fba4204f3977f48af97175c5478d35509b05d).
     - Retained the existing legacy macOS versions and checksums, including 3.0.4 on Sonoma; active release discovery applies to Sequoia and newer.
     - Preserved the existing app installation and zap paths without adding uninstall signals or changing quarantine behavior.
     artifacts:
