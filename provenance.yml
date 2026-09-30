@@ -1014,36 +1014,39 @@ casks:
     artifacts:
       default: 229cbfca5a8ec31075dd71b38e82f5e14230ba3551e8f33c2d8dc998b0ebf1a6
   secretive:
-    source_type: homebrew-cask
-    recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: efe202a25512f9fcd5fdec53ed1954d3d3a08f86
-    recipe_path: Casks/s/secretive.rb
-    recipe_blob: d24fba4204f3977f48af97175c5478d35509b05d
-    local_file_sha256: 270595f54929b44fc74d2fe6f5c271f0a61087ea0dee36b6c3f913da91b7a6d4
-    version: 3.0.4
-    release_published_at: '2025-11-27T21:46:05Z'
+    source_type: upstream-release
+    upstream_repository: maxgoedjen/secretive
+    upstream_tag: v4.0.0
+    upstream_commit: 54e0d00d87e207377101b0ea6ddfa624cd1a1c16
+    local_file_sha256: 090edb9fca9da39f256ef6fd39919b3c8f9e098da64079420e1305c0a8bb8f80
+    version: 4.0.0
+    release_published_at: '2026-09-21T03:08:01Z'
     release_evidence:
-      description: GitHub release published_at per macOS-specific version
-      reference: https://github.com/maxgoedjen/secretive/releases/tag/v3.0.4
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
+      description: GitHub release publication and macOS 15 minimum; asset checksum and upstream build attestation verified independently.
+      reference: https://github.com/maxgoedjen/secretive/releases/tag/v4.0.0
+    adopted_at: '2026-09-30T06:23:02Z'
+    adoption_commit: e19eb734668f94536de62f5dca1ae65b51f49692
+    adoption_reason: Adopt Secretive 4.0.0 for stacked requests and SSH certificate support on macOS 15 and newer. Verified Developer ID Max Goedjen (Z72PRUAWF6), hardened runtime, and notarized Gatekeeper acceptance; preserve prior versions on older macOS.
     cooldown_exception:
+      reason: The owner explicitly approved a one-time early adoption of Secretive 4.0.0 on September 30, 2026. This is a release-specific owner override, not a security incident exception.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/e19eb734668f94536de62f5dca1ae65b51f49692/SECURITY.md#one-time-secretive-400-override
     legacy_baseline:
-      version: 3.0.4
-      artifact_fingerprint_sha256: 6cc63df22b729321a7aa78cfb8c8bff0cf39b2fe450790d3b40804bd23fb95d3
-    local_changes: []
+    local_changes:
+    - Legacy versions 1.0.3, 2.3.1, 2.4.1, and 3.0.4 retain the reviewed Homebrew/homebrew-cask recipe at https://github.com/Homebrew/homebrew-cask/blob/efe202a25512f9fcd5fdec53ed1954d3d3a08f86/Casks/s/secretive.rb (Git blob d24fba4204f3977f48af97175c5478d35509b05d).
+    - Retained the existing legacy macOS versions and checksums, including 3.0.4 on Sonoma; active release discovery applies to Sequoia and newer.
+    - Preserved the existing app installation and zap paths without adding uninstall signals or changing quarantine behavior.
     artifacts:
       catalina_or_older_1.0.3: d8522c153f20cd03513e6815bdb46be98eae0db2b2a45d30f60b25a6609d1657
       big_sur_2.3.1: 493a72362898b4480baa70f115d9515b41b2af4a503caf00277e2bc3824b0bbd
       monterey_ventura_2.4.1: 00ddf651f1151f1e3888c51e58ce343f6888480db79771b6de7371db21bde4d8
-      sonoma_or_newer_3.0.4: 696d07812e4431075234a900a0136dbad3131a91086e535fc2b07d69a1d084ba
+      sonoma_3.0.4: 696d07812e4431075234a900a0136dbad3131a91086e535fc2b07d69a1d084ba
+      sequoia_or_newer_4.0.0: 877517e212938ffb7048bc7b6811e992194ba4b3eaa4dae36405b6303d1ac1fa
     platform_versions:
       catalina_or_older: 1.0.3
       big_sur: 2.3.1
       monterey_ventura: 2.4.1
-      sonoma_or_newer: 3.0.4
+      sonoma: 3.0.4
+      sequoia_or_newer: 4.0.0
   shit:
     source_type: personal-release
     upstream_repository: grantbirki/shit
