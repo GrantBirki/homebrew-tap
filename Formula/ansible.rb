@@ -6,17 +6,8 @@ class Ansible < Formula
   url "https://files.pythonhosted.org/packages/d8/d0/b083e41b4653ba3ab542c2b58c71afee8a2317a2b23ffe00f574152b53ad/ansible-13.7.0.tar.gz"
   sha256 "ebca5898346963691915bfea19048f5019b4e46f57e856dc1b790bcde3769224"
   license "GPL-3.0-or-later"
+  revision 1
   compatibility_version 2
-
-  bottle do
-    root_url "https://ghcr.io/v2/homebrew/core"
-    sha256 cellar: :any,                 arm64_tahoe:   "3015e788888017b35794146dbe7ac4a192ff287c81e12f75fb2cb73ed1299c33"
-    sha256 cellar: :any,                 arm64_sequoia: "06914ab3e073e43d3b70ef5db88697efa0cdae3aa03efb378d2d551bae64087f"
-    sha256 cellar: :any,                 arm64_sonoma:  "1ee3ad50a668cd66f29284da2ffc7d4f4d4061edc29497032451506b9586bbb8"
-    sha256 cellar: :any,                 sonoma:        "6fc6b55ad1c90d26e47ca65a0063884c6a8c4a5211eb078864ad1ecc8a7aeb0e"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "63d04655e7c212b0ab2dd8c4758db9bbbcb13c4c20547983bc6c48508ea3cb9d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d05172d9e46e4fce6794c66bd77accbe600538055c09151c09d097aaa7521fef"
-  end
 
   # `pkgconf` and `rust` are for bcrypt
   depends_on "pkgconf" => :build
@@ -525,8 +516,8 @@ class Ansible < Formula
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz"
-    sha256 "231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c"
+    url "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b90a496d987258916dbbf88e842c729f510e/urllib3-2.8.0.tar.gz"
+    sha256 "63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63"
   end
 
   resource "wcwidth" do
