@@ -8,33 +8,30 @@ formulae:
     recipe_commit: bdc6a6c63c9e896a5264a533f094eb951bfa4df0
     recipe_path: Formula/a/ansible.rb
     recipe_blob: bf8c49b1d36295a1e422208cd61f1cb9575ce6d0
-    local_file_sha256: 762fadfc3603f11c5966ced5b742434d2aba0029c4eafa72d95347425313f5fe
-    version: 13.7.0
-    release_published_at: '2026-05-19T19:52:52.248965Z'
+    local_file_sha256: c09e9fb9d0cc6106a3c078b4d59d6561fcaa9c5caa82a75b7c41757bd8584e3a
+    version: 13.7.0_1
+    release_published_at: '2026-09-15T19:29:36.253420Z'
     release_evidence:
-      description: PyPI ansible 13.7.0 upload
-      reference: https://pypi.org/project/ansible/13.7.0/
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
+      description: PyPI urllib3 2.8.0 resource upload; Ansible 13.7.0 remains pinned.
+      reference: https://pypi.org/project/urllib3/2.8.0/
+    adopted_at: '2026-10-01T19:59:10Z'
+    adoption_commit: 83c29f658fa3f577c360c721b2dcfab0ba290e30
+    adoption_reason: >-
+      Update only urllib3 to 2.8.0 for GHSA-8988-9cw3-xx77,
+      GHSA-vxq7-64xx-v4gw, and GHSA-gh4c-6fx4-qh6g after its 14-day cooldown.
+      Retain Ansible 13.7.0 and build from source because the original core
+      bottles bundle vulnerable urllib3 2.7.0.
     cooldown_exception:
     legacy_baseline:
-      version: 13.7.0
-      artifact_fingerprint_sha256: d15977525c9d844bd3256dd185237e4e269f03c37563de2dcbf034a1218d2f98
     local_changes:
     - Removed the mutable head spec.
-    - Pinned the Homebrew core bottle root explicitly.
+    - Added revision 1 so existing Ansible installations receive the resource fix.
+    - Updated only the urllib3 resource to the verified PyPI 2.8.0 source and SHA-256.
+    - Removed all original core bottles because their bundled urllib3 is vulnerable.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
-      digests:
-        arm64_tahoe: 3015e788888017b35794146dbe7ac4a192ff287c81e12f75fb2cb73ed1299c33
-        arm64_sequoia: '06914ab3e073e43d3b70ef5db88697efa0cdae3aa03efb378d2d551bae64087f'
-        arm64_sonoma: 1ee3ad50a668cd66f29284da2ffc7d4f4d4061edc29497032451506b9586bbb8
-        sonoma: 6fc6b55ad1c90d26e47ca65a0063884c6a8c4a5211eb078864ad1ecc8a7aeb0e
-        arm64_linux: 63d04655e7c212b0ab2dd8c4758db9bbbcb13c4c20547983bc6c48508ea3cb9d
-        x86_64_linux: d05172d9e46e4fce6794c66bd77accbe600538055c09151c09d097aaa7521fef
+      verified_at:
+      digests: {}
   bash:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
