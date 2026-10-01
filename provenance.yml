@@ -27,6 +27,12 @@ formulae:
     - Removed the mutable head spec.
     - Added revision 1 so existing Ansible installations receive the resource fix.
     - Updated only the urllib3 resource to the verified PyPI 2.8.0 source and SHA-256.
+    - >-
+      The urllib3 resource matches Homebrew/homebrew-core Formula/a/ansible.rb
+      at commit ca3ce4410729f14303da490e6545f61a2b66e21a and blob
+      de7530b5f6f387539fca83eb706cbfd154b163e1. The primary recipe fields retain
+      the original Ansible 13.7.0 snapshot; the resource source is
+      https://github.com/Homebrew/homebrew-core/blob/ca3ce4410729f14303da490e6545f61a2b66e21a/Formula/a/ansible.rb.
     - Removed all original core bottles because their bundled urllib3 is vulnerable.
     bottles:
       repository: Homebrew/homebrew-core
