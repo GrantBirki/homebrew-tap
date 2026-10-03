@@ -16,6 +16,8 @@ env:
   HOMEBREW_NO_INSTALL_CLEANUP: "1"
   HOMEBREW_REQUIRE_TAP_TRUST: "1"
 
+cache-mode: none
+
 jobs:
   test:
     name: test
