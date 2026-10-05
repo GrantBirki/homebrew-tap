@@ -365,18 +365,32 @@ module HomebrewTap
 
           manifest = YAML.safe_load_file(ARGV.shift, permitted_classes: [], permitted_symbols: [], aliases: false)
 
-          [:arm, :intel].each do |arch|
-            Homebrew::SimulateSystem.with(os: :tahoe, arch: arch) do
+          [:tahoe, :sonoma, :sequoia].product([:arm, :intel]).each do |os, arch|
+            Homebrew::SimulateSystem.with(os: os, arch: arch) do
               ARGV.each do |path|
+                next if os != :tahoe && File.basename(path) != "secretive.rb"
+
                 cask = Cask::CaskLoader::FromContentLoader.new(File.read(path)).load(config: nil)
                 provenance = manifest.fetch("casks").fetch(cask.token)
                 raise "#{path}: missing version for #{arch}" if cask.version.blank?
                 raise "#{path}: missing sha256 for #{arch}" if cask.sha256.blank? || cask.sha256.to_s == "no_check"
-                unless cask.version.to_s == provenance.fetch("version")
-                  raise "#{path}: selected version does not match provenance.yml for #{arch}"
+                expected_version = provenance.fetch("version")
+                expected_digests = provenance.fetch("artifacts").values
+                expected_url = nil
+                if cask.token == "secretive"
+                  platform = os == :sonoma ? "sonoma" : "sequoia_or_newer"
+                  expected_version = provenance.fetch("platform_versions").fetch(platform)
+                  expected_digests = [provenance.fetch("artifacts").fetch("#{platform}_#{expected_version}")]
+                  expected_url = "https://github.com/maxgoedjen/secretive/releases/download/v#{expected_version}/Secretive.zip"
                 end
-                unless provenance.fetch("artifacts").value?(cask.sha256.to_s)
-                  raise "#{path}: selected sha256 does not match provenance.yml for #{arch}"
+                unless cask.version.to_s == expected_version && (os != :tahoe || cask.version.to_s == provenance.fetch("version"))
+                  raise "#{path}: selected version does not match provenance.yml for #{os}/#{arch}"
+                end
+                unless expected_digests.include?(cask.sha256.to_s)
+                  raise "#{path}: selected sha256 does not match provenance.yml for #{os}/#{arch}"
+                end
+                if expected_url && cask.url.to_s != expected_url
+                  raise "#{path}: selected URL does not match #{platform} provenance"
                 end
                 raise "#{path}: missing URL for #{arch}" if cask.url.to_s.blank?
                 raise "#{path}: URL must use HTTPS" unless cask.url.to_s.start_with?("https://")

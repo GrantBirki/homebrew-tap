@@ -8,33 +8,36 @@ formulae:
     recipe_commit: bdc6a6c63c9e896a5264a533f094eb951bfa4df0
     recipe_path: Formula/a/ansible.rb
     recipe_blob: bf8c49b1d36295a1e422208cd61f1cb9575ce6d0
-    local_file_sha256: 762fadfc3603f11c5966ced5b742434d2aba0029c4eafa72d95347425313f5fe
-    version: 13.7.0
-    release_published_at: '2026-05-19T19:52:52.248965Z'
+    local_file_sha256: c09e9fb9d0cc6106a3c078b4d59d6561fcaa9c5caa82a75b7c41757bd8584e3a
+    version: 13.7.0_1
+    release_published_at: '2026-09-15T19:29:36.253420Z'
     release_evidence:
-      description: PyPI ansible 13.7.0 upload
-      reference: https://pypi.org/project/ansible/13.7.0/
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
+      description: PyPI urllib3 2.8.0 resource upload; Ansible 13.7.0 remains pinned.
+      reference: https://pypi.org/project/urllib3/2.8.0/
+    adopted_at: '2026-10-01T19:59:10Z'
+    adoption_commit: 83c29f658fa3f577c360c721b2dcfab0ba290e30
+    adoption_reason: >-
+      Update only urllib3 to 2.8.0 for GHSA-8988-9cw3-xx77,
+      GHSA-vxq7-64xx-v4gw, and GHSA-gh4c-6fx4-qh6g after its 14-day cooldown.
+      Retain Ansible 13.7.0 and build from source because the original core
+      bottles bundle vulnerable urllib3 2.7.0.
     cooldown_exception:
     legacy_baseline:
-      version: 13.7.0
-      artifact_fingerprint_sha256: d15977525c9d844bd3256dd185237e4e269f03c37563de2dcbf034a1218d2f98
     local_changes:
     - Removed the mutable head spec.
-    - Pinned the Homebrew core bottle root explicitly.
+    - Added revision 1 so existing Ansible installations receive the resource fix.
+    - Updated only the urllib3 resource to the verified PyPI 2.8.0 source and SHA-256.
+    - >-
+      The urllib3 resource matches Homebrew/homebrew-core Formula/a/ansible.rb
+      at commit ca3ce4410729f14303da490e6545f61a2b66e21a and blob
+      de7530b5f6f387539fca83eb706cbfd154b163e1. The primary recipe fields retain
+      the original Ansible 13.7.0 snapshot; the resource source is
+      https://github.com/Homebrew/homebrew-core/blob/ca3ce4410729f14303da490e6545f61a2b66e21a/Formula/a/ansible.rb.
+    - Removed all original core bottles because their bundled urllib3 is vulnerable.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
-      digests:
-        arm64_tahoe: 3015e788888017b35794146dbe7ac4a192ff287c81e12f75fb2cb73ed1299c33
-        arm64_sequoia: '06914ab3e073e43d3b70ef5db88697efa0cdae3aa03efb378d2d551bae64087f'
-        arm64_sonoma: 1ee3ad50a668cd66f29284da2ffc7d4f4d4061edc29497032451506b9586bbb8
-        sonoma: 6fc6b55ad1c90d26e47ca65a0063884c6a8c4a5211eb078864ad1ecc8a7aeb0e
-        arm64_linux: 63d04655e7c212b0ab2dd8c4758db9bbbcb13c4c20547983bc6c48508ea3cb9d
-        x86_64_linux: d05172d9e46e4fce6794c66bd77accbe600538055c09151c09d097aaa7521fef
+      verified_at:
+      digests: {}
   bash:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
@@ -1014,36 +1017,39 @@ casks:
     artifacts:
       default: 229cbfca5a8ec31075dd71b38e82f5e14230ba3551e8f33c2d8dc998b0ebf1a6
   secretive:
-    source_type: homebrew-cask
-    recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: efe202a25512f9fcd5fdec53ed1954d3d3a08f86
-    recipe_path: Casks/s/secretive.rb
-    recipe_blob: d24fba4204f3977f48af97175c5478d35509b05d
-    local_file_sha256: 270595f54929b44fc74d2fe6f5c271f0a61087ea0dee36b6c3f913da91b7a6d4
-    version: 3.0.4
-    release_published_at: '2025-11-27T21:46:05Z'
+    source_type: upstream-release
+    upstream_repository: maxgoedjen/secretive
+    upstream_tag: v4.0.0
+    upstream_commit: 54e0d00d87e207377101b0ea6ddfa624cd1a1c16
+    local_file_sha256: 090edb9fca9da39f256ef6fd39919b3c8f9e098da64079420e1305c0a8bb8f80
+    version: 4.0.0
+    release_published_at: '2026-09-21T03:08:01Z'
     release_evidence:
-      description: GitHub release published_at per macOS-specific version
-      reference: https://github.com/maxgoedjen/secretive/releases/tag/v3.0.4
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
+      description: GitHub release publication and macOS 15 minimum; asset checksum and upstream build attestation verified independently.
+      reference: https://github.com/maxgoedjen/secretive/releases/tag/v4.0.0
+    adopted_at: '2026-09-30T06:23:02Z'
+    adoption_commit: e19eb734668f94536de62f5dca1ae65b51f49692
+    adoption_reason: Adopt Secretive 4.0.0 for stacked requests and SSH certificate support on macOS 15 and newer. Verified Developer ID Max Goedjen (Z72PRUAWF6), hardened runtime, and notarized Gatekeeper acceptance; preserve prior versions on older macOS.
     cooldown_exception:
+      reason: The owner explicitly approved a one-time early adoption of Secretive 4.0.0 on September 30, 2026. This is a release-specific owner override, not a security incident exception.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/e19eb734668f94536de62f5dca1ae65b51f49692/SECURITY.md#one-time-secretive-400-override
     legacy_baseline:
-      version: 3.0.4
-      artifact_fingerprint_sha256: 6cc63df22b729321a7aa78cfb8c8bff0cf39b2fe450790d3b40804bd23fb95d3
-    local_changes: []
+    local_changes:
+    - Legacy versions 1.0.3, 2.3.1, 2.4.1, and 3.0.4 retain the reviewed Homebrew/homebrew-cask recipe at https://github.com/Homebrew/homebrew-cask/blob/efe202a25512f9fcd5fdec53ed1954d3d3a08f86/Casks/s/secretive.rb (Git blob d24fba4204f3977f48af97175c5478d35509b05d).
+    - Retained the existing legacy macOS versions and checksums, including 3.0.4 on Sonoma; active release discovery applies to Sequoia and newer.
+    - Preserved the existing app installation and zap paths without adding uninstall signals or changing quarantine behavior.
     artifacts:
       catalina_or_older_1.0.3: d8522c153f20cd03513e6815bdb46be98eae0db2b2a45d30f60b25a6609d1657
       big_sur_2.3.1: 493a72362898b4480baa70f115d9515b41b2af4a503caf00277e2bc3824b0bbd
       monterey_ventura_2.4.1: 00ddf651f1151f1e3888c51e58ce343f6888480db79771b6de7371db21bde4d8
-      sonoma_or_newer_3.0.4: 696d07812e4431075234a900a0136dbad3131a91086e535fc2b07d69a1d084ba
+      sonoma_3.0.4: 696d07812e4431075234a900a0136dbad3131a91086e535fc2b07d69a1d084ba
+      sequoia_or_newer_4.0.0: 877517e212938ffb7048bc7b6811e992194ba4b3eaa4dae36405b6303d1ac1fa
     platform_versions:
       catalina_or_older: 1.0.3
       big_sur: 2.3.1
       monterey_ventura: 2.4.1
-      sonoma_or_newer: 3.0.4
+      sonoma: 3.0.4
+      sequoia_or_newer: 4.0.0
   shit:
     source_type: personal-release
     upstream_repository: grantbirki/shit

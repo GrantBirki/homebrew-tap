@@ -294,6 +294,13 @@ An exception must contain:
 “Latest version available,” “Dependabot opened a PR,” or “livecheck found it”
 is not a valid exception.
 
+The owner explicitly approved a one-time override for Secretive 4.0.0 on
+September 30, 2026. The exact release commit and artifact digest are bound in
+**SECURITY.md**, under "One-time Secretive 4.0.0 override". Its provenance
+exception references that decision, not a security advisory. This approval
+does not extend to another release or artifact, and all other review
+requirements still apply.
+
 Existing pre-policy versions are recorded as legacy baselines. Once any
 version or direct digest changes, the legacy exemption is no longer valid.
 
@@ -441,7 +448,7 @@ system security state.
 
 Secretive has multiple OS-specific versions and checksums. Preserve and
 validate every supported platform branch; the current supported
-Sonoma-or-newer version is the scalar manifest version.
+Sequoia-or-newer version is the scalar manifest version. Sonoma retains 3.0.4.
 
 Preserve user-facing application names, bundle identifiers, uninstall
 directives, and zap paths unless package contents or primary release notes
