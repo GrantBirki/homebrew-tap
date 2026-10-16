@@ -783,7 +783,7 @@ casks:
     recipe_commit: d6bb4173c6760bd96921bb6cbf7ca44e78786c61
     recipe_path: Casks/a/alacritty.rb
     recipe_blob: 1ebc85a8ee74401e557e2fe6fc184a0bd1c04a06
-    local_file_sha256: e4c907b25e68f3bdb334aa79742c2d4ed30ce8127fdf46c1233691a5264b55ae
+    local_file_sha256: 31ff741a81fdad8a0176d86bcd5d81f51477f9725768c90bb3b986f5f45187a0
     version: 0.17.0
     release_published_at: '2026-04-06T19:24:18Z'
     release_evidence:
@@ -799,6 +799,7 @@ casks:
       artifact_fingerprint_sha256: f4702d7dda5a8f543fff92164ddeafa87ed8999980ffd41c6dea7591bf7f73b2
     local_changes:
     - Use Homebrew's supported macOS requirement instead of its redundant Big Sur minimum.
+    - Order shell completion stanzas to match Homebrew style.
     artifacts:
       default: ad8d7de35fb38e43184776cac6dfee05ca325caa0b6639a06a55e54e4b026620
   blockblock:
