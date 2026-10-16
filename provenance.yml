@@ -212,26 +212,23 @@ formulae:
   gh:
     source_type: upstream-release
     upstream_repository: cli/cli
-    upstream_tag: v2.93.0
-    upstream_commit: f96972ce1c11fdb8eaa556257fde962a363dffde
-    local_file_sha256: 5c59683135dbd871f74d1dddcd1a024a8a84e98c4f39989e124ac872b8d566a4
-    version: 2.93.0
-    release_published_at: '2026-05-27T17:47:48Z'
+    upstream_tag: v2.102.0
+    upstream_commit: fc4b137cdef0a6bd28fd461b7cf9c84a5812a8cd
+    local_file_sha256: 3d4a0ecee91b0990200cd1a810194c9923cbb292420fa989ca537e870d5297ce
+    version: 2.102.0
+    release_published_at: '2026-09-30T02:40:02Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/cli/cli/releases/tag/v2.93.0
-    adopted_at: '2026-06-06T16:25:24Z'
-    adoption_commit: f71c4171382928cc5d7d40aad0598d64e7840a26
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
+      reference: https://github.com/cli/cli/releases/tag/v2.102.0
+    adopted_at: '2026-10-16T04:52:39Z'
+    adoption_commit: c3eb69fa6d4c9eb4422bc7d024530e374a5ac60f
+    adoption_reason: Upgrade the signed upstream CLI after its cooldown to include the authentication-status token-masking fix.
     cooldown_exception:
     legacy_baseline:
-      version: 2.93.0
-      artifact_fingerprint_sha256: ad0d451ecc636ce7810e05ec06563d6aaffc2051f3d13b84cf9671b31229fdbe
     local_changes: []
     artifacts:
-      asset_01: a86be4e0a86c26456cf71177d6572d6f1165cf1679e532b72f7f15918ee51fd2
-      asset_02: '009425b9d175c482037fe25181817fd6b1ea3ae1f51cfae0e18f29f33d3152ac'
+      asset_01: da922c20d1792e5b2cbf375593d7a658acf034c12c84e007e71c76ef959c337e
+      asset_02: b245f24eb2bf5f75b426b4c26da3651a107f8d5b6f4fddfbfccc5679041378b3
   gnupg:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
