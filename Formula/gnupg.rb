@@ -1,9 +1,10 @@
 class Gnupg < Formula
   desc "GNU Privacy Guard (OpenPGP)"
   homepage "https://gnupg.org/"
-  url "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.5.20.tar.bz2"
-  sha256 "6461266e99c308419a379abe6c356d54c214136c4589bd65951091138989ffc6"
+  url "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.5.24.tar.bz2"
+  sha256 "bf149d01a2b9fcc0e4589b8ae8697d3d5c557ea48ed95a3fa55dd3b1187e6039"
   license "GPL-3.0-or-later"
+  revision 1
   compatibility_version 1
 
   # GnuPG usually indicates stable releases with an even-numbered minor but
@@ -19,12 +20,11 @@ class Gnupg < Formula
 
   bottle do
     root_url "https://ghcr.io/v2/homebrew/core"
-    sha256 arm64_tahoe:   "97b693dac83b61c9e6e3ec51c2a2dd8e22c70cd51e50aa334bfc64b693005839"
-    sha256 arm64_sequoia: "3af7e31aa9d7b338fb5d5829452b66fa303f5914fcb1a974106107a8fa1915e4"
-    sha256 arm64_sonoma:  "2fbb4e6a008b159b9733e7e374aaab0d84f94c9d813703a880a04e6f345e24db"
-    sha256 sonoma:        "4bcfb0d2cae7c2135fa9049731e2b838b27ba40e2634bba417f5dedd89f6b448"
-    sha256 arm64_linux:   "171fa43da17a222d11cd0c3d826604335df0fe831c6151047ce669f4b2580366"
-    sha256 x86_64_linux:  "8968cbe8875ec54539111c9b25e1aff019f72d0ac942f151a7ed4419ad2214d5"
+    sha256 arm64_golden_gate: "1cbc3ab22b562d1bef04ca0d00b0917195870a80b6a7de1051d07c1b44ac75c0"
+    sha256 arm64_tahoe:       "16b53990074dfe23dbe2342a548e8b72a91a5697c522d1eef3410fe8be5c1e0a"
+    sha256 arm64_sequoia:     "91163072d2759706aa41c014bc865019900eaa815ab5bd017263ab059694addf"
+    sha256 arm64_linux:       "12e8cda7299a624bd92f45f63284ac527ff07bcbcf7d7107e76a5ff77cefa7f2"
+    sha256 x86_64_linux:      "3f5c7667ecc9b2d6342eab1a69b4e8f16faace4e536d3f60c5653b939cd5c5c6"
   end
 
   depends_on "pkgconf" => :build
@@ -50,14 +50,29 @@ class Gnupg < Formula
     depends_on "zlib-ng-compat"
   end
 
-  conflicts_with cask: "gpg-suite"
-  conflicts_with cask: "gpg-suite-no-mail"
-  conflicts_with cask: "gpg-suite-pinentry"
-  conflicts_with cask: "gpg-suite@nightly"
+  # Fix import of unprotected ECDH secret keys, a regression in 2.5.23
+  patch do
+    url "https://github.com/gpg/gnupg/commit/42386bcf8861f04c1bdec5cbb139a03da83d8ef9.patch?full_index=1"
+    sha256 "93817449be3f93dcade3d79960e33e72959f54f95ff6108f22176bef28111f2b"
+    type :backport
+    resolves "https://dev.gnupg.org/T8469"
+  end
+
+  patch do
+    url "https://github.com/gpg/gnupg/commit/5523cec6913bcbd1a374d183899a6f298d2c0e32.patch?full_index=1"
+    sha256 "0a0acd2f7f25723f3f84ec5c4ecf03b786d73ca61c48487d4d00c0559be89d66"
+    type :backport
+    resolves "https://dev.gnupg.org/T8469"
+  end
+
+  deny_network_access!
 
   def install
     libusb = Formula["libusb"]
     ENV.append "CPPFLAGS", "-I#{libusb.opt_include}/libusb-#{libusb.version.major_minor}"
+
+    # gpgscm otherwise hard-codes /tmp on Unix.
+    inreplace "tests/gpgscm/tests.scm", "(get-temp-path)", '(getenv "TMPDIR")'
 
     mkdir "build" do
       system "../configure", "--disable-silent-rules",
@@ -84,7 +99,7 @@ class Gnupg < Formula
 
   post_install_steps do
     mkdir_p "run", base: :var
-    run "killall", args: ["gpg-agent"], must_succeed: false, print_stderr: false
+    terminate_process "gpg-agent", must_succeed: false
   end
 
   test do
