@@ -169,6 +169,8 @@ RSpec.describe HomebrewTap::TestChecks do
     expect(described_class::ShellSyntax.new(root: @root, runner: fake).validate).to eq(true)
     expect(fake.commands).to include(["bash", "-n", File.join(@root, "script/install")])
 
+    provenance = instance_double(HomebrewTap::ProvenanceManifest, validate: true)
+    allow(HomebrewTap::ProvenanceManifest).to receive(:new).with(root: @root).and_return(provenance)
     expect(described_class::FormulaParsing.new(root: @root, runner: fake).validate).to eq(true)
     formula_command = fake.commands.last
     expect(formula_command).to include(
@@ -219,6 +221,94 @@ RSpec.describe HomebrewTap::TestChecks do
     expect(brewfile_command[brew_index, 3]).to eq(["brew", "ruby", "-e"])
     expect(brewfile_command).to include(File.join(@root, "Brewfile"))
     expect(brewfile_command.join(" ")).to include("Homebrew::Bundle::Dsl")
+  end
+
+  it "validates provenance before evaluating formula contents" do
+    fake = FakeRunner.new
+    provenance = instance_double(HomebrewTap::ProvenanceManifest)
+    allow(HomebrewTap::ProvenanceManifest).to receive(:new).with(root: @root).and_return(provenance)
+    allow(provenance).to receive(:validate).and_raise(HomebrewTap::Error, "local patch bytes changed")
+
+    expect { described_class::FormulaParsing.new(root: @root, runner: fake).validate }.to raise_error(HomebrewTap::Error, /local patch bytes changed/)
+    expect(fake.commands).to be_empty
+  end
+
+  it "rejects dynamically dispatched unrecorded local patches at formula and resource scope" do
+    provenance = instance_double(HomebrewTap::ProvenanceManifest, validate: true)
+    allow(HomebrewTap::ProvenanceManifest).to receive(:new).with(root: @root).and_return(provenance)
+    write("provenance.yml", YAML.dump("formulae" => { "foo" => { "version" => "1.0.0" } }))
+    [
+      'patch do; send("file", "unrecorded.patch"); end',
+      <<~RUBY
+        resource "bar" do
+          url "https://example.com/bar-1.0.0.tar.gz"
+          sha256 "#{'b' * 64}"
+          patch do; send("file", "unrecorded.patch"); end
+        end
+      RUBY
+    ].each do |patch|
+      source = <<~RUBY
+        class Foo < Formula
+          url "https://example.com/foo-1.0.0.tar.gz"
+          sha256 "#{'a' * 64}"
+          #{patch}
+        end
+      RUBY
+      write("Formula/foo.rb", source)
+      fake = FakeRunner.new
+      described_class::FormulaParsing.new(root: @root, runner: fake).validate
+      _stdout, stderr, status = Open3.capture3(*fake.commands.last)
+      expect(status.success?).to eq(false)
+      expect(stderr).to include("parsed local patch paths do not match provenance.yml")
+    end
+  end
+
+  it "rechecks recorded local patch paths and bytes after formula evaluation" do
+    provenance = instance_double(HomebrewTap::ProvenanceManifest, validate: true)
+    allow(HomebrewTap::ProvenanceManifest).to receive(:new).with(root: @root).and_return(provenance)
+    patch_path = "Patches/foo/build.patch"
+    bytes = "reviewed patch bytes\n"
+    file = write(patch_path, bytes)
+    metadata = {
+      "blob" => Digest::SHA1.hexdigest("blob #{bytes.bytesize}\0" + bytes),
+      "sha256" => Digest::SHA256.hexdigest(bytes)
+    }
+    data = { "formulae" => { "foo" => { "version" => "1.0.0", "recipe_patches" => { patch_path => metadata } } } }
+    write("provenance.yml", YAML.dump(data))
+    write("Formula/foo.rb", <<~RUBY)
+      class Foo < Formula
+        url "https://example.com/foo-1.0.0.tar.gz"
+        sha256 "#{'a' * 64}"
+        patch do
+          file "#{patch_path}"
+        end
+      end
+    RUBY
+    fake = FakeRunner.new
+    described_class::FormulaParsing.new(root: @root, runner: fake).validate
+    command = fake.commands.last
+    stdout, stderr, status = Open3.capture3(*command)
+    expect(status.success?).to eq(true), "#{stdout}\n#{stderr}"
+
+    File.write(file, "changed after preflight")
+    _stdout, stderr, status = Open3.capture3(*command)
+    expect(status.success?).to eq(false)
+    expect(stderr).to include("parsed local patch bytes do not match provenance.yml")
+
+    FileUtils.rm(file)
+    target = write("outside.patch", bytes)
+    File.symlink(target, file)
+    _stdout, stderr, status = Open3.capture3(*command)
+    expect(status.success?).to eq(false)
+    expect(stderr).to include("parsed local patch must be a regular file without symlinks")
+
+    source = File.read(File.join(@root, "Formula/foo.rb")).sub(patch_path, "outside.patch")
+    write("Formula/foo.rb", source)
+    data["formulae"]["foo"]["recipe_patches"] = { "outside.patch" => metadata }
+    write("provenance.yml", YAML.dump(data))
+    _stdout, stderr, status = Open3.capture3(*command)
+    expect(status.success?).to eq(false)
+    expect(stderr).to include("parsed local patch path is invalid")
   end
 
   it "checks Secretive's retained Sonoma version, exact digest, and release URL" do

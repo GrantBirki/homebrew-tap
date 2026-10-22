@@ -160,6 +160,117 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     described_class.new(root: @root)
   end
 
+  def local_patch_data
+    data = base_data
+    path = "Patches/foo/build.patch"
+    content = "--- a/source\n+++ b/source\n@@ -1 +1 @@\n-old\n+new\n"
+    write(path, content)
+    source = formula_source.sub(/\nend\n\z/, "\n  patch do\n    file \"#{path}\"\n  end\nend\n")
+    formula = write("Formula/foo.rb", source)
+    data["formulae"]["foo"].merge!(
+      "local_file_sha256" => Digest::SHA256.file(formula).hexdigest,
+      "recipe_patches" => {
+        path => {
+          "blob" => Digest::SHA1.hexdigest("blob #{content.bytesize}\0" + content),
+          "sha256" => Digest::SHA256.hexdigest(content)
+        }
+      },
+    )
+    data
+  end
+
+  it "binds local patch paths, Git blobs and SHA-256 bytes before recipe parsing" do
+    data = local_patch_data
+    expect(manifest(data).validate).to eq(true)
+
+    write("Patches/foo/build.patch", "changed bytes")
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error) do |error|
+      expect(error.message).to include("blob does not match the local patch", "sha256 does not match the local patch")
+    end
+  end
+
+  it "rejects missing, unrecorded, unreferenced, and dynamic local patches" do
+    data = local_patch_data
+    data["formulae"]["foo"].delete("recipe_patches")
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /do not match local patch declarations/)
+
+    data = local_patch_data
+    FileUtils.rm(File.join(@root, "Patches/foo/build.patch"))
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /regular file without symlinks/)
+
+    data = local_patch_data
+    write("Patches/foo/unrecorded.patch", "unrecorded")
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /unrecorded local patch file/)
+    FileUtils.rm(File.join(@root, "Patches/foo/unrecorded.patch"))
+
+    source = formula_source
+    path = write("Formula/foo.rb", source)
+    data["formulae"]["foo"]["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /do not match local patch declarations/)
+
+    source = source.sub(/\nend\n\z/, "\n  patch do\n    file ENV.fetch(\"PATCH\")\n  end\nend\n")
+    path = write("Formula/foo.rb", source)
+    data["formulae"]["foo"]["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /unsupported local patch declarations/)
+  end
+
+  it "rejects malformed patch metadata, traversal, cross-formula paths, and symlinks" do
+    data = local_patch_data
+    entry = data["formulae"]["foo"]
+    entry["recipe_patches"] = "bad"
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /recipe_patches must be a mapping/)
+
+    metadata = local_patch_data["formulae"]["foo"]["recipe_patches"].values.first
+    ["/tmp/build.patch", "Patches/foo/../build.patch", "Patches/bar/build.patch", 1].each do |invalid|
+      entry["recipe_patches"] = { invalid => metadata }
+      expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /contains an invalid path/)
+    end
+    entry["recipe_patches"] = { "Patches/foo/build.patch" => { "extra" => "unbound" } }
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /must contain only blob and sha256/)
+    entry["recipe_patches"]["Patches/foo/build.patch"] = { "blob" => "bad", "sha256" => "bad" }
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /blob is invalid/)
+
+    data = local_patch_data
+    path = File.join(@root, "Patches/foo/build.patch")
+    FileUtils.mv(path, File.join(@root, "outside.patch"))
+    File.symlink(File.join(@root, "outside.patch"), path)
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /regular file without symlinks/)
+    FileUtils.rm(path)
+    FileUtils.mkdir_p(File.join(@root, "alternate"))
+    FileUtils.mv(File.join(@root, "outside.patch"), File.join(@root, "alternate/build.patch"))
+    FileUtils.rmdir(File.join(@root, "Patches/foo"))
+    File.symlink(File.join(@root, "alternate"), File.join(@root, "Patches/foo"))
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /regular file without symlinks/)
+  end
+
+  it "rejects inline, parenthesized, dynamic, and extra unrecorded file patch declarations" do
+    data = base_data
+    [
+      'patch do; file "unrecorded.patch"; end',
+      'patch do; file ENV.fetch("PATCH"); end',
+      'patch do; if true; file "unrecorded.patch"; end; end',
+      'patch do; file("unrecorded.patch"); end'
+    ].each do |declaration|
+      source = formula_source.sub(/\nend\n\z/, "\n  #{declaration}\nend\n")
+      path = write("Formula/foo.rb", source)
+      data["formulae"]["foo"]["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+      expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /unsupported local patch declarations/)
+    end
+
+    data = local_patch_data
+    source = File.read(File.join(@root, "Formula/foo.rb"))
+    source = source.sub(/\nend\n\z/, "\n  patch do\n    file \"Patches/foo/unrecorded.patch\"\n  end\nend\n")
+    path = write("Formula/foo.rb", source)
+    data["formulae"]["foo"]["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /do not match local patch declarations/)
+  end
+
+  it "limits local patch provenance to core-derived formulae" do
+    data = local_patch_data
+    data["formulae"]["foo"]["source_type"] = "upstream-release"
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /recipe_patches require homebrew-core provenance/)
+  end
+
   it "validates direct artifact provenance and records verification time" do
     subject = manifest
 
@@ -539,6 +650,56 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
       }],
     )
     [HomebrewTap::ProvenanceManifest.new(root: @root), bottle_sha, recipe, info]
+  end
+
+  def setup_local_patch_manifest
+    manifest, sha, recipe, info = setup_manifest
+    path = "Patches/foo/build.patch"
+    patch = "--- a/source\n+++ b/source\n@@ -1 +1 @@\n-old\n+new\n"
+    write(path, patch)
+    source = recipe.unpack1("m0").sub(/\nend\n\z/, "\n  patch do\n    file \"#{path}\"\n  end\nend\n")
+    formula_path = write("Formula/foo.rb", source)
+    data = manifest.load!
+    metadata = {
+      "blob" => Digest::SHA1.hexdigest("blob #{patch.bytesize}\0" + patch),
+      "sha256" => Digest::SHA256.hexdigest(patch)
+    }
+    data["formulae"]["foo"].merge!(
+      "local_file_sha256" => Digest::SHA256.file(formula_path).hexdigest,
+      "recipe_patches" => { path => metadata },
+    )
+    write("provenance.yml", YAML.dump(data))
+    patch_api = ["gh", "api", "repos/Homebrew/homebrew-core/contents/#{path}?ref=#{'c' * 40}"]
+    payload = { "type" => "file", "sha" => metadata.fetch("blob"), "content" => [patch].pack("m0") }
+    [HomebrewTap::ProvenanceManifest.new(root: @root), sha, [source].pack("m0"), info, patch_api, payload]
+  end
+
+  it "verifies local patches at the recorded recipe commit before bottle work" do
+    manifest, sha, recipe, info, patch_api, payload = setup_local_patch_manifest
+    captures = {
+      ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
+      patch_api => JSON.generate(payload),
+      core_info_command => info,
+      core_fetch_command(recipe, sha: sha) => core_fetch_payload(sha: sha),
+      bottle_attestation_command => attestation_payload(sha)
+    }
+    expect(described_class.new(manifest: manifest, runner: FakeRunner.new(captures: captures), out: StringIO.new).verify!(["foo"])).to eq(true)
+
+    mutations = [
+      payload.merge("sha" => "f" * 40),
+      payload.merge("content" => ["changed patch bytes"].pack("m0")),
+      payload.merge("type" => "symlink")
+    ]
+    mutations.each do |changed|
+      fake = FakeRunner.new(captures: captures.merge(patch_api => JSON.generate(changed)))
+      allow(fake).to receive(:capture).and_call_original
+      expect(fake).not_to receive(:capture).with(*core_info_command)
+      expect { described_class.new(manifest: manifest, runner: fake).verify!(["foo"]) }.to raise_error(HomebrewTap::Error, /differs from the recorded upstream patch/)
+    end
+    ["not json", JSON.generate(payload.except("content"))].each do |invalid|
+      fake = FakeRunner.new(captures: captures.merge(patch_api => invalid))
+      expect { described_class.new(manifest: manifest, runner: fake).verify!(["foo"]) }.to raise_error(HomebrewTap::Error, /invalid recipe metadata/)
+    end
   end
 
   it "uses native core verification when the current core bottle set matches" do

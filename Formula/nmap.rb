@@ -21,6 +21,7 @@ class Nmap < Formula
   end
 
   depends_on "python-setuptools" => :build
+  depends_on "ca-certificates"
   depends_on "liblinear"
   depends_on "libssh2"
   # Check supported Lua version at https://github.com/nmap/nmap/tree/master/liblua.
@@ -70,6 +71,17 @@ class Nmap < Formula
     system python3, "-m", "pip", "install", *std_pip_args, "./ndiff"
     bin.glob("uninstall_*").map(&:unlink) # Users should use brew uninstall.
   end
+
+  post_install_steps(
+    type: "run",
+    command: Tap.fetch("grantbirki/tap").path/"script/ncat-trust",
+    args: ["--apply", "--prefix", "{{prefix}}"],
+    writable_paths: [
+      { path: "share/ncat", base: :prefix },
+      { path: "homebrew-tap/ncat-ca-backups", base: :var },
+    ],
+    network_access: false,
+  )
 
   test do
     system bin/"nmap", "-p80,443", "-oX", "scan1.xml", "google.com"
