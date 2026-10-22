@@ -40,7 +40,7 @@ formulae:
     recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/b/bash.rb
     recipe_blob: bb5bd7b1620ccf38dab065df1fa3038c93ec0d04
-    local_file_sha256: 52670c5b88484cc60338907945266519a29837a44a0c30aeb44dbbdc1be1fc7e
+    local_file_sha256: f7384d0061a1b5234443aaabbdf86d7744a0b9d6ae9f6b46cef2ae4ff3899086
     release_published_at: '2026-09-14T18:16:33Z'
     release_evidence:
       description: GNU bash53-020 official patch HTTP Last-Modified in GMT; index
@@ -50,6 +50,7 @@ formulae:
     - Removed the mutable head spec.
     - Omitted upstream autobump metadata.
     - Pinned the Homebrew core bottle root explicitly.
+    - Unwrapped the stable-only block and restored top-level component order after removing head.
     recipe_repository: Homebrew/homebrew-core
     version: 5.3.20
     legacy_baseline:
