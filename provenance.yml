@@ -16,23 +16,20 @@ formulae:
       reference: https://pypi.org/project/urllib3/2.8.0/
     adopted_at: '2026-10-01T19:59:10Z'
     adoption_commit: 83c29f658fa3f577c360c721b2dcfab0ba290e30
-    adoption_reason: >-
-      Update only urllib3 to 2.8.0 for GHSA-8988-9cw3-xx77,
-      GHSA-vxq7-64xx-v4gw, and GHSA-gh4c-6fx4-qh6g after its 14-day cooldown.
-      Retain Ansible 13.7.0 and build from source because the original core
-      bottles bundle vulnerable urllib3 2.7.0.
+    adoption_reason: Update only urllib3 to 2.8.0 for GHSA-8988-9cw3-xx77, GHSA-vxq7-64xx-v4gw,
+      and GHSA-gh4c-6fx4-qh6g after its 14-day cooldown. Retain Ansible 13.7.0 and
+      build from source because the original core bottles bundle vulnerable urllib3
+      2.7.0.
     cooldown_exception:
     legacy_baseline:
     local_changes:
     - Removed the mutable head spec.
     - Added revision 1 so existing Ansible installations receive the resource fix.
     - Updated only the urllib3 resource to the verified PyPI 2.8.0 source and SHA-256.
-    - >-
-      The urllib3 resource matches Homebrew/homebrew-core Formula/a/ansible.rb
-      at commit ca3ce4410729f14303da490e6545f61a2b66e21a and blob
-      de7530b5f6f387539fca83eb706cbfd154b163e1. The primary recipe fields retain
-      the original Ansible 13.7.0 snapshot; the resource source is
-      https://github.com/Homebrew/homebrew-core/blob/ca3ce4410729f14303da490e6545f61a2b66e21a/Formula/a/ansible.rb.
+    - The urllib3 resource matches Homebrew/homebrew-core Formula/a/ansible.rb at
+      commit ca3ce4410729f14303da490e6545f61a2b66e21a and blob de7530b5f6f387539fca83eb706cbfd154b163e1.
+      The primary recipe fields retain the original Ansible 13.7.0 snapshot; the resource
+      source is https://github.com/Homebrew/homebrew-core/blob/ca3ce4410729f14303da490e6545f61a2b66e21a/Formula/a/ansible.rb.
     - Removed all original core bottles because their bundled urllib3 is vulnerable.
     bottles:
       repository: Homebrew/homebrew-core
@@ -40,38 +37,38 @@ formulae:
       digests: {}
   bash:
     source_type: homebrew-core
-    recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 3fffe7fcf6052f50f56208c5a73f63f6137512db
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/b/bash.rb
-    recipe_blob: 9779e43d4893e94704472aef5cc51d61361f4c7f
-    local_file_sha256: 691ff7ba88d75d927c5adabdbf5fc39b413a52ffae0ad9d960ac57b48f006e77
-    version: 5.3.9
-    release_published_at: '2025-12-10T16:17:27Z'
+    recipe_blob: bb5bd7b1620ccf38dab065df1fa3038c93ec0d04
+    local_file_sha256: f7384d0061a1b5234443aaabbdf86d7744a0b9d6ae9f6b46cef2ae4ff3899086
+    release_published_at: '2026-09-14T18:16:33Z'
     release_evidence:
-      description: GNU mirror bash53-009 Last-Modified
-      reference: https://ftp.gnu.org/gnu/bash/bash-5.3-patches/bash53-009
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 5.3.9
-      artifact_fingerprint_sha256: bfcf358ce5bbc028bcb94f7e1b4f81672067da416958df484b45a12ff44b9dd1
+      description: GNU bash53-020 official patch HTTP Last-Modified in GMT; index
+        display uses an unspecified timezone
+      reference: https://ftp.gnu.org/gnu/bash/bash-5.3-patches/bash53-020
     local_changes:
-    - Removed the mutable head spec and flattened the formerly separate stable block.
+    - Removed the mutable head spec.
     - Omitted upstream autobump metadata.
     - Pinned the Homebrew core bottle root explicitly.
+    - Unwrapped the stable-only block and restored top-level component order after removing head.
+    recipe_repository: Homebrew/homebrew-core
+    version: 5.3.20
+    legacy_baseline:
+    adoption_reason: Adopt Bash 5.3.20 with official patches 010 through 020, including
+      identifier bounds and signal/readline fixes. Independently verify the unchanged
+      base archive and all added patch SHA-256 values.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 075fd682409ff27a9acbbe88a1456b12826634a1669c0c99fe4d76fda574e0ef
-        arm64_sequoia: 99ad5486305387ebc826b15f2c8ac0eb5e0c221ee03bc2b8c74902f6478d8627
-        arm64_sonoma: 6de5e01ff6246712ee5f78dbe2828bdffffd4bd91539963dfa6d0eb10b0dcd0f
-        sonoma: 16d2c963e646d30f259382a3b20c6f959b5f9c69dce11e6e62fc7a6648752612
-        arm64_linux: f1dab753e73b8ba1d4569214f7d47c4e6f34f1e37a4272855143b4ee7346b157
-        x86_64_linux: 7f7a002baad948b82cd8e1e0a89ef8816fb3433fe6e914ac2d0ab4f50c90202f
+        arm64_golden_gate: 27fe00d21b581ba549b9312986b90d2b6e97970743a12a5f9058faf71e40a7b3
+        arm64_tahoe: ac5b291d5571c2aaf30bd17e0df16f0a43723dad8aac2023b9c5904742fdd2da
+        arm64_sequoia: 753bdd9943047829a2f8469ed2d29fc71d0de5572df2a6d0e7b3f30be71ae937
+        arm64_linux: 84db1fb59b457f94e28d1c0c0f31b670c7da88b64b29ff720963ecc048ce2dcf
+        x86_64_linux: 37c145e5e2616798e5351173d543454a26f3cf61edd3e832c57a32d46fb996e6
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
   bat:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
@@ -144,189 +141,197 @@ formulae:
         x86_64_linux: 775806218241479471ea7a2b823545e81d898f867f4c887119641aabda2c926a
   eza:
     source_type: homebrew-core
-    recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 16d6c1aa02caed7bb4935164e44402ace95c0ce5
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/e/eza.rb
-    recipe_blob: 8d8972de6d93a05324adb90cba0d2b2d49ff34a8
-    local_file_sha256: fe906b255b8998875ed5af29edd593836ced7ea99eaabc5c98e50c0dc55a9a5b
-    version: 0.23.4
-    release_published_at: '2025-10-03T20:44:49Z'
+    recipe_blob: 6380b563faaf776d8c113045303036592ff20750
+    local_file_sha256: 260fde438f82bdf356918dd5930758f1d8441a4db751b70364ffb1065456d6ba
+    release_published_at: '2026-07-09T10:21:04Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/eza-community/eza/releases/tag/v0.23.4
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 0.23.4
-      artifact_fingerprint_sha256: 5ce956cc0ff5ffd33def814a3a0b285c6f871ccef3f492244ca95e7833beabf0
+      reference: https://github.com/eza-community/eza/releases/tag/v0.23.5
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
-    - Updated dependency path references to Homebrew's current formula helper DSL.
+    recipe_repository: Homebrew/homebrew-core
+    version: 0.23.5
+    legacy_baseline:
+    adoption_reason: Adopt Eza 0.23.5 with upstream git2 and crossbeam-epoch security
+      fixes. Retain the reviewed source build and Git integration tests; the anyhow
+      advisory dependency is excluded from supported macOS/Linux builds.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 41991ad81cb8fd691125d28eda4bbfa0ebb14c6f902767402dc2ea8763ecf196
-        arm64_sequoia: 2bc7df7c601dfb6b9004db58a8033a5633dfb731dbfc0288cb9cc0c4fc1a4df7
-        arm64_sonoma: 4371bc10070f7728a665b3e590903c1861b6882fb37fef7abfed93717e38dbc4
-        sonoma: 40120b86f48af531ff13393db0bbbf9fcb4c304bbdd6cb3bbab3bc70d0236c72
-        arm64_linux: b8b0bd9691c73ab64a5542c0372d5f2f2e0e96bbc8fae25d5bb278ddde5e49b8
-        x86_64_linux: 2bdf49feadb1e11bf7a5247cb64cf6a0efc6624ef7af0305f11e53bc0463bf77
+        arm64_golden_gate: acc695dd30baf5b466a5d62ec8a48aebb667e2614124ad4d2c2d9f6e431e495f
+        arm64_tahoe: 49b4351a61ebedbe102726fadb3638998cbfd98a81cb1a5f0e4fd0f1be30444e
+        arm64_sequoia: 94b3b640649a5e89a6f75c15fa2fa66098cf78c4faf742a6d43771fe377f31a0
+        arm64_sonoma: c40aba3602dda7fb2327bf8401f9c4b234e2f87a02c066fafb49f917f8cf1a6b
+        sonoma: 63b565307886da9465e9c8744e112c1872da74cf2a3e5723c38c49f49d5701d9
+        arm64_linux: 401228759a123919e80302eed23d749f59ced13a5ddd964343ef4c13029f9d2e
+        x86_64_linux: 246d2197c53ed155fa308c1da349f0c948f3a803642d0e40542abe769ba81894
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
   ffmpeg:
     source_type: homebrew-core
-    recipe_repository: Homebrew/homebrew-core
-    recipe_commit: ae9432ae787bd221063ebe7431f42b63f6b32ff8
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/f/ffmpeg.rb
-    recipe_blob: 25076b1c2154e94c407c1ae1cf41a1d7705d6ac9
-    local_file_sha256: 3088ef23f65e160ba0b88fdf83fc6c0a125ac8deebd2f1fb28a90b6dff92357f
-    version: 8.1.1
-    release_published_at: '2026-05-03T22:25:52Z'
+    recipe_blob: c272983157211473a9a85926a72c35369e82de45
+    local_file_sha256: 2b49ec4250e5c04c201199a99ef73ee1652d1711463f03b60781bd79f32057f4
+    release_published_at: '2026-09-18T02:30:12Z'
     release_evidence:
-      description: ffmpeg.org artifact Last-Modified
-      reference: https://ffmpeg.org/releases/ffmpeg-8.1.1.tar.xz
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 8.1.1
-      artifact_fingerprint_sha256: b9bde51afcc6061c82529e42d6918ed878483ff340fd704b0ff1b24973abbb88
+      description: FFmpeg 9.0.2 source archive HTTP Last-Modified in GMT; official
+        download page confirms 2026-09-18 release
+      reference: https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    recipe_repository: Homebrew/homebrew-core
+    version: 9.0.2_1
+    legacy_baseline:
+    adoption_reason: Adopt FFmpeg 9.0.2_1 with the 9.0 security fixes and reviewed
+      OpenSSL 4, sdl2-compat, and all-platform xz dependency changes. Preserve the
+      pinned source build and existing tests.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 77ffdd3eb03f079eaf2a815143ca4bc6352ad694c88d03e4e5798d6d1f3c881d
-        arm64_sequoia: 8d0e790194705d684e7baba9d75f24aa220811600861061e9121df7b5db7e3f7
-        arm64_sonoma: dbc651c6f6b4e9dce0980e29dceab9672bb676d1266447b5b1aecb24d90d0ef8
-        sonoma: 2651703294b954a745b5dfb93d20537b92b86d6e6fc8c15cb27dd1d626ba1dfc
-        arm64_linux: 9e11c2041abb2877b5770e4493e37f9fbe78562b3854c93b107f3978bb091a29
-        x86_64_linux: 865d382f79f56d505703c903769459c8d6ce6e4c2b1dfa32f3fd3b389bb66310
+        arm64_golden_gate: d521452157b1117f909f441ce90165c360a7dcd9785c87d14cabc28934572a90
+        arm64_tahoe: 595b0bb854e692d7f6f89b866e860afacfdab5e3698451555547f58f523ed04d
+        arm64_sequoia: 65ba8ccb4778a0554346f416cd9a64c6cce2f92c7af5effb48deb6b757f01678
+        arm64_linux: 71883b27a7bea616321bb41458d4821ee31fe3855e0f262c9b27059fa4d56d91
+        x86_64_linux: 9b63fb0037cb84285b5c848606e3d84af3c8c39d17030ac9796de4acf631e951
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
   gh:
     source_type: upstream-release
     upstream_repository: cli/cli
-    upstream_tag: v2.102.0
-    upstream_commit: fc4b137cdef0a6bd28fd461b7cf9c84a5812a8cd
-    local_file_sha256: 3d4a0ecee91b0990200cd1a810194c9923cbb292420fa989ca537e870d5297ce
-    version: 2.102.0
-    release_published_at: '2026-09-30T02:40:02Z'
+    upstream_tag: v2.102.1
+    upstream_commit: 89d7dcec017194af1d6f8853176b2dae9c1da762
+    local_file_sha256: 9fe5acbaa787ff346d6a60fbf6ae8cfd7314fe89c97ab35c00841eca88b53647
+    version: 2.102.1
+    release_published_at: '2026-10-20T19:35:51Z'
     release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/cli/cli/releases/tag/v2.102.0
-    adopted_at: '2026-10-16T04:52:39Z'
-    adoption_commit: c3eb69fa6d4c9eb4422bc7d024530e374a5ac60f
-    adoption_reason: Upgrade the signed upstream CLI after its cooldown to include the authentication-status token-masking fix.
+      description: GitHub release API published_at; exact tag commit and independently
+        hashed release assets reviewed
+      reference: https://github.com/cli/cli/releases/tag/v2.102.1
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    adoption_reason: Adopt the eligible exact upstream patch release to update Go
+      1.27.1 to 1.27.3 and golang.org/x/net 0.58.0 to 0.60.0, with independently verified
+      macOS artifacts and source-bound upstream SLSA attestations.
     cooldown_exception:
+      reason: One-time owner authorization for a 24-complete-hour minimum in the October
+        2026 security review, including maintenance updates. Exact release and retained
+        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
     legacy_baseline:
     local_changes: []
     artifacts:
-      asset_01: da922c20d1792e5b2cbf375593d7a658acf034c12c84e007e71c76ef959c337e
-      asset_02: b245f24eb2bf5f75b426b4c26da3651a107f8d5b6f4fddfbfccc5679041378b3
+      asset_01: '08bfef98b50c553df122bb34ee8dcf415cae7d3b108891488964a0df07aa2aeb'
+      asset_02: 91c5fbd493274b545b03ef32a89c2a21238393c0c0b1108210967199b3230d9d
   gnupg:
     source_type: homebrew-core
-    recipe_repository: Homebrew/homebrew-core
-    recipe_commit: de036adbf416f03a4441b377c4ba99273a00e8ed
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/g/gnupg.rb
-    recipe_blob: 45e7a85439823a94c975728f1213af94fd2bc8a7
-    local_file_sha256: 9fb758bc22da806625b4c216481244fa5f8b7c8a944eea7b41160e779ccdeefd
-    version: 2.5.20
-    release_published_at: '2026-05-13T12:55:28Z'
+    recipe_blob: 583e3b04fc1684daefd2cbd43142cf05e0d5376a
+    local_file_sha256: 9f3a0e6f02e2f83562780f3df559809ce2ea813602dff77a212223691d325c96
+    release_published_at: '2026-09-23T14:59:20Z'
     release_evidence:
-      description: gnupg.org artifact Last-Modified
-      reference: https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.5.20.tar.bz2
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 2.5.20
-      artifact_fingerprint_sha256: ce459cc3f7f3c26a1e9bcd0be4f30828c9f878f5b794f77c0e2ed79ccf8376cf
+      description: Upstream gnupg-announce publication Wed Sep23 16:59:20 CEST converted
+        to UTC
+      reference: https://lists.gnupg.org/pipermail/gnupg-announce/2026q3/000516.html
     local_changes:
-    - Migrated the post-install hook to Homebrew's declarative install steps without changing package artifacts.
     - Pinned the Homebrew core bottle root explicitly.
-    - Updated dependency path references to Homebrew's current formula helper DSL.
+    recipe_repository: Homebrew/homebrew-core
+    version: 2.5.24_1
+    legacy_baseline:
+    adoption_reason: Adopt GnuPG 2.5.24_1 for upstream printf and out-of-bounds access
+      fixes, including the two checksum-verified upstream patches restoring unprotected
+      ECDH key import. Preserve source build and signature tests.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 97b693dac83b61c9e6e3ec51c2a2dd8e22c70cd51e50aa334bfc64b693005839
-        arm64_sequoia: 3af7e31aa9d7b338fb5d5829452b66fa303f5914fcb1a974106107a8fa1915e4
-        arm64_sonoma: 2fbb4e6a008b159b9733e7e374aaab0d84f94c9d813703a880a04e6f345e24db
-        sonoma: 4bcfb0d2cae7c2135fa9049731e2b838b27ba40e2634bba417f5dedd89f6b448
-        arm64_linux: 171fa43da17a222d11cd0c3d826604335df0fe831c6151047ce669f4b2580366
-        x86_64_linux: 8968cbe8875ec54539111c9b25e1aff019f72d0ac942f151a7ed4419ad2214d5
+        arm64_golden_gate: 1cbc3ab22b562d1bef04ca0d00b0917195870a80b6a7de1051d07c1b44ac75c0
+        arm64_tahoe: 16b53990074dfe23dbe2342a548e8b72a91a5697c522d1eef3410fe8be5c1e0a
+        arm64_sequoia: 91163072d2759706aa41c014bc865019900eaa815ab5bd017263ab059694addf
+        arm64_linux: 12e8cda7299a624bd92f45f63284ac527ff07bcbcf7d7107e76a5ff77cefa7f2
+        x86_64_linux: 3f5c7667ecc9b2d6342eab1a69b4e8f16faace4e536d3f60c5653b939cd5c5c6
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
   hugo:
     source_type: homebrew-core
-    recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 58f3ea0ec581b4e28cd6afd1fd1b14e07b8b5424
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/h/hugo.rb
-    recipe_blob: 859e4044dd9c56fcf3baace972cd502df07e754f
-    local_file_sha256: ed99f29090cd430d5d616c1bb50cc0c0b9ef22388a2539d9cfa9c61e018d0d1a
-    version: 0.162.0
-    release_published_at: '2026-05-26T14:16:07Z'
+    recipe_blob: dd64e8d83e71d92aecd7f877683b6bd3fc65319e
+    local_file_sha256: 52c966569f9c4d3c1a8dbf66f32f4196b32dd6236bddc657929f97e585cbff17
+    release_published_at: '2026-10-13T17:24:15Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/gohugoio/hugo/releases/tag/v0.162.0
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 0.162.0
-      artifact_fingerprint_sha256: 8d9f6f5ac88a0aca8af8793ce07021739cfdf62e7608f29985f5d26016d023c8
+      reference: https://github.com/gohugoio/hugo/releases/tag/v0.168.0
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    recipe_repository: Homebrew/homebrew-core
+    version: 0.168.0
+    legacy_baseline:
+    adoption_reason: Adopt Hugo 0.168.0 to fix theme-defined module replacement confinement,
+      previous filesystem boundary issues, and HTML/JavaScript escaping. The OpenPGP
+      module advisory has no importing caller in the reviewed selected sources.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 25fb8c74ee4f778f9545cb3b07ea950efe37344992fb762064489decbbe5a5ad
-        arm64_sequoia: 6d6aba48e73a0e99ae79a314f34af2405b0df8b81c5b5a59c97270a80698850d
-        arm64_sonoma: 51594b6a963c0cd4da1b98d575f67ba592a3f538c8e0459a7eacc8a808153d40
-        sonoma: 6a78cdc30976644d60b310834387a0d25e2baa8888458b0ae0e7b8bb8e5fd427
-        arm64_linux: e965f43173e024cd255f562c160d67c997d180ef52f3c4819c594cf0dc657528
-        x86_64_linux: 70a184cb20ef00856c710354af368837de2ab7c7f16b952c7bcc2c8a0dddd9a8
+        arm64_golden_gate: 28d739b37e6a0f8e164a26b8c4f97a11e486a878698e3a93f3710caf9eb29929
+        arm64_tahoe: 4a3e5ea5f9d2bcb3a53de8e653336071bdfce83a98f8249925f61ef906a97cbd
+        arm64_sequoia: 045eb666297b94bdaeb10e1b230199fe2e02fa047b127cd569978e26df2fb321
+        arm64_linux: be39811fef5a418dd10df0b36bf75bb213673a5c8a6d0db18276fc0628248ddf
+        x86_64_linux: 23ea9272eff90d0538d45eff0f780d0655583e6a7c18c7cd0b21bcd5b8ea6a1b
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
+      reason: One-time owner authorization for a 24-complete-hour minimum in the October
+        2026 security review, including maintenance updates. Exact release and retained
+        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   imagemagick:
     source_type: homebrew-core
-    recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 2181cb882725e8bf507eb36c826791f0e01fc87e
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/i/imagemagick.rb
-    recipe_blob: 7538de82800db2bd4f3d3f2808537f137e7a8afe
-    local_file_sha256: 1b4407fd2c284464266542d6a7ef5e941140befb7a46298734e63b761102d0cc
-    version: 7.1.2-29
-    release_published_at: '2026-07-27T19:00:27Z'
+    recipe_blob: 5667891fd1843b78290f3de81c07802f86b46dff
+    local_file_sha256: b68726ae31ab24656c1fefa73742bb5d345f12d61ef2d1ff11121c00e3b8e5dc
+    release_published_at: '2026-10-14T20:45:10Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.2-29
-    adopted_at: '2026-08-22T17:06:18Z'
-    adoption_commit: 0e881b91c0422ea17d8caccf8dad1e530e877867
-    adoption_reason: Add ImageMagick 7.1.2-29 as an explicitly selected image-processing
-      tool after reviewing the upstream source and Homebrew bottles.
-    cooldown_exception:
-    legacy_baseline:
+      reference: https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.2-34
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    recipe_repository: Homebrew/homebrew-core
+    version: 7.1.2-34
+    legacy_baseline:
+    adoption_reason: Adopt ImageMagick 7.1.2-34 for upstream fixes to TIFF stack overflow
+      and morph heap buffer overwrite, plus earlier decoder and policy fixes. Preserve
+      existing dependencies, source build, and tests.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-08-22T18:07:50Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 4a6d4f8d0762e1203ec0cd37de10e0d964b5a31fe6889413e0f34fd4c3d57983
-        arm64_sequoia: 269586f2eea931ed78d5e160be50c14395885f56cad69378c7e7a97c4caeed97
-        arm64_sonoma: dfb889ae2338549bc7382adc6bd18f6ce7234f90e7a2e16d028e11d7a0b948f4
-        sonoma: 0c053f8259a6981ca83c6aa09113bcbcdd3d3688c4d9527f50a25a94f4912e5b
-        arm64_linux: 4ce9e6c2a0c5a250cb96449195b1e9e9abd2d1534d371da1abe86ddc232940c1
-        x86_64_linux: 2f9dfb0c932ef80ad775f6daabf095788e057dd38f8e1d31e2e53ddadf4be56d
+        arm64_golden_gate: aa9163d6f8aaa76a2e094117108c54987693a52e769742a86fa54f7da68d73c8
+        arm64_tahoe: 4bd66f421d38a1b0daac64882a94f1edadc0abfe65c636990c9f9084979444e5
+        arm64_sequoia: 1e2da96f3dc276daf4f743a8c2484c6cec8cd7fa34dc0d163e60142964e5eca5
+        arm64_linux: e318769f883d2aeeb85861bba5fd0d26af8942b0cb6937ce4bb04dd251f163f2
+        x86_64_linux: 9f0850f3c21f1d0283ca5e951a6cbf7fa1b377ad8a45fe02e72ac8a019bfd3d1
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
+      reason: One-time owner authorization for a 24-complete-hour minimum in the October
+        2026 security review, including maintenance updates. Exact release and retained
+        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   libyaml:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
@@ -362,69 +367,72 @@ formulae:
   nmap:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 6616270a3082fd101102b62ef68ddab1b09c5412
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/n/nmap.rb
-    recipe_blob: fb94ebfbc9b4d38d9d45bb403e498cae3563650b
-    local_file_sha256: d20a5d98f93bd0b8e1328225ba992baa5b006f6e797c1e2e419944f65356b673
-    version: '7.99'
-    release_published_at: '2026-03-26T15:55:55Z'
+    recipe_blob: 1074d9a279d643afbca168ea92341fc10d85e294
+    release_published_at: '2026-10-12T19:27:22Z'
     release_evidence:
-      description: nmap.org artifact Last-Modified
-      reference: https://nmap.org/dist/nmap-7.99.tar.bz2
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
+      description: Primary nmap.org source archive Last-Modified; upstream changelog
+        separately labels release 2026-10-15. Both are older than 24 complete hours.
+      reference: https://nmap.org/dist/nmap-7.992.tar.bz2
+    version: '7.992'
+    local_file_sha256: 1b39864649c15768b25d63c791f2ec70ae5b1e746efcc73ffd1a5ace7363eb44
     legacy_baseline:
-      version: '7.99'
-      artifact_fingerprint_sha256: 420a9ca854bb89831e909e782f5a5f3c9a6d1b67ee9b156adf986355d0d4402c
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
-    - Updated dependency path references to Homebrew's current formula helper DSL.
+    adoption_reason: Adopt nmap 7.992 from the reviewed immutable core recipe, with
+      independently verified source inputs and retained strict bottle attestations.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 610785e4dd545c5f71d3af2d221f8a92951714710cf98ac4ed10f6fd0d0c5153
-        arm64_sequoia: 5840513b1bcc8c8e20b68a1a9e71977d424827ba9e26c157e79760dc218fb55e
-        arm64_sonoma: 47740d854f1669dc68deabbfd6f5d54036c99ddb606ba39d70e747f7632f4f85
-        sonoma: a5c5594350aad5168e64c364c6508b669cd5ea2273ad0f88d005b27de75cd5bd
-        arm64_linux: 55edc13eebfb103bdc26cdcb479daf81d709b727d6c6e2e22ae2c447cebc638a
-        x86_64_linux: 71db30907d6cd22b65e60fbb825cbc394ea291123aba6f9422342026bdddd6ad
+        arm64_golden_gate: ccc2756db90d4a7fe768b473ce4e006109002ab5c91aba60034c9969e0be0d8c
+        arm64_tahoe: affe98fb2db9b7712ca41b6485a4403aad4af549c626032b6c1ea6ed57a75c7a
+        arm64_sequoia: e3fbe5d32fee8255873112ea0b334370e69dd06d2cdc67ae4595e61aa015066f
+        arm64_linux: c2aed414bec25d82ed498b9f66cae486a8e586cd75ab4dd5af50a3dfe22d6830
+        x86_64_linux: 3fe32360824e60cd1f0ed7da590edeaf1ffe629a3a14e2dffab1f32794992f28
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
+      reason: One-time owner authorization for a 24-complete-hour minimum in the October
+        2026 security review, including maintenance updates. Exact release and retained
+        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   osv-scanner:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: b21288c544fb78c9b47a3856070e4f121e050824
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/o/osv-scanner.rb
-    recipe_blob: 414f3c33a2c80791c595be3a2d08a67d686ca561
-    local_file_sha256: fba0dff81d515cf7e3ac14d5a85cb4ea8e91c64538923a346d4f5a22505208fd
-    version: 2.3.8
-    release_published_at: '2026-05-08T05:28:16Z'
+    recipe_blob: a9f091c5c5fa15aa3b52b36cb0bd115b37b7a962
+    release_published_at: '2026-10-12T01:32:07Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/google/osv-scanner/releases/tag/v2.3.8
-    adopted_at: '2026-06-09T03:12:58Z'
-    adoption_commit: a898ff68fdd9d1c37d39125f0bb6dba0372ebefc
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
+      reference: https://github.com/google/osv-scanner/releases/tag/v2.7.0
+    version: 2.7.0
+    local_file_sha256: 903d95d8be02259bc075e87d80e562cf09afe9ff7550928e422a355190a35d9d
     legacy_baseline:
-      version: 2.3.8
-      artifact_fingerprint_sha256: 1ee168eab80ad318cface9dde00ea3592848bfbf55d889383ceec50a12f4f6d4
     local_changes:
     - Removed the mutable head spec.
+    - Pinned the Homebrew core bottle root explicitly.
+    adoption_reason: Adopt osv-scanner 2.7.0 from the reviewed immutable core recipe,
+      with independently verified source inputs and retained strict bottle attestations.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 6c908a40747ea7cbd10f548d5f8edc32e4db31f6ae06a6b3016fb047de1b16c2
-        arm64_sequoia: 3eae4ee581c5abb4527366e9a01299acb1337624a8caea87590f3da5d412d42a
-        arm64_sonoma: b752628540f57cc390eb4ac0944a790a112c96739b01cad432d70e4b51299f46
-        sonoma: a2d287434f2736e340ee3fb5d833e476d8619621d0c11bdec73a93f3f99d7f08
-        arm64_linux: 0fcceaab3ebca098831b180e076c243e8a3eda8eab9e094b2daf4615683ecd11
-        x86_64_linux: d1a8f8e99b621f2ef851017de9d6909e61cfdeed0262df7b21af7f11003a8e04
+        arm64_golden_gate: 4e6182d28e59f75673d8772506034305c78aec123c836de69aaab698f9939f29
+        arm64_tahoe: e8eb1f9d874a3e991cd539cba03a279ffeaa46a485f4c55273cf1661be129606
+        arm64_sequoia: b9710f629c378b9889ec24657478cdea1804af3ac979a0a360eb913b60f2a3ff
+        arm64_linux: 9531ccd8f5b46401982134fc0dfdbf68bc12113aa4369f233a66ffa897603515
+        x86_64_linux: 72dfc42b3183928e8be9d40f53df78806ba0303d6e3e69a55145cd0876d32fe0
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
+      reason: One-time owner authorization for a 24-complete-hour minimum in the October
+        2026 security review, including maintenance updates. Exact release and retained
+        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   pinentry-mac:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
@@ -461,61 +469,61 @@ formulae:
   ripgrep:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 7ab35eadc4aefb44e0d2aebfe229fb174d5216ee
+    recipe_commit: 2f98d8e130207bf84a3d4777e00b6f91fa03e3fc
     recipe_path: Formula/r/ripgrep.rb
-    recipe_blob: e25b08538ca12f1f1183b146c24fa2ac36410f10
-    local_file_sha256: d836559b7e6f99b761bc0b9a4e92fd2bc2c0ecd021c9eb8e55f05403caf2572f
-    version: 15.1.0
-    release_published_at: '2025-10-22T13:00:26Z'
+    recipe_blob: 2360cd6de75912505f0f151c365a95c6d838ec29
+    release_published_at: '2026-07-15T16:26:10Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/BurntSushi/ripgrep/releases/tag/15.1.0
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
+      reference: https://github.com/BurntSushi/ripgrep/releases/tag/15.2.0
+    version: 15.2.0
+    local_file_sha256: 0401375da60adce9b8c41a5cde3110a2dfa2f847faab73b1c85ea96c513e7898
     legacy_baseline:
-      version: 15.1.0
-      artifact_fingerprint_sha256: c69b09a4e9258ccd627c207eab207ea2798f75c49bb37246f2226fc149e3c09e
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    adoption_reason: Adopt ripgrep 15.2.0 from the reviewed immutable core recipe,
+      with independently verified source inputs and retained strict bottle attestations.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: f4dc761b07edb8e6438b618d22f7e57252903e2f2b973e2c7aa0da518fc374b9
-        arm64_sequoia: 0153b06af62b4b8c6ed3f2756dcc4859f74a6128a286f976740468229265cfbe
-        arm64_sonoma: d9c83b35f30d48925b8c573afa83ec32b10aaca8f247bc938650a838d188c5df
-        sonoma: ab382b4ae86aba1b7e6acab3bc50eb64be7bb08cf33a37a32987edb8bc6affe4
-        arm64_linux: bbdef955d5752e53473be06b698c45ce31682cd47d75e7c706365450bd08ff44
-        x86_64_linux: 349bc55db5ad4b4e8935b889d44c745ae23605c1d57d6eb639dbd5c86d573a88
+        arm64_golden_gate: 327215e000a1e83a9e3bf643bd88a3211796bfede87958955ad2a27df270ec4d
+        arm64_tahoe: 7829e262f0ebbb51c4744b343bf801a5107479fe08c6d6f61f4d909748cba337
+        arm64_sequoia: 2754dac3a512be2007dde3a8a481f1753ea9b0e22041a1a32b544daed966981b
+        arm64_sonoma: 8e485dfa978673c6ada6f83ca39f5f15f8b7444b0cdbe8814cd3d3d7bd83afa0
+        sonoma: 9dd76bad725daf9ad1d4c983419e79ec92aefdae0cc9c92d465b424c8aea4808
+        arm64_linux: d3659fe11edcb52b93ce3510428435991fcb479c854d0b66bd14a2ffc7ef956a
+        x86_64_linux: b92a80402edd4e6fa17e9eb580d20e941c60787510c4ce2716fa53d2c6d4c432
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
   rust-template:
     source_type: personal-release
     upstream_repository: GrantBirki/rust-template
-    upstream_tag: v0.2.0
-    upstream_commit: f5a87c0b6a5e47bdfba7f2a9338a02a23fd76794
-    local_file_sha256: 3d6147f9e37cd059fb10eaf57445d7bff09061da542068c93d075caa4e302018
-    version: 0.2.0
-    release_published_at: '2026-01-29T06:06:10Z'
+    upstream_tag: v0.4.0
+    upstream_commit: 1e73cb3c159dd2f6bbdcdb8a1c3c95e517a3b672
+    local_file_sha256: 4aa47227fa65233ab1e4b9f2db21ce6ca1cc97c34b75f644f8403f6442c456c8
+    version: 0.4.0
+    release_published_at: '2026-05-25T04:45:34Z'
     release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/GrantBirki/rust-template/releases/tag/v0.2.0
-    adopted_at: '2026-01-29T06:12:41Z'
-    adoption_commit: bedab9b19d6b731304e2e8bd991c1c59fd4b9095
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
+      description: GitHub release API published_at; exact tag commit and independently
+        hashed release assets reviewed
+      reference: https://github.com/GrantBirki/rust-template/releases/tag/v0.4.0
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    adoption_reason: Adopt the aged exact owner-controlled 0.4.0 release with completion
+      fixes and current locked CLI dependencies, preserving all supported platforms
+      and optional completion/man installation; verify every retained archive and
+      its exact-source SLSA attestation.
     cooldown_exception:
     legacy_baseline:
-      version: 0.2.0
-      artifact_fingerprint_sha256: 8945f4798c0a6ac0d8991a4d62179e5164161d352d1b937746f655e2648df6ad
     local_changes: []
     artifacts:
-      asset_01: 0e92863648891e58be2f668439550526b12e6867b8dbeea1d70ea05a7dcf300c
-      asset_02: 0e92863648891e58be2f668439550526b12e6867b8dbeea1d70ea05a7dcf300c
-      asset_03: 9ed344b2eaec47f1820de277f13bfab0cf611c6d2511203f13727172142e7352
-      asset_04: c2a75a054d1655944f971de81ca5230a651a355713894ef671d08bc754ba912e
+      asset_01: 3de93c15e1b7f9f06eb4680e1ace37eb53d2e1b020b5d88494688128906d43ed
+      asset_02: 3de93c15e1b7f9f06eb4680e1ace37eb53d2e1b020b5d88494688128906d43ed
+      asset_03: e718214ad30759e8b237ace1ce242470cfcd3bd7415d8d7411e6643156267b7a
+      asset_04: b91b6aef3af32084b537be990ea085a9d20b7e6737bf8b4554bda0c28617af93
   rustup:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
@@ -537,7 +545,8 @@ formulae:
       version: 1.29.0_1
       artifact_fingerprint_sha256: e72d97b4f8d45a0223727e4aceecbfddb95b138df341506c8640d46d66e53051
     local_changes:
-    - Migrated the post-install hook to Homebrew's declarative install steps without changing package artifacts.
+    - Migrated the post-install hook to Homebrew's declarative install steps without
+      changing package artifacts.
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
     - Retained the local cargo shell-completion generation implementation.
@@ -554,70 +563,68 @@ formulae:
   swiftformat:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: d76b000f42f9879a3979d7facaa07ee0e1ce6ef5
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/s/swiftformat.rb
-    recipe_blob: 2a61a147d10237518b53ed2bb8ea64cd0e3534a7
-    local_file_sha256: 75a50f0ea3c2a03d39ff6b2bf0d36a608c773ae9151d054829ab51a9629be03c
-    version: 0.61.1
-    release_published_at: '2026-04-27T14:09:24Z'
+    recipe_blob: f227071248112b4ef7c301bf641a1e2b36919416
+    release_published_at: '2026-10-16T22:27:52Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/nicklockwood/SwiftFormat/releases/tag/0.61.1
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
+      reference: https://github.com/nicklockwood/SwiftFormat/releases/tag/0.64.0
+    version: 0.64.0
+    local_file_sha256: b7ea32e32babb818ab65ae8fc64046388ca3783a8269121b441df81d6412f6ea
     legacy_baseline:
-      version: 0.61.1
-      artifact_fingerprint_sha256: c36277098b42d26e3ca0c66472830ef0bcd88f209f24ea2aea13f40473bacaa4
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    adoption_reason: Adopt swiftformat 0.64.0 from the reviewed immutable core recipe,
+      with independently verified source inputs and retained strict bottle attestations.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 3f9ee68bb4d447ebf6e3c7816dc67577a5cee498614a55064add2224e278ed52
-        arm64_sequoia: '078438fe8be63c0dcb3a02cf4a0abbfa45c1b8218be3f4097e8d44857147979d'
-        arm64_sonoma: 2beb2997ce08de9e04a4cebc8363d2fc94eac1b34bf023b547f2747d056e3ca8
-        sonoma: 1fbaf5f42c75735beafad0dbed2370d58eedc679b4cc1165f64b9d5cfb9f8257
-        arm64_linux: cc3672c5a1460afcccaa6f66c3b160846da93edd945a2816fec55dd83cf1f1c4
-        x86_64_linux: 2e834c12c65ffeb4d2a049ab17a761277ea0f23ae2389d68cff5501e4a9b26ee
+        arm64_golden_gate: 524cf77a7a47841ebfe01943a7421bfed0117b11b5a9ccc833a67e365900dfb7
+        arm64_tahoe: 871e56b300ad9ae1df9ef97a8297ccd921e976b9f0c3065dbffd13ce0972664c
+        arm64_sequoia: 97133daaee1ccbf7319848d2b5230f21cb63f0c0946cc908e04f516f51c8f44a
+        arm64_linux: a69ac20335c16ecdda108a9db1a15ef5dfc69ff231e145f73a01dfdfd0a793fb
+        x86_64_linux: cbdbf8894844230b749a20b2f883fee7e88085faf002e2f0aaf17cdd787bbba4
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
+      reason: One-time owner authorization for a 24-complete-hour minimum in the October
+        2026 security review, including maintenance updates. Exact release and retained
+        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   swiftlint:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 9575844975483201ef76c92100804d0fc54210f9
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/s/swiftlint.rb
-    recipe_blob: d061e85644f766cd848a99ec973b80a93ac04d70
-    local_file_sha256: 15d95304b803de2a0f1caa0ff8a8551af38fce614db6b2b1f8992e29ba633a28
-    version: 0.63.3
-    release_published_at: '2026-05-27T15:12:03Z'
+    recipe_blob: e04b96efdc693136c71f91600cdc633aba18ba39
+    release_published_at: '2026-08-21T20:29:47Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/realm/SwiftLint/releases/tag/0.63.3
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
+      reference: https://github.com/realm/SwiftLint/releases/tag/0.65.1
+    version: 0.65.1
+    local_file_sha256: cbfea19450f025f940b8752677ea88de4f7b03ae4cf592ef71892b62d5f9314e
     legacy_baseline:
-      version: 0.63.3
-      artifact_fingerprint_sha256: d04d73e5fbb556bbaeb82b552557ff9f177473fda83c2aedf81b9591055afa1f
     local_changes:
-    - Removed the mutable head spec and upstream autobump metadata.
+    - Removed the mutable head spec.
+    - Omitted upstream autobump metadata.
     - Pinned the Homebrew core bottle root explicitly.
-    - Updated dependency path references to Homebrew's current formula helper DSL.
+    adoption_reason: Adopt swiftlint 0.65.1 from the reviewed immutable core recipe,
+      with independently verified source inputs and retained strict bottle attestations.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: 9543efe7eb3d5c29413789fda02c3f8d70e4df5e3e4c4f8272dc6497be286aab
-        arm64_sequoia: f502ca6c67e466021a7f728016682f61645c60e16402c1f8d5ff9020caa24b91
-        arm64_sonoma: 3e0b17659999384334ff2e9fe91968853e51f563ef1ad64e5971bda1b5840c3e
-        sonoma: 6e454ebe3fcdecdfbda9c2801af0db33e54b71453814edd97fa3a1ba9a07fd7b
-        arm64_linux: 2b94207f2c97ffc84d535fe21cd6fcc64162231e4f8dc153165f82ff817bcb42
-        x86_64_linux: cc9c5d46560ec79f8c1d6eaaa683ac555184328657eb70a80db4a9409b940dea
+        arm64_golden_gate: e986deaff3ecaa4dd5c1f169a0900131dd5ff56c5ec4cbf96b73b1033196e593
+        arm64_tahoe: 1d50373afecfb6ad0dbb527de4bd678d38cf9f9a42c248e85b7235055a8db68a
+        arm64_sequoia: a08a9e47fe0ccaf6c4eacec3961a6897393d9431dfd0fcb52767994f2ea197c4
+        arm64_linux: 309cb49b4012b0dcbf56b74305734209706122e074e2fb93e8e7a62e86c19c1d
+        x86_64_linux: e79601d7a4c1483ed94d820ca94f8f39609728d7826f29d2aad51b9861549ab3
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
   tart:
     source_type: upstream-release
     upstream_repository: openai/tart
@@ -631,14 +638,20 @@ formulae:
       reference: https://github.com/openai/tart/releases/tag/2.32.1
     adopted_at: '2026-07-12T22:53:04Z'
     adoption_commit: a7b0dd0d6365c7483353127de9528e3679bca213
-    adoption_reason: Vendor the reviewed Tart 2.32.1 release for Apple Virtualization.framework-based macOS and Linux virtual machines.
+    adoption_reason: Vendor the reviewed Tart 2.32.1 release for Apple Virtualization.framework-based
+      macOS and Linux virtual machines.
     cooldown_exception:
     legacy_baseline:
     local_changes:
-    - Migrated the post-install hook to Homebrew's declarative install steps without changing package artifacts.
-    - Updated the release and homepage URLs to the canonical repository after its transfer from Cirrus Labs to OpenAI.
-    - Omitted the optional qualified Softnet dependency so installing Tart does not broaden trust to another tap or install a separate setuid-capable networking tool.
-    - Added a focused version test and caveat documenting the intentional Softnet limitation.
+    - Migrated the post-install hook to Homebrew's declarative install steps without
+      changing package artifacts.
+    - Updated the release and homepage URLs to the canonical repository after its
+      transfer from Cirrus Labs to OpenAI.
+    - Omitted the optional qualified Softnet dependency so installing Tart does not
+      broaden trust to another tap or install a separate setuid-capable networking
+      tool.
+    - Added a focused version test and caveat documenting the intentional Softnet
+      limitation.
     artifacts:
       tart.tar.gz: 8554ab4f7fc12afe52f9b7e3093a935673cbac737a83973d2db7a0683c814529
   tfenv:
@@ -714,7 +727,8 @@ formulae:
       reference: https://github.com/GrantBirki/uninstall/releases/tag/v1.3.5
     adopted_at: '2026-09-28T11:14:16-07:00'
     adoption_commit: 461cd6495a79ffd087a1ba3b656390f208fc57cd
-    adoption_reason: Adopt the owner-controlled v1.3.5 release to fix Finder Trash moves and reject symlink apps before removing their data.
+    adoption_reason: Adopt the owner-controlled v1.3.5 release to fix Finder Trash
+      moves and reject symlink apps before removing their data.
     cooldown_exception:
     legacy_baseline:
     local_changes: []
@@ -723,59 +737,62 @@ formulae:
   vector:
     source_type: upstream-release
     upstream_repository: vectordotdev/vector
-    upstream_tag: v0.56.0
-    upstream_commit: 6817c0218e1af8efc484c3a74317fc1192a5a450
-    local_file_sha256: f723f1e3c30f149faec3b1d00a2692249ebf820a4683d532ec79777e81246e0f
-    version: 0.56.0
-    release_published_at: '2026-06-03T15:26:05Z'
+    upstream_tag: v0.60.0
+    upstream_commit: 0d0b35865036f8b5c2f0104d9744fa84985ffff1
+    local_file_sha256: f84520076260c2f11c43ef15106a94c0bb8799fa9ad64dd83f7f6b574703419c
+    version: 0.60.0
+    release_published_at: '2026-10-19T17:55:58Z'
     release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/vectordotdev/vector/releases/tag/v0.56.0
-    adopted_at: '2026-06-05T17:09:34Z'
-    adoption_commit: 6704269a644ee0d93d067ea7b03c2a1ebe50e4cd
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
+      description: GitHub release API published_at; exact tag commit and independently
+        hashed ARM macOS release archive reviewed
+      reference: https://github.com/vectordotdev/vector/releases/tag/v0.60.0
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    adoption_reason: Adopt exact Vector 0.60.0 to move beyond the three upstream 0.57.0
+      security fixes for templated file-sink writes and logstash denial of service,
+      preserving ARM macOS support and independently verifying its release checksum.
+      Residual source and binary dependency advisory matches remain documented; no
+      clean vulnerability or verified SLSA claim is made.
     cooldown_exception:
+      reason: One-time owner authorization for a 24-complete-hour minimum in the October
+        2026 security review, including maintenance updates. Exact release and retained
+        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
     legacy_baseline:
-      version: 0.56.0
-      artifact_fingerprint_sha256: 6574cc6adf9ffc2f3a82212bf95fbeae0946c5b5c4326bac20ee43916468551a
     local_changes:
     - Made post-install directories explicitly relative to Homebrew's var directory.
     artifacts:
-      asset_01: 9aa8b6772d7c887734d38c84eb721d3a067e08a4aa4dc0dcc809365da242ec16
+      asset_01: aa5c9d89416b39f1a90a7f1a088a9ecbb8c8c3a5669fb86609c9d4a958fe1a28
   yq:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 5c9a75c5d4b67d967f0cde2b6bd83a65804d48b3
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/y/yq.rb
-    recipe_blob: e9b8e5006dab805c279d62b710f51fcbf7482833
-    local_file_sha256: 1f26d0ab57c654526c398b725bf356c38efaf85aee47a200ebf79589a2ed4eb3
-    version: 4.53.2
-    release_published_at: '2026-04-17T06:28:18Z'
+    recipe_blob: 7efc76d14d56f06720e5e34893919ddb273a6770
+    release_published_at: '2026-09-29T04:22:30Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/mikefarah/yq/releases/tag/v4.53.2
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
+      reference: https://github.com/mikefarah/yq/releases/tag/v4.54.1
+    version: 4.54.1
+    local_file_sha256: a8babbac2c7b7890eb41ed14ed880f6acf7781a7c25b6800f0fb8d0b8b924a46
     legacy_baseline:
-      version: 4.53.2
-      artifact_fingerprint_sha256: b6e6b01faebfc83b1b724cfa663db336f0c6829fb8df39ffeba9cb4da4d1daa7
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    adoption_reason: Adopt yq 4.54.1 from the reviewed immutable core recipe, with
+      independently verified source inputs and retained strict bottle attestations.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T05:56:16Z'
       digests:
-        arm64_tahoe: d17c2839ee1777042fee74ea12ae4b208ad185b7568736848056fca2c280ae10
-        arm64_sequoia: d17c2839ee1777042fee74ea12ae4b208ad185b7568736848056fca2c280ae10
-        arm64_sonoma: d17c2839ee1777042fee74ea12ae4b208ad185b7568736848056fca2c280ae10
-        sonoma: f286c6fe05ab3414f9698d81d59d36209980c63b3937e2e4e9437981e1fec8f7
-        arm64_linux: 2fb220286c54f661e9779d91eff29f46055ff544995b8beffacd7e6486df5fb7
-        x86_64_linux: 8c30770b766c4be4264aaab9e3d901451cb8465d6e34cd42480b3088446ea1dd
+        arm64_golden_gate: 69b698c900cb0458e22e9b2261f67fb665b448b131f788f7611f1773431ad95b
+        arm64_tahoe: 69b698c900cb0458e22e9b2261f67fb665b448b131f788f7611f1773431ad95b
+        arm64_sequoia: 69b698c900cb0458e22e9b2261f67fb665b448b131f788f7611f1773431ad95b
+        arm64_linux: 271d4524ae546930ae4540094f5e1a8807e33f0e531018c542f97594b78489cd
+        x86_64_linux: edf7c42fc120d260de08df774b9372461c2b4bdeef9f062b9a00b3b94e49e268
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
 casks:
   alacritty:
     source_type: homebrew-cask
@@ -798,7 +815,8 @@ casks:
       version: 0.17.0
       artifact_fingerprint_sha256: f4702d7dda5a8f543fff92164ddeafa87ed8999980ffd41c6dea7591bf7f73b2
     local_changes:
-    - Use Homebrew's supported macOS requirement instead of its redundant Big Sur minimum.
+    - Use Homebrew's supported macOS requirement instead of its redundant Big Sur
+      minimum.
     - Order shell completion stanzas to match Homebrew style.
     artifacts:
       default: ad8d7de35fb38e43184776cac6dfee05ca325caa0b6639a06a55e54e4b026620
@@ -839,7 +857,8 @@ casks:
       reference: https://github.com/GrantBirki/espresso/releases/tag/v0.1.2
     adopted_at: '2026-08-15T17:16:57Z'
     adoption_commit: d34bc12c64f5d98ea9ad69831a742dcf7c010c2c
-    adoption_reason: Adopt Espresso v0.1.2 with Developer ID signing, Apple notarization, a stapled ticket, hardened runtime, and provenance-attested release packaging.
+    adoption_reason: Adopt Espresso v0.1.2 with Developer ID signing, Apple notarization,
+      a stapled ticket, hardened runtime, and provenance-attested release packaging.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -869,34 +888,37 @@ casks:
       version: 1.9.3
       artifact_fingerprint_sha256: 2db85e73ad131d13ba8f5f1910a01759a1c2081bd632372ea5b6e36733e4f991
     local_changes:
-    - Use Homebrew's supported macOS requirement instead of its redundant Big Sur minimum.
+    - Use Homebrew's supported macOS requirement instead of its redundant Big Sur
+      minimum.
     artifacts:
       default: d4e453bbb55b6491d519a30e0e6de5beb7ce1a929e8f835767b638ef6ffd371d
   karabiner-elements:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: 0b310aa9ebce369448f239992438e31868214d5c
+    recipe_commit: f06ec02f5bd3ea26cc01c2a39f6a8823a7ae455d
     recipe_path: Casks/k/karabiner-elements.rb
-    recipe_blob: 28c15ae6f7350ec679237abf8452b75fbf12bca5
-    local_file_sha256: f4c0cfb3ebe109c6b1f5cee1003e6887767add957973c92f54cfcb857b852c44
-    version: 16.0.0
-    release_published_at: '2026-05-03T05:26:17Z'
-    release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/pqrs-org/Karabiner-Elements/releases/tag/v16.0.0
-    adopted_at: '2026-05-28T05:55:40Z'
-    adoption_commit: 524de4b4514ace8abf37feb1e5d3fa75000ba253
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 16.0.0
-      artifact_fingerprint_sha256: d2c0b83623b8b0e181d60a2bfe0830e290ba09775d09c5bb750a7cdb7aa972da
+    recipe_blob: f0fc80893c515bc6129f6909e3a8e703688a0b75
+    local_file_sha256: 253a234a964ec9a51e698c431e3e635f8a210ba13e6d325a3c6994da9e322836
+    release_published_at: '2026-09-06T07:49:45Z'
     local_changes:
-    - Retained only the current 16.0.0 branch; legacy OS branches from the recorded
-      Homebrew recipe are intentionally not vendored.
+    - Retain local verified GitHub source declaration.
+    - Retain the macOS-only cask and existing livecheck/install/uninstall/zap declarations.
+    - Retain the existing macOS Ventura minimum; omit upstream legacy branches that
+      would expand this tap cask platform support.
+    version: 16.3.0
+    release_evidence:
+      description: GitHub release published_at; exact asset hash and native signing/notarization
+        independently verified
+      reference: https://github.com/pqrs-org/Karabiner-Elements/releases/tag/v16.3.0
+    adoption_reason: Adopt karabiner-elements 16.3.0 with independently verified checksum
+      and signed/notarized payloads, preserving existing architecture, operating-system,
+      installation, and uninstall boundaries.
+    legacy_baseline:
     artifacts:
-      default: b960f731890a74231c229e5453c4ee7109efb328c4fb63aed8974e347fd1f9c0
+      default: 19cce7bed3d48a722242ca683bd1bae406b6a87fed520728d1c91dee175b75e4
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
   keepassxc:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
@@ -924,27 +946,28 @@ casks:
   knockknock:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: '0281c09c3a2fc054f858087d74f9fbfffa534404'
+    recipe_commit: f06ec02f5bd3ea26cc01c2a39f6a8823a7ae455d
     recipe_path: Casks/k/knockknock.rb
-    recipe_blob: c0a7a7fe9e79816f0888a7801a618dd754d6795e
-    local_file_sha256: b41c550d1d25f1a5f7031ff8ea804d07ea1ceafa48d089b6b034ce3f3ecd890f
-    version: 4.0.3
-    release_published_at: '2025-12-18T05:44:28Z'
-    release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/objective-see/KnockKnock/releases/tag/v4.0.3
-    adopted_at: '2026-05-28T05:34:05Z'
-    adoption_commit: 995f9848b5d1da878298ffeb1dc48857a7745b0c
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 4.0.3
-      artifact_fingerprint_sha256: d2a0265cafed21fc62f61f5e55296a32e1db182051dedeb16e6fd399c40dfbc0
+    recipe_blob: 6af189f146e1a4fb43f747b21c92a55d62b14bdf
+    local_file_sha256: 62fbdb97f1464ed9a1480f868b79353a6d4ccdbbe1498817205f2445f93bb868
+    release_published_at: '2026-09-15T08:53:55Z'
     local_changes:
-    - Use Homebrew's supported macOS requirement instead of an obsolete Catalina or Big Sur minimum.
+    - Retain local verified GitHub source declaration.
+    - Retain the macOS-only cask and existing livecheck/install/uninstall/zap declarations.
+    version: 4.1.0
+    release_evidence:
+      description: GitHub release published_at; exact asset hash and native signing/notarization
+        independently verified
+      reference: https://github.com/objective-see/KnockKnock/releases/tag/v4.1.0
+    adoption_reason: Adopt knockknock 4.1.0 with independently verified checksum and
+      signed/notarized payloads, preserving existing architecture, operating-system,
+      installation, and uninstall boundaries.
+    legacy_baseline:
     artifacts:
-      default: 1e1371ff6eb62e0866266a0744e90aa3bdc6b22cca0599afbd330ddf52663c69
+      default: 98eae6cda5a7e122e6c7e68622617c00d6533a909f505f002c93dd90941a3f9e
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
   oneshot:
     source_type: personal-release
     upstream_repository: grantbirki/oneshot
@@ -958,7 +981,9 @@ casks:
       reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.12
     adopted_at: '2026-09-06T16:19:11Z'
     adoption_commit: 30de61e3d87e1de28174fb2c8a8c276640425743
-    adoption_reason: Adopt OneShot v1.2.12 to fix invalid volume crashes and speed up long filename truncation, with verified Developer ID signing, notarization, a stapled ticket, hardened runtime, and artifact provenance.
+    adoption_reason: Adopt OneShot v1.2.12 to fix invalid volume crashes and speed
+      up long filename truncation, with verified Developer ID signing, notarization,
+      a stapled ticket, hardened runtime, and artifact provenance.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -970,27 +995,32 @@ casks:
   osquery:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: a78b75c102df73c3b8a8ff4835ebd7aeacd17c1e
+    recipe_commit: f06ec02f5bd3ea26cc01c2a39f6a8823a7ae455d
     recipe_path: Casks/o/osquery.rb
-    recipe_blob: d1d5d29e8c3d84e71e22ab05cc0dd50ebe70f2a4
-    local_file_sha256: 8657decd0015c7bb5161a2e4e7843492677b2afe8fea8fa76fa3be3615fddb5d
-    version: 5.23.0
-    release_published_at: '2026-04-25T20:33:09Z'
-    release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/osquery/osquery/releases/tag/5.23.0
-    adopted_at: '2026-06-09T02:56:46Z'
-    adoption_commit: 9ae3c0f96b524da0287e7cfe39b573ec4179f53f
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 5.23.0
-      artifact_fingerprint_sha256: e5ceb14cff21026a5e7104152fcb9a35b83e9d9d0512f7e3b7b421e25446a324
+    recipe_blob: aeec4bc1d71a502958393186426fab1baf3cc3b9
+    local_file_sha256: 310536b6d0dc07e5417e16282f14219ab79127a21f850aa2787d371e87c00247
+    release_published_at: '2026-10-09T22:50:20Z'
     local_changes:
-    - Omitted a non-functional upstream comment.
+    - Retain local verified GitHub source declaration.
+    - Retain existing macOS-only pkg artifact and uninstall launchctl/pkgutil rules.
+    version: 5.24.0
+    release_evidence:
+      description: GitHub release published_at; exact asset hash and native signing/notarization
+        independently verified; package asset published 2026-10-11T02:40:42Z
+      reference: https://github.com/osquery/osquery/releases/tag/5.24.0
+    adoption_reason: Adopt osquery 5.24.0 with independently verified checksum and
+      signed/notarized payloads, preserving existing architecture, operating-system,
+      installation, and uninstall boundaries.
+    legacy_baseline:
     artifacts:
-      default: 2621179c334a6482fa822732f121409bbccc36784db18f576e2965dfc4f1845d
+      default: 41c56afaa8dfa0e83ac7f47c0ce325e69cf20813327bee592b1a13ee9e3393f6
+    adopted_at: '2026-10-22T05:43:45Z'
+    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+    cooldown_exception:
+      reason: One-time owner authorization for a 24-complete-hour minimum in the October
+        2026 security review, including maintenance updates. Exact release and retained
+        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   santa:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
@@ -1005,9 +1035,11 @@ casks:
       reference: https://github.com/northpolesec/santa/releases/tag/2026.8
     adopted_at: '2026-09-20T18:47:10Z'
     adoption_commit: b4cc57f1ffef989a895d340d07e4f22d2a0c904e
-    adoption_reason: Adopt Santa 2026.8 to fix execution inspection races, stale cached decisions, and universal binary classification bypasses.
+    adoption_reason: Adopt Santa 2026.8 to fix execution inspection races, stale cached
+      decisions, and universal binary classification bypasses.
     cooldown_exception:
-      reason: Santa 2026.8 fixes an execution inspection race affecting 2026.7 and earlier that lets local users bypass execution policy.
+      reason: Santa 2026.8 fixes an execution inspection race affecting 2026.7 and
+        earlier that lets local users bypass execution policy.
       reference: https://github.com/northpolesec/santa/security/advisories/GHSA-qwrh-7hrj-mppm
     legacy_baseline:
     local_changes:
@@ -1019,23 +1051,33 @@ casks:
     upstream_repository: maxgoedjen/secretive
     upstream_tag: v4.0.0
     upstream_commit: 54e0d00d87e207377101b0ea6ddfa624cd1a1c16
-    local_file_sha256: 090edb9fca9da39f256ef6fd39919b3c8f9e098da64079420e1305c0a8bb8f80
+    local_file_sha256: '090edb9fca9da39f256ef6fd39919b3c8f9e098da64079420e1305c0a8bb8f80'
     version: 4.0.0
     release_published_at: '2026-09-21T03:08:01Z'
     release_evidence:
-      description: GitHub release publication and macOS 15 minimum; asset checksum and upstream build attestation verified independently.
+      description: GitHub release publication and macOS 15 minimum; asset checksum
+        and upstream build attestation verified independently.
       reference: https://github.com/maxgoedjen/secretive/releases/tag/v4.0.0
     adopted_at: '2026-09-30T06:23:02Z'
     adoption_commit: e19eb734668f94536de62f5dca1ae65b51f49692
-    adoption_reason: Adopt Secretive 4.0.0 for stacked requests and SSH certificate support on macOS 15 and newer. Verified Developer ID Max Goedjen (Z72PRUAWF6), hardened runtime, and notarized Gatekeeper acceptance; preserve prior versions on older macOS.
+    adoption_reason: Adopt Secretive 4.0.0 for stacked requests and SSH certificate
+      support on macOS 15 and newer. Verified Developer ID Max Goedjen (Z72PRUAWF6),
+      hardened runtime, and notarized Gatekeeper acceptance; preserve prior versions
+      on older macOS.
     cooldown_exception:
-      reason: The owner explicitly approved a one-time early adoption of Secretive 4.0.0 on September 30, 2026. This is a release-specific owner override, not a security incident exception.
+      reason: The owner explicitly approved a one-time early adoption of Secretive
+        4.0.0 on September 30, 2026. This is a release-specific owner override, not
+        a security incident exception.
       reference: https://github.com/GrantBirki/homebrew-tap/blob/e19eb734668f94536de62f5dca1ae65b51f49692/SECURITY.md#one-time-secretive-400-override
     legacy_baseline:
     local_changes:
-    - Legacy versions 1.0.3, 2.3.1, 2.4.1, and 3.0.4 retain the reviewed Homebrew/homebrew-cask recipe at https://github.com/Homebrew/homebrew-cask/blob/efe202a25512f9fcd5fdec53ed1954d3d3a08f86/Casks/s/secretive.rb (Git blob d24fba4204f3977f48af97175c5478d35509b05d).
-    - Retained the existing legacy macOS versions and checksums, including 3.0.4 on Sonoma; active release discovery applies to Sequoia and newer.
-    - Preserved the existing app installation and zap paths without adding uninstall signals or changing quarantine behavior.
+    - Legacy versions 1.0.3, 2.3.1, 2.4.1, and 3.0.4 retain the reviewed Homebrew/homebrew-cask
+      recipe at https://github.com/Homebrew/homebrew-cask/blob/efe202a25512f9fcd5fdec53ed1954d3d3a08f86/Casks/s/secretive.rb
+      (Git blob d24fba4204f3977f48af97175c5478d35509b05d).
+    - Retained the existing legacy macOS versions and checksums, including 3.0.4 on
+      Sonoma; active release discovery applies to Sequoia and newer.
+    - Preserved the existing app installation and zap paths without adding uninstall
+      signals or changing quarantine behavior.
     artifacts:
       catalina_or_older_1.0.3: d8522c153f20cd03513e6815bdb46be98eae0db2b2a45d30f60b25a6609d1657
       big_sur_2.3.1: 493a72362898b4480baa70f115d9515b41b2af4a503caf00277e2bc3824b0bbd
@@ -1061,7 +1103,9 @@ casks:
       reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.8
     adopted_at: '2026-09-02T19:06:01Z'
     adoption_commit: 7fde0c180d19c41d0da43a1b46eb686050ec3fac
-    adoption_reason: Adopt Shit v0.2.8 so displayed meeting times follow system timezone changes, with verified Developer ID signing, notarization, a stapled ticket, hardened runtime, and release provenance.
+    adoption_reason: Adopt Shit v0.2.8 so displayed meeting times follow system timezone
+      changes, with verified Developer ID signing, notarization, a stapled ticket,
+      hardened runtime, and release provenance.
     cooldown_exception:
     legacy_baseline:
     local_changes:

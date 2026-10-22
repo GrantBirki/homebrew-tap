@@ -1,13 +1,14 @@
 class Ffmpeg < Formula
   desc "Play, record, convert, and stream select audio and video codecs"
   homepage "https://ffmpeg.org/"
-  url "https://ffmpeg.org/releases/ffmpeg-8.1.1.tar.xz"
-  sha256 "b6863adde98898f42602017462871b5f6333e65aec803fdd7a6308639c52edf3"
+  url "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz"
+  sha256 "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e"
   # None of these parts are used by default, you have to explicitly pass `--enable-gpl`
   # to configure to activate them. In this case, FFmpeg's license changes to GPL v2+.
   # Passing `--enable-version3` changes the license to GPL v3+.
   license "GPL-3.0-or-later"
-  compatibility_version 2
+  revision 1
+  compatibility_version 3
 
   livecheck do
     url "https://ffmpeg.org/download.html"
@@ -16,12 +17,11 @@ class Ffmpeg < Formula
 
   bottle do
     root_url "https://ghcr.io/v2/homebrew/core"
-    sha256 arm64_tahoe:   "77ffdd3eb03f079eaf2a815143ca4bc6352ad694c88d03e4e5798d6d1f3c881d"
-    sha256 arm64_sequoia: "8d0e790194705d684e7baba9d75f24aa220811600861061e9121df7b5db7e3f7"
-    sha256 arm64_sonoma:  "dbc651c6f6b4e9dce0980e29dceab9672bb676d1266447b5b1aecb24d90d0ef8"
-    sha256 sonoma:        "2651703294b954a745b5dfb93d20537b92b86d6e6fc8c15cb27dd1d626ba1dfc"
-    sha256 arm64_linux:   "9e11c2041abb2877b5770e4493e37f9fbe78562b3854c93b107f3978bb091a29"
-    sha256 x86_64_linux:  "865d382f79f56d505703c903769459c8d6ce6e4c2b1dfa32f3fd3b389bb66310"
+    sha256 arm64_golden_gate: "d521452157b1117f909f441ce90165c360a7dcd9785c87d14cabc28934572a90"
+    sha256 arm64_tahoe:       "595b0bb854e692d7f6f89b866e860afacfdab5e3698451555547f58f523ed04d"
+    sha256 arm64_sequoia:     "65ba8ccb4778a0554346f416cd9a64c6cce2f92c7af5effb48deb6b757f01678"
+    sha256 arm64_linux:       "71883b27a7bea616321bb41458d4821ee31fe3855e0f262c9b27059fa4d56d91"
+    sha256 x86_64_linux:      "9b63fb0037cb84285b5c848606e3d84af3c8c39d17030ac9796de4acf631e951"
   end
 
   depends_on "pkgconf" => :build
@@ -35,12 +35,13 @@ class Ffmpeg < Formula
   depends_on "lame"
   depends_on "libvmaf" # dependent: ab-av1
   depends_on "libvpx"
-  depends_on "openssl@3"
+  depends_on "openssl@4"
   depends_on "opus"
-  depends_on "sdl2"
+  depends_on "sdl2-compat"
   depends_on "svt-av1"
   depends_on "x264"
   depends_on "x265"
+  depends_on "xz"
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
@@ -48,13 +49,14 @@ class Ffmpeg < Formula
   on_linux do
     depends_on "alsa-lib"
     depends_on "libxcb"
-    depends_on "xz"
     depends_on "zlib-ng-compat"
   end
 
   on_intel do
     depends_on "nasm" => :build
   end
+
+  deny_network_access!
 
   def install
     # The new linker leads to duplicate symbol issue https://github.com/homebrew-ffmpeg/homebrew-ffmpeg/issues/140
