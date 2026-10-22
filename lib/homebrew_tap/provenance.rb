@@ -378,6 +378,39 @@ module HomebrewTap
       dispatch-rebottle.yml
       publish-commit-bottles.yml
     ].freeze
+    CORE_INFO_SCRIPT = <<~RUBY
+      require "json"
+      require "api/formula"
+      formula = Homebrew::API::Formula.all_formulae.fetch(ARGV.fetch(0))
+      puts JSON.generate("formulae" => [formula])
+    RUBY
+    CORE_FETCH_SCRIPT = <<~'RUBY'
+      require "json"
+      require "formulary"
+      require "api/formula"
+      token, version, expected_json, recipe_sha256 = ARGV
+      expected = JSON.parse(expected_json)
+      api_formula = Formulary.factory("homebrew/core/#{token}")
+      download = Homebrew::API::Formula.source_download(api_formula)
+      unless Digest::SHA256.file(download.symlink_location).hexdigest == recipe_sha256
+        raise "#{token} current core recipe differs from the reviewed recipe"
+      end
+      formula = Homebrew::API::Formula.source_download_formula(api_formula)
+      raise "#{token} did not load from homebrew/core" unless formula.tap&.core_tap?
+      files = formula.bottle_hash.fetch("files")
+      actual = files.to_h { |tag, metadata| [tag.to_s, metadata.fetch("sha256")] }
+      unless formula.pkg_version.to_s == version && actual == expected
+        raise "#{token} current core version or bottle map changed"
+      end
+      bottles = expected.map do |tag, digest|
+        bottle = formula.bottle_for_tag(Utils::Bottles::Tag.from_symbol(tag.to_sym))
+        raise "#{token} #{tag} bottle is unavailable" unless bottle && bottle.tag.to_sym.to_s == tag
+        path = bottle.fetch(quiet: true)
+        raise "#{token} #{tag} bottle checksum mismatch" unless Digest::SHA256.file(path).hexdigest == digest
+        { "tag" => tag, "digest" => digest, "path" => path.to_s }
+      end
+      puts JSON.generate(bottles)
+    RUBY
 
     attr_reader :manifest, :runner, :out, :verified_at
 
@@ -417,10 +450,10 @@ module HomebrewTap
       digests = manifest.bottle_digests(entry)
       raise Error, "#{token} has no bottles to verify" if digests.empty?
 
-      verify_recipe!(token, entry)
+      recipe_sha256 = verify_recipe!(token, entry)
       info = core_info(token)
       if info["version"] == entry["version"] && info["digests"] == digests
-        verify_current_core!(token, digests.values)
+        verify_current_core!(token, entry["version"], digests, recipe_sha256)
       else
         digests.each { |tag, digest| verify_pinned_bottle!(token, tag, digest) }
       end
@@ -445,6 +478,7 @@ module HomebrewTap
       manifest.bottle_digests(entry).each_value do |digest|
         raise Error, "#{token} bottle digest is absent from the recorded upstream recipe" unless content.include?(digest)
       end
+      Digest::SHA256.hexdigest(content)
     rescue ArgumentError, JSON::ParserError, KeyError => e
       raise Error, "invalid recipe metadata for #{token}: #{e.message}"
     end
@@ -460,24 +494,45 @@ module HomebrewTap
     end
 
     def core_info(token)
-      payload = JSON.parse(runner.capture("brew", "info", "--json=v2", "homebrew/core/#{token}"))
+      payload = JSON.parse(runner.capture(
+                             "env", "HOMEBREW_NO_AUTO_UPDATE=1", "brew", "ruby", "-e", CORE_INFO_SCRIPT, token,
+                           ))
       formula = payload.fetch("formulae").fetch(0)
-      files = formula.dig("bottle", "stable", "files") || {}
-      digests = files.to_h do |tag, metadata|
-        [tag.to_s, metadata.fetch("sha256")]
+      digests = [formula, *formula.fetch("variations", {}).values].each_with_object({}) do |variation, merged|
+        files = variation.dig("bottle", "stable", "files") || {}
+        files.each do |tag, metadata|
+          tag = tag.to_s
+          digest = metadata.fetch("sha256")
+          if merged.key?(tag) && merged[tag] != digest
+            raise Error, "conflicting homebrew/core bottle digests for #{token} #{tag}"
+          end
+
+          merged[tag] = digest
+        end
       end
-      { "version" => formula.dig("versions", "stable"), "digests" => digests }
+      version = formula.dig("versions", "stable")
+      revision = formula.fetch("revision", 0).to_i
+      version = "#{version}_#{revision}" if revision.positive?
+      { "version" => version, "digests" => digests }
     rescue JSON::ParserError, IndexError => e
       raise Error, "invalid homebrew/core metadata for #{token}: #{e.message}"
     end
 
-    def verify_current_core!(token, digests)
+    def verify_current_core!(token, version, digests, recipe_sha256)
       output = runner.capture(
         "env", "HOMEBREW_NO_AUTO_UPDATE=1",
-        "brew", "verify", "--os", "all", "--arch", "all", "--quiet", "--json", "homebrew/core/#{token}",
+        "brew", "ruby", "-e", CORE_FETCH_SCRIPT, token, version, JSON.generate(digests), recipe_sha256,
       )
       json = output.lines.reverse.find { |line| line.lstrip.start_with?("[") } || output
-      validate_attestations!(JSON.parse(json), digests, token)
+      bottles = JSON.parse(json)
+      actual = bottles.to_h { |bottle| [bottle.fetch("tag"), bottle.fetch("digest")] }
+      unless actual == digests && bottles.length == digests.length
+        raise Error, "#{token} fetched core bottle map differs from provenance.yml"
+      end
+
+      bottles.each do |bottle|
+        verify_bottle_attestation!(token, bottle.fetch("tag"), bottle.fetch("digest"), bottle.fetch("path"))
+      end
     rescue JSON::ParserError => e
       raise Error, "invalid attestation metadata for #{token}: #{e.message}"
     end
@@ -489,6 +544,10 @@ module HomebrewTap
         "brew", "fetch", "--force", "--bottle-tag=#{tag}", "--formula", full_name,
       )
       cache_path = runner.capture("brew", "--cache", "--bottle-tag=#{tag}", "--formula", full_name).strip
+      verify_bottle_attestation!(token, tag, digest, cache_path)
+    end
+
+    def verify_bottle_attestation!(token, tag, digest, cache_path)
       raise Error, "brew did not return a cached bottle for #{token} #{tag}" if cache_path.empty? || !File.file?(cache_path)
       raise Error, "#{token} #{tag} bottle checksum does not match provenance.yml" unless Digest::SHA256.file(cache_path).hexdigest == digest
 
