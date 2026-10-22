@@ -383,14 +383,14 @@ formulae:
         separately labels release 2026-10-15. Both are older than 24 complete hours.
       reference: https://nmap.org/dist/nmap-7.992.tar.bz2
     version: '7.992'
-    local_file_sha256: 93d3baae9f77633c00e9bf1531551891c72d843e2c63ec55c00fcb14c368d88e
+    local_file_sha256: 9d7249968d8b9ad3aab231ee439b12cc1e86f94f45c98ccc7f6f3f824648151d
     legacy_baseline:
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
-    - Use a guarded post-install repair to link only the exact stock Ncat CA bundle
-      to maintained Homebrew ca-certificates, preserving custom bundles and a stock
-      backup.
+    - Use a guarded declarative post-install step bound to the just-installed keg
+      to link only the exact stock Ncat CA bundle to maintained Homebrew ca-certificates,
+      preserving custom bundles and a stock backup without network access.
     adoption_reason: Adopt nmap 7.992 from the reviewed immutable core recipe, with
       independently verified source inputs and retained strict bottle attestations.
     bottles:

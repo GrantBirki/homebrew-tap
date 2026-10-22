@@ -114,7 +114,8 @@ authenticated GitHub session. It never installs or upgrades `gh`. The offline
 ### Ncat certificate bundle
 
 The Nmap 7.992 source still ships Ncat's obsolete CA bundle, which accepts
-the incident's alternate AAA certificate chains. The tap's post-install hook
+the incident's alternate AAA certificate chains. The tap's declarative
+post-install step
 replaces only the exact known upstream bundle with a link to Homebrew's
 maintained `ca-certificates` file (2026-10-20 or newer). That file retains
 local CA additions managed through Homebrew. An unrecognized bundle or link
@@ -122,9 +123,12 @@ is left untouched and reported as an error. The stock bundle is backed up
 under Homebrew's `var/homebrew-tap/ncat-ca-backups` before atomic replacement.
 
 For an existing Nmap installation, `script/ncat-trust` previews this repair;
-`script/ncat-trust --apply` applies it. The hook applies to future tap bottle
-and source installations. No source URL, version, or bottle digest changes
-as part of this local trust-file repair. Ncat still requires `--ssl-verify`
+`script/ncat-trust --apply` applies it. The step binds the just-installed keg
+explicitly, denies network access, and declares writes only to its Ncat data
+directory and the backup directory. An explicit `--prefix` must name an
+installed Nmap keg; it cannot target an arbitrary path. The step applies to
+future tap bottle and source installations. No source URL, version, or bottle
+digest changes as part of this local trust-file repair. Ncat still requires `--ssl-verify`
 to verify a TLS peer; this does not enable verification for `--ssl` alone.
 
 Prefer one formula update per pull request unless formulae are inseparably

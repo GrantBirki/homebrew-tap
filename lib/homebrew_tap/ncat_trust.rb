@@ -109,7 +109,7 @@ module HomebrewTap
   end
 
   class NcatTrustCommand
-    USAGE = "Usage: script/ncat-trust [--dry-run | --apply] [--help]"
+    USAGE = "Usage: script/ncat-trust [--dry-run | --apply] [--prefix INSTALLED_KEG] [--help]"
     MESSAGES = {
       planned: "Would replace the stock Ncat CA bundle with the corrected Homebrew CA file.",
       unchanged: "Ncat already uses the corrected Homebrew CA file.",
@@ -129,10 +129,14 @@ module HomebrewTap
 
       apply = @argv.delete("--apply")
       dry_run = @argv.delete("--dry-run")
+      prefix_option = @argv.index("--prefix")
+      requested_prefix = @argv.delete_at(prefix_option + 1) if prefix_option
+      @argv.delete_at(prefix_option) if prefix_option
+      return usage(2) if prefix_option && requested_prefix.nil?
       return usage(2) unless @argv.empty? && !(apply && dry_run)
 
       nmap = @formula_loader.call("#{TAP_NAME}/nmap")
-      prefix = nmap.any_installed_prefix
+      prefix = installed_prefix(nmap, requested_prefix)
       raise Error, "Nmap is not installed; no package will be installed automatically" unless prefix
 
       ca = @formula_loader.call("ca-certificates")
@@ -149,6 +153,17 @@ module HomebrewTap
     end
 
     private
+
+    def installed_prefix(nmap, requested)
+      return nmap.any_installed_prefix unless requested
+
+      selected = Pathname(requested).expand_path
+      unless nmap.installed_prefixes.any? { |path| Pathname(path).expand_path == selected }
+        raise Error, "Selected Nmap keg is not installed: #{selected}"
+      end
+
+      selected
+    end
 
     def usage(status)
       @out.puts USAGE

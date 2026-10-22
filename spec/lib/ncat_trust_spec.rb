@@ -227,8 +227,8 @@ end
 RSpec.describe HomebrewTap::NcatTrustCommand do
   include_context "stock Ncat CA fixture"
 
-  def command(argv)
-    nmap = Struct.new(:any_installed_prefix).new(@bundle.dirname.parent.parent)
+  def command(argv, selected: @bundle.dirname.parent.parent, installed: [@bundle.dirname.parent.parent])
+    nmap = Struct.new(:any_installed_prefix, :installed_prefixes).new(selected, installed)
     ca = Struct.new(:pkgetc, :any_installed_version).new(@ca.dirname, "2026-10-20")
     @loader = ->(name) { { "grantbirki/tap/nmap" => nmap, "ca-certificates" => ca }.fetch(name) }
     @out = StringIO.new
@@ -268,6 +268,30 @@ RSpec.describe HomebrewTap::NcatTrustCommand do
     expect(@out.string).to include("already uses")
   end
 
+  it "repairs the explicitly selected installed keg instead of the older linked keg" do
+    newer = Pathname(write("new-keg/share/ncat/ca-bundle.crt", @stock)).dirname.parent.parent
+    previous = @bundle.dirname.parent.parent
+
+    expect(command(["--apply", "--prefix", newer.to_s], installed: [previous, newer]).run).to eq(0)
+    expect(newer / "share/ncat/ca-bundle.crt").to be_symlink
+    expect(@bundle).not_to be_symlink
+    expect(@bundle.read).to eq(@stock)
+  end
+
+  it "refuses a selected path outside installed Nmap kegs without mutation" do
+    expect(command(["--apply", "--prefix", @root]).run).to eq(1)
+    expect(@err.string).to include("Selected Nmap keg is not installed")
+    expect(@bundle).not_to be_symlink
+    expect(@backup_dir).not_to exist
+  end
+
+  it "rejects a missing prefix argument without loading formulae" do
+    instance = command(["--apply", "--prefix"])
+    expect(@loader).not_to receive(:call)
+    expect(instance.run).to eq(2)
+    expect(@bundle).not_to be_symlink
+  end
+
   it "refuses to install a missing Nmap" do
     instance = command(["--apply"])
     allow(@loader).to receive(:call).with("grantbirki/tap/nmap").and_return(Struct.new(:any_installed_prefix).new(nil))
@@ -287,7 +311,7 @@ end
 RSpec.describe "Ncat trust entrypoint" do
   include_context "stock Ncat CA fixture"
 
-  def run_entrypoint(argument)
+  def run_entrypoint(*)
     bin = File.join(@root, "bin")
     bootstrap = write("fake-homebrew.rb", <<~RUBY)
       require "pathname"
@@ -302,7 +326,9 @@ RSpec.describe "Ncat trust entrypoint" do
       module Formula
         def self.[](name)
           prefix = Pathname(ENV.fetch("TEST_BREW_PREFIX"))
-          return Struct.new(:any_installed_prefix).new(prefix / "keg") if name == "grantbirki/tap/nmap"
+          if name == "grantbirki/tap/nmap"
+            return Struct.new(:any_installed_prefix, :installed_prefixes).new(prefix / "keg", [prefix / "keg"])
+          end
           return Struct.new(:pkgetc, :any_installed_version).new(prefix / "etc/ca-certificates", "2026-10-20") if name == "ca-certificates"
 
           raise "Unexpected formula request"
@@ -322,7 +348,7 @@ RSpec.describe "Ncat trust entrypoint" do
     FileUtils.chmod("u+x", File.join(bin, "brew"))
     Open3.capture3(
       { "PATH" => "#{bin}:#{ENV.fetch("PATH")}", "TEST_BREW_PREFIX" => @root, "TEST_TAP_ROOT" => ROOT },
-      File.join(ROOT, "script", "ncat-trust"), argument,
+      File.join(ROOT, "script", "ncat-trust"), *,
     )
   end
 
@@ -343,7 +369,7 @@ RSpec.describe "Ncat trust entrypoint" do
   end
 
   it "routes an apply only to the fixture paths resolved by Homebrew" do
-    stdout, stderr, status = run_entrypoint("--apply")
+    stdout, stderr, status = run_entrypoint("--apply", "--prefix", File.join(@root, "keg"))
     expect(status).to be_success, stderr
     expect(stdout).to include("Ncat now uses", "Stock bundle backup:")
     expect(@bundle.readlink).to eq(@ca)

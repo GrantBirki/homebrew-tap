@@ -72,17 +72,16 @@ class Nmap < Formula
     bin.glob("uninstall_*").map(&:unlink) # Users should use brew uninstall.
   end
 
-  def post_install
-    require Tap.fetch("grantbirki/tap").path/"lib/homebrew_tap/ncat_trust"
-
-    ca = Formula["ca-certificates"]
-    HomebrewTap::NcatTrust.new(
-      bundle: share/"ncat/ca-bundle.crt",
-      ca_file: ca.pkgetc/"cert.pem",
-      ca_version: ca.any_installed_version,
-      backup_dir: var/"homebrew-tap/ncat-ca-backups",
-    ).repair(dry_run: false)
-  end
+  post_install_steps(
+    type: "run",
+    command: Tap.fetch("grantbirki/tap").path/"script/ncat-trust",
+    args: ["--apply", "--prefix", "{{prefix}}"],
+    writable_paths: [
+      { path: "share/ncat", base: :prefix },
+      { path: "homebrew-tap/ncat-ca-backups", base: :var },
+    ],
+    network_access: false,
+  )
 
   test do
     system bin/"nmap", "-p80,443", "-oX", "scan1.xml", "google.com"
