@@ -265,13 +265,17 @@ module HomebrewTap
       end
 
       def validate
+        ProvenanceManifest.new(root: @root).validate
         script = <<~'RUBY'
+          require "digest"
           require "formulary"
           require "pathname"
           require "simulate_system"
           require "yaml"
 
-          manifest = YAML.safe_load_file(ARGV.shift, permitted_classes: [], permitted_symbols: [], aliases: false)
+          manifest_path = ARGV.shift
+          manifest = YAML.safe_load_file(manifest_path, permitted_classes: [], permitted_symbols: [], aliases: false)
+          root = File.realpath(File.dirname(manifest_path))
 
           systems = [
             { os: :tahoe, arch: :arm },
@@ -314,7 +318,28 @@ module HomebrewTap
                   raise "#{path}: resource #{resource.name} is missing a checksum" if resource.checksum.blank?
                 end
 
-                formula.stable.patches.each do |patch|
+                patches = formula.stable.patches + formula.stable.resources.values.flat_map(&:patches)
+                local_paths = patches.grep(LocalPatch).map { |patch| patch.file.to_s }
+                recorded_patches = provenance.fetch("recipe_patches", {})
+                unless local_paths.sort == recorded_patches.keys.sort
+                  raise "#{path}: parsed local patch paths do not match provenance.yml"
+                end
+                local_paths.each do |patch_path|
+                  unless patch_path.match?(%r{\APatches/#{Regexp.escape(name)}/[a-zA-Z0-9][a-zA-Z0-9_.-]*\.patch\z})
+                    raise "#{path}: parsed local patch path is invalid"
+                  end
+                  file = File.join(root, patch_path)
+                  unless File.file?(file) && File.realpath(file) == file
+                    raise "#{path}: parsed local patch must be a regular file without symlinks"
+                  end
+                  bytes = File.binread(file)
+                  metadata = recorded_patches.fetch(patch_path)
+                  blob = Digest::SHA1.hexdigest("blob #{bytes.bytesize}\0" + bytes)
+                  unless metadata["blob"] == blob && metadata["sha256"] == Digest::SHA256.hexdigest(bytes)
+                    raise "#{path}: parsed local patch bytes do not match provenance.yml"
+                  end
+                end
+                patches.each do |patch|
                   next unless patch.respond_to?(:resource)
 
                   resource = patch.resource

@@ -2,6 +2,7 @@
 
 require "digest"
 require "json"
+require "ripper"
 require "time"
 require "yaml"
 
@@ -44,6 +45,7 @@ module HomebrewTap
       failures = validate_top_level
       failures.concat(validate_section("formulae", "Formula"))
       failures.concat(validate_section("casks", "Casks"))
+      failures.concat(validate_patch_coverage)
       raise Error, failures.join("\n") unless failures.empty?
 
       true
@@ -149,7 +151,7 @@ module HomebrewTap
 
     def validate_entry_keys(section, label, entry, failures)
       source_keys = %w[homebrew-core homebrew-cask].include?(entry["source_type"]) ? RECIPE_KEYS : RELEASE_KEYS
-      artifact_keys = section == "formulae" ? %w[bottles artifacts] : %w[artifacts platform_versions]
+      artifact_keys = section == "formulae" ? %w[bottles artifacts recipe_patches] : %w[artifacts platform_versions]
       unknown = entry.keys - COMMON_ENTRY_KEYS - source_keys - artifact_keys
       failures << "#{label} has unknown keys: #{unknown.join(", ")}" unless unknown.empty?
     end
@@ -256,12 +258,71 @@ module HomebrewTap
       failures << "#{relative(file)} uses sha256 :no_check" if content.include?("sha256 :no_check")
       validate_git_revisions(content, file, failures)
       if section == "formulae"
+        validate_recipe_patches(content, entry, label, failures)
         validate_formula_artifacts(content, entry, label, failures) unless %w[homebrew-core].include?(entry["source_type"])
         validate_formula_bottles(content, entry, label, failures)
       else
         validate_cask_artifacts(content, entry, label, failures)
         failures << "#{relative(file)} removes or bypasses quarantine" if content.match?(/\b(?:xattr|quarantine|no-quarantine)\b/i)
       end
+    end
+
+    def validate_recipe_patches(content, entry, label, failures)
+      patches = entry.fetch("recipe_patches", {})
+      unless patches.is_a?(Hash)
+        failures << "#{label}.recipe_patches must be a mapping"
+        return
+      end
+      lines = content.lines
+      declarations = Ripper.lex(content).select { |_position, type, text, _state| type == :on_ident && text == "file" }
+      paths = declarations.filter_map do |position, _type, _text, _state|
+        lines.fetch(position.fetch(0) - 1)[/\A\s*file\s+"([^"]+)"\s*\z/, 1]
+      end
+      failures << "#{label} has unsupported local patch declarations" unless paths.length == declarations.length
+      unless paths.sort == patches.keys.sort_by(&:to_s)
+        failures << "#{label}.recipe_patches do not match local patch declarations"
+      end
+      return if patches.empty?
+
+      failures << "#{label}.recipe_patches require homebrew-core provenance" unless entry["source_type"] == "homebrew-core"
+      token = label.delete_prefix("formulae.")
+      patches.each do |path, metadata|
+        validate_recipe_patch(path, metadata, token, label, failures)
+      end
+    end
+
+    def validate_recipe_patch(path, metadata, token, label, failures)
+      unless path.is_a?(String) && path.match?(%r{\APatches/#{Regexp.escape(token)}/[a-zA-Z0-9][a-zA-Z0-9_.-]*\.patch\z})
+        failures << "#{label}.recipe_patches contains an invalid path"
+        return
+      end
+      unless metadata.is_a?(Hash) && metadata.keys.sort_by(&:to_s) == %w[blob sha256]
+        failures << "#{label}.recipe_patches.#{path} must contain only blob and sha256"
+        return
+      end
+      validate_sha(metadata["blob"], SHA40, "#{label}.recipe_patches.#{path}.blob", failures)
+      validate_sha(metadata["sha256"], SHA256, "#{label}.recipe_patches.#{path}.sha256", failures)
+      file = File.join(root, path)
+      unless File.file?(file) && File.realpath(file) == File.join(File.realpath(root), path)
+        failures << "#{label}.recipe_patches.#{path} must be a regular file without symlinks"
+        return
+      end
+      content = File.binread(file)
+      blob = Digest::SHA1.hexdigest("blob #{content.bytesize}\0" + content)
+      failures << "#{label}.recipe_patches.#{path}.blob does not match the local patch" unless metadata["blob"] == blob
+      return if metadata["sha256"] == Digest::SHA256.hexdigest(content)
+
+      failures << "#{label}.recipe_patches.#{path}.sha256 does not match the local patch"
+    end
+
+    def validate_patch_coverage
+      entries = data["formulae"]
+      return [] unless entries.is_a?(Hash)
+
+      expected = entries.values.grep(Hash).filter_map { |entry| entry["recipe_patches"] }.grep(Hash).flat_map(&:keys)
+      actual = Dir.glob(File.join(root, "Patches", "**", "*"), File::FNM_DOTMATCH)
+                  .reject { |file| File.directory?(file) && !File.symlink?(file) }.map { |file| relative(file) }
+      (actual - expected).map { |path| "unrecorded local patch file: #{path}" }
     end
 
     def version_appears?(content, version)
@@ -475,6 +536,8 @@ module HomebrewTap
         raise Error, "#{token} source, resource, patch, or checksum data differs from the recorded upstream recipe"
       end
 
+      verify_recipe_patches!(token, entry)
+
       manifest.bottle_digests(entry).each_value do |digest|
         raise Error, "#{token} bottle digest is absent from the recorded upstream recipe" unless content.include?(digest)
       end
@@ -488,9 +551,25 @@ module HomebrewTap
       without_head = without_bottles.gsub(/^  head do\n.*?^  end\n/m, "")
                                     .gsub(/^  head\s+.*\n/, "")
       urls = without_head.scan(/^\s*(url|mirror)\s+"([^"]+)"/i)
+      files = without_head.scan(/^\s*(file)\s+"([^"]+)"/i)
       git_refs = without_head.scan(/\b(tag|revision):\s*"([^"]+)"/i)
       hashes = without_head.scan(/\b[0-9a-f]{40}(?:[0-9a-f]{24})?\b/i).map { |value| ["hash", value] }
-      urls + git_refs + hashes
+      urls + files + git_refs + hashes
+    end
+
+    def verify_recipe_patches!(token, entry)
+      entry.fetch("recipe_patches", {}).each do |path, metadata|
+        response = runner.capture(
+          "gh", "api",
+          "repos/#{entry.fetch("recipe_repository")}/contents/#{path}?ref=#{entry.fetch("recipe_commit")}",
+        )
+        payload = JSON.parse(response)
+        content = payload.fetch("content").unpack1("m")
+        unless payload["type"] == "file" && payload["sha"] == metadata["blob"] &&
+               Digest::SHA256.hexdigest(content) == metadata["sha256"]
+          raise Error, "#{token} local patch #{path} differs from the recorded upstream patch"
+        end
+      end
     end
 
     def core_info(token)

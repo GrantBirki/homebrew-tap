@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is required; no package will be installed automatically." >&2
+  exit 1
+fi
+
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_REQUIRE_TAP_TRUST=1
+readonly TAP_BREW_BIN="$(command -v brew)"
+readonly RUBY_ENTRYPOINT='ENV.delete("HOMEBREW_NO_INSTALL_FROM_API")
+$LOAD_PATH.unshift(File.join(ARGV.shift, "lib"))
+require "homebrew_tap/ncat_trust"
+exit HomebrewTap::NcatTrustCommand.new(
+  argv: ARGV,
+  formula_loader: ->(name) { require "formulary"; Formula[name] },
+  backup_dir: HOMEBREW_PREFIX/"var/homebrew-tap/ncat-ca-backups"
+).run'
+
+exec env HOMEBREW_NO_INSTALL_FROM_API=1 "$TAP_BREW_BIN" ruby -e "$RUBY_ENTRYPOINT" -- "$ROOT" "$@"

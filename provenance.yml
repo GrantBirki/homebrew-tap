@@ -5,36 +5,42 @@ formulae:
   ansible:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: bdc6a6c63c9e896a5264a533f094eb951bfa4df0
+    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
     recipe_path: Formula/a/ansible.rb
-    recipe_blob: bf8c49b1d36295a1e422208cd61f1cb9575ce6d0
-    local_file_sha256: c09e9fb9d0cc6106a3c078b4d59d6561fcaa9c5caa82a75b7c41757bd8584e3a
-    version: 13.7.0_1
-    release_published_at: '2026-09-15T19:29:36.253420Z'
+    recipe_blob: eb79d7be550a71cac080b07b7175db94cc9b999c
+    local_file_sha256: 9910eaa8128c887b7e6e34a21dd2506c1bcc7ab6a3b0bcd53a5a340bf213cd46
+    version: 14.5.0
+    release_published_at: '2026-10-06T18:51:37.336635Z'
     release_evidence:
-      description: PyPI urllib3 2.8.0 resource upload; Ansible 13.7.0 remains pinned.
-      reference: https://pypi.org/project/urllib3/2.8.0/
-    adopted_at: '2026-10-01T19:59:10Z'
-    adoption_commit: 83c29f658fa3f577c360c721b2dcfab0ba290e30
-    adoption_reason: Update only urllib3 to 2.8.0 for GHSA-8988-9cw3-xx77, GHSA-vxq7-64xx-v4gw,
-      and GHSA-gh4c-6fx4-qh6g after its 14-day cooldown. Retain Ansible 13.7.0 and
-      build from source because the original core bottles bundle vulnerable urllib3
-      2.7.0.
+      description: PyPI Ansible 14.5.0 source distribution upload_time_iso_8601; independently
+        rehashed exact sdist
+      reference: https://pypi.org/pypi/ansible/14.5.0/json
+    adoption_reason: Adopt maintained Ansible 14.5.0 and ansible-core 2.21.5 with 111
+      hash-pinned resources, preserving urllib3 2.8.0; bind the unchanged Homebrew
+      passlib compatibility patch to its exact recipe commit, Git blob and SHA-256.
     cooldown_exception:
     legacy_baseline:
     local_changes:
     - Removed the mutable head spec.
-    - Added revision 1 so existing Ansible installations receive the resource fix.
-    - Updated only the urllib3 resource to the verified PyPI 2.8.0 source and SHA-256.
-    - The urllib3 resource matches Homebrew/homebrew-core Formula/a/ansible.rb at
-      commit ca3ce4410729f14303da490e6545f61a2b66e21a and blob de7530b5f6f387539fca83eb706cbfd154b163e1.
-      The primary recipe fields retain the original Ansible 13.7.0 snapshot; the resource
-      source is https://github.com/Homebrew/homebrew-core/blob/ca3ce4410729f14303da490e6545f61a2b66e21a/Formula/a/ansible.rb.
-    - Removed all original core bottles because their bundled urllib3 is vulnerable.
+    - Pinned the Homebrew core bottle root explicitly.
+    - Vendored the upstream passlib patch at its original recipe-local path, with
+      exact commit/blob/SHA-256 provenance.
+    - Kept the CA-bundle test local rather than contacting an external TLS test service.
+    recipe_patches:
+      Patches/ansible/passlib-1.7.4.patch:
+        blob: 3b8d6ccaae04f57ac7d5f1456da42615f50947d3
+        sha256: 16a8c2c3ebc0a1d494567f04a12c1b58fa4f50113b364c7ee8fb39d856882861
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at:
-      digests: {}
+      verified_at: '2026-10-22T16:06:39Z'
+      digests:
+        arm64_golden_gate: 0344a75b46bcd16ced19a3cb7b8f5271997bde441cb74a69f838069a97a1d575
+        arm64_tahoe: fd931bd8e705745022117c6ae3ff6583757d1fbca449af32a647449a5b100437
+        arm64_sequoia: 0c94cbea858559b086778ca0fbadb1c4427db0608c14c69ab0e91788b6b5eccf
+        arm64_linux: c19fc0105aaaedf947a9df3c9c34f44e0c494748c0fbda9c7fd203d407e85674
+        x86_64_linux: ffd18250e9ea6e8bd31dabfd2d426e6c13dcdbd68638eb83b34bf8dd9b051997
+    adopted_at: '2026-10-22T16:05:54Z'
+    adoption_commit: c4a78b57ab86d3d94f9983be263a3d691fd812ed
   bash:
     source_type: homebrew-core
     recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
@@ -50,7 +56,8 @@ formulae:
     - Removed the mutable head spec.
     - Omitted upstream autobump metadata.
     - Pinned the Homebrew core bottle root explicitly.
-    - Unwrapped the stable-only block and restored top-level component order after removing head.
+    - Unwrapped the stable-only block and restored top-level component order after
+      removing head.
     recipe_repository: Homebrew/homebrew-core
     version: 5.3.20
     legacy_baseline:
@@ -376,11 +383,14 @@ formulae:
         separately labels release 2026-10-15. Both are older than 24 complete hours.
       reference: https://nmap.org/dist/nmap-7.992.tar.bz2
     version: '7.992'
-    local_file_sha256: 1b39864649c15768b25d63c791f2ec70ae5b1e746efcc73ffd1a5ace7363eb44
+    local_file_sha256: 93d3baae9f77633c00e9bf1531551891c72d843e2c63ec55c00fcb14c368d88e
     legacy_baseline:
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
+    - Use a guarded post-install repair to link only the exact stock Ncat CA bundle
+      to maintained Homebrew ca-certificates, preserving custom bundles and a stock
+      backup.
     adoption_reason: Adopt nmap 7.992 from the reviewed immutable core recipe, with
       independently verified source inputs and retained strict bottle attestations.
     bottles:
@@ -527,39 +537,39 @@ formulae:
   rustup:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: 8cad0865b9cb085555f51a0eedf4292f229d8ed1
+    recipe_commit: e7d3fbf08aa7288da7ec500a0f0e41f8c9c0a7e6
     recipe_path: Formula/r/rustup.rb
-    recipe_blob: 4aa8fa8973621e16a6769ecc94304879ba44634a
-    local_file_sha256: 8d7525bfcc611a931035a425177ae42bad9a1ed58c1ed6e5f6a1eebfbb3a024d
-    version: 1.29.0_1
-    release_published_at: '2026-03-05T06:31:28Z'
+    recipe_blob: aa82233392a51e40d48805fdb4ddb11143baaa3f
+    local_file_sha256: 2fef96f3b56cd2e7b7fe78053ff41a50e6e16d5bb37a89b7df86936439be8c4b
+    version: 1.29.2
+    release_published_at: '2026-10-21T12:39:42Z'
     release_evidence:
-      description: Git tag commit date; no GitHub release
-      reference: https://github.com/rust-lang/rustup/commit/28d1352dbcb436d3111c3594b9e1588e94950464
-    adopted_at: '2026-05-28T23:41:13Z'
-    adoption_commit: c95e2ed7259c5c742ff5839de6d06ac45a4bffa5
-    adoption_reason: 'Legacy baseline: retain the existing user-selected direct formula
-      without changing its version or digests.'
-    cooldown_exception:
-    legacy_baseline:
-      version: 1.29.0_1
-      artifact_fingerprint_sha256: e72d97b4f8d45a0223727e4aceecbfddb95b138df341506c8640d46d66e53051
+      description: Verified upstream annotated 1.29.2 tag timestamp; later than the
+        October 20 announcement, used conservatively for the 24-hour minimum.
+      reference: https://api.github.com/repos/rust-lang/rustup/git/tags/f4f7c055e24e77f41662e9f9034b0d4285768585
     local_changes:
-    - Migrated the post-install hook to Homebrew's declarative install steps without
-      changing package artifacts.
-    - Removed the mutable head spec.
+    - Removed the mutable head spec and redundant stable-only wrapper.
     - Pinned the Homebrew core bottle root explicitly.
-    - Retained the local cargo shell-completion generation implementation.
+    - Retained the tap-specific post-install symlink migration and existing test scope.
+    legacy_baseline:
+    adoption_reason: Adopt Rustup 1.29.2 to fix eMudhra certificate path acceptance
+      via rustls-webpki 0.103.16 and updated webpki-root-certs. Preserve Homebrew no-self-update
+      behavior and strict bottle provenance.
+    cooldown_exception:
+      reason: Verified eMudhra certificate security fix (CVE-2026-111943/RUSTSEC-2026-0382);
+        exact source tag is older than the owner-authorized 24-hour minimum.
+      reference: https://blog.rust-lang.org/2026/10/20/Rustup-1.29.2/
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-06-12T03:30:03Z'
+      verified_at: '2026-10-22T16:06:39Z'
       digests:
-        arm64_tahoe: 1adfcf92959af43b31eb55007ec19dccb0236b9e44804025aeda84f931d7a427
-        arm64_sequoia: 39caad94c4db4d5bc3ca121a7dfcdc41281281088b36b11afb24a92de653b5c7
-        arm64_sonoma: 00e1f91ea9c03796a1808726abe397935567903a8dbcd22e2f3db3c9ee0d2bbf
-        sonoma: 282513938fc4e7cbb73d1c29ec969295b021cf725036b571f701bee2b25f38f8
-        arm64_linux: 2e9c1c73a958abd26ba816d34fa017e762cf048db5a9664ba0a6e404c44f5320
-        x86_64_linux: bff7c94142160615a5919c3c673b36c62093bd19290e053f3b4738ebda500665
+        arm64_golden_gate: 27bbc67ff56c010b5ae02abd09456d513e6ccb4b54d0818915c1d49e32075cbe
+        arm64_tahoe: 4a777627c17a11cd1f907e2bbe68095baa247ca27d29745f5d03dd99c3a5b4a3
+        arm64_sequoia: 4a14a4be824bc9a7f39869350c1cb1f91468ee35586f8dd70fc7dae3020484e7
+        arm64_linux: f2cb1c2104d13d32dba4cb2803d46a711b167e3c6606132ccdae9623387bcd40
+        x86_64_linux: 03b2c1db2e4fac2f1cc365de392a3ddc56603a8abdb7c9aefed572aa4ef60878
+    adopted_at: '2026-10-22T16:05:54Z'
+    adoption_commit: c4a78b57ab86d3d94f9983be263a3d691fd812ed
   swiftformat:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core

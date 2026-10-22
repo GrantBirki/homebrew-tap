@@ -99,9 +99,33 @@ script/provenance verify-formula <token>
 script/provenance verify-formula --all
 ```
 
+Core recipe-local patches may be recorded in `recipe_patches`. Each exact
+`Patches/<formula>/<filename>.patch` must match its recorded Git blob and
+SHA-256, and the same upstream recipe commit. Offline checks validate static
+declarations and their local bytes before evaluating a formula. Parsed patch
+objects must then match the recorded set and bytes before patch application.
+Adoption verifies the upstream patch before checking bottles. Symlinks, path
+traversal, unsupported declarations, and unrecorded patch files are rejected.
+
 The command requires an existing compatible `gh` installation and an
 authenticated GitHub session. It never installs or upgrades `gh`. The offline
 `script/provenance check` remains the CI-safe policy gate.
+
+### Ncat certificate bundle
+
+The Nmap 7.992 source still ships Ncat's obsolete CA bundle, which accepts
+the incident's alternate AAA certificate chains. The tap's post-install hook
+replaces only the exact known upstream bundle with a link to Homebrew's
+maintained `ca-certificates` file (2026-10-20 or newer). That file retains
+local CA additions managed through Homebrew. An unrecognized bundle or link
+is left untouched and reported as an error. The stock bundle is backed up
+under Homebrew's `var/homebrew-tap/ncat-ca-backups` before atomic replacement.
+
+For an existing Nmap installation, `script/ncat-trust` previews this repair;
+`script/ncat-trust --apply` applies it. The hook applies to future tap bottle
+and source installations. No source URL, version, or bottle digest changes
+as part of this local trust-file repair. Ncat still requires `--ssl-verify`
+to verify a TLS peer; this does not enable verification for `--ssl` alone.
 
 Prefer one formula update per pull request unless formulae are inseparably
 coupled. Do not vendor a transitive dependency merely because a direct root

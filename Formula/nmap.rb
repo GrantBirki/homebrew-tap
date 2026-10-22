@@ -21,6 +21,7 @@ class Nmap < Formula
   end
 
   depends_on "python-setuptools" => :build
+  depends_on "ca-certificates"
   depends_on "liblinear"
   depends_on "libssh2"
   # Check supported Lua version at https://github.com/nmap/nmap/tree/master/liblua.
@@ -69,6 +70,18 @@ class Nmap < Formula
     # Install `ndiff` separately so that we can use `pip` and `setuptools`.
     system python3, "-m", "pip", "install", *std_pip_args, "./ndiff"
     bin.glob("uninstall_*").map(&:unlink) # Users should use brew uninstall.
+  end
+
+  def post_install
+    require Tap.fetch("grantbirki/tap").path/"lib/homebrew_tap/ncat_trust"
+
+    ca = Formula["ca-certificates"]
+    HomebrewTap::NcatTrust.new(
+      bundle: share/"ncat/ca-bundle.crt",
+      ca_file: ca.pkgetc/"cert.pem",
+      ca_version: ca.any_installed_version,
+      backup_dir: var/"homebrew-tap/ncat-ca-backups",
+    ).repair(dry_run: false)
   end
 
   test do
