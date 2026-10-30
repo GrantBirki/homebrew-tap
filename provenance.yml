@@ -5,19 +5,18 @@ formulae:
   ansible:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
-    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
+    recipe_commit: 9af4f445448fe7aa9e76a3be665f8c203fce01ae
     recipe_path: Formula/a/ansible.rb
-    recipe_blob: eb79d7be550a71cac080b07b7175db94cc9b999c
-    local_file_sha256: 9910eaa8128c887b7e6e34a21dd2506c1bcc7ab6a3b0bcd53a5a340bf213cd46
-    version: 14.5.0
+    recipe_blob: 1c4b8991bba56a9fe97bf6d818abf7555a2dc4be
+    local_file_sha256: b464a5a03b12f53dc367b6d0ca5cb1332e579d64b5590ffa65899e7331d19aca
+    version: 14.5.0_2
     release_published_at: '2026-10-06T18:51:37.336635Z'
     release_evidence:
       description: PyPI Ansible 14.5.0 source distribution upload_time_iso_8601; independently
         rehashed exact sdist
       reference: https://pypi.org/pypi/ansible/14.5.0/json
-    adoption_reason: Adopt maintained Ansible 14.5.0 and ansible-core 2.21.5 with 111
-      hash-pinned resources, preserving urllib3 2.8.0; bind the unchanged Homebrew
-      passlib compatibility patch to its exact recipe commit, Git blob and SHA-256.
+    adoption_reason: Use Homebrew's Python 3.15 rebuild of Ansible 14.5.0, including
+      the ansible-core startup backport and 26 new or updated Python resources.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -25,22 +24,21 @@ formulae:
     - Pinned the Homebrew core bottle root explicitly.
     - Vendored the upstream passlib patch at its original recipe-local path, with
       exact commit/blob/SHA-256 provenance.
-    - Kept the CA-bundle test local rather than contacting an external TLS test service.
     recipe_patches:
       Patches/ansible/passlib-1.7.4.patch:
         blob: 3b8d6ccaae04f57ac7d5f1456da42615f50947d3
         sha256: 16a8c2c3ebc0a1d494567f04a12c1b58fa4f50113b364c7ee8fb39d856882861
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-10-22T16:06:39Z'
+      verified_at: '2026-10-30T19:04:14Z'
       digests:
-        arm64_golden_gate: 0344a75b46bcd16ced19a3cb7b8f5271997bde441cb74a69f838069a97a1d575
-        arm64_tahoe: fd931bd8e705745022117c6ae3ff6583757d1fbca449af32a647449a5b100437
-        arm64_sequoia: 0c94cbea858559b086778ca0fbadb1c4427db0608c14c69ab0e91788b6b5eccf
-        arm64_linux: c19fc0105aaaedf947a9df3c9c34f44e0c494748c0fbda9c7fd203d407e85674
-        x86_64_linux: ffd18250e9ea6e8bd31dabfd2d426e6c13dcdbd68638eb83b34bf8dd9b051997
-    adopted_at: '2026-10-22T16:05:54Z'
-    adoption_commit: c4a78b57ab86d3d94f9983be263a3d691fd812ed
+        arm64_golden_gate: 519a51c723d0f7a06d634d16af5ed133219706e3e6daed0180a315c258e7c7e2
+        arm64_tahoe: 9c6f0eb376c0567685cd47577057526dbc093a3702476f381ce0cae5f547d4cf
+        arm64_sequoia: 1959df9b8bce138541a138d9bedb0ce1480df080c4839ded86af230f416fb266
+        arm64_linux: ce20469506a94da1bfca253751e67497d27d273c54d54339718804181d50c3d2
+        x86_64_linux: a5ea7dd120825d9ebfb6de02a31817c1553f098cd73444b8dfa2ca85788220eb
+    adopted_at: '2026-10-30T19:02:41Z'
+    adoption_commit: 73c5a8a5b6ae158604b0d690921c08552fd9352e
   bash:
     source_type: homebrew-core
     recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
