@@ -1,30 +1,19 @@
 cask "keepassxc" do
   arch arm: "arm64", intel: "x86_64"
 
-  version "2.8.0,2.8.0-1"
-  sha256 arm:   "85f0e75e258ef513f0fc7f5bf470cad0943b7d7e8191b2171f9898ad32e62b9c",
-         intel: "28492c5535570020179150b2871b3c54abd032cbb8cdee2f1b3fa7c46cdba43e"
+  version "2.7.12"
+  sha256 arm:   "65f4f63607180c0a15794b4a4068f85e99ed5391c87c1fb9312648f1b36fed40",
+         intel: "f55737bf759b7ea622967ae979e8fd0ef06a8133104124c24861fd11a3fe14b5"
 
-  url "https://github.com/keepassxreboot/keepassxc/releases/download/#{version.csv.first}/KeePassXC-#{version.csv.second || version.csv.first}-#{arch}.dmg",
+  url "https://github.com/keepassxreboot/keepassxc/releases/download/#{version}/KeePassXC-#{version}-#{arch}.dmg",
       verified: "github.com/keepassxreboot/keepassxc/"
   name "KeePassXC"
   desc "Password manager app"
   homepage "https://keepassxc.org/"
 
-  # The release tag and rebuilt macOS asset can have different versions.
   livecheck do
     url :url
-    regex(%r{/v?(\d+(?:\.\d+)+)/KeePassXC[._-]v?(\d+(?:[.-]\d+)+)[._-]#{arch}\.dmg$}i)
-    strategy :github_latest do |json, regex|
-      json["assets"]&.map do |asset|
-        match = asset["browser_download_url"]&.match(regex)
-        next if match.blank?
-
-        next match[1] if match[1] == match[2]
-
-        "#{match[1]},#{match[2]}"
-      end
-    end
+    strategy :github_latest
   end
 
   conflicts_with cask: [

@@ -932,29 +932,24 @@ casks:
   keepassxc:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: 944b53af7c46c55fdd3419eaaf2b97b7d4fbcb03
+    recipe_commit: b16e020e108e15c2c3b9d9bb8eada361171c2d04
     recipe_path: Casks/k/keepassxc.rb
-    recipe_blob: 78f24f86a7c376f17b45dc8bd6ccd5a13e4408cf
-    local_file_sha256: 8268b6201a4ed5b82e0cb8a32aa33e29955329383bc573afe67c725d1a15936e
-    version: 2.8.0,2.8.0-1
-    release_published_at: '2026-10-23T22:33:00Z'
+    recipe_blob: e2a397275b1d7fbe7264dde124b1490ce4a92e7a
+    local_file_sha256: 308765ba78cbdd7bb8280b760bcda644f2281c2089f57ccc47a5776c9bd1aa38
+    version: 2.7.12
+    release_published_at: '2026-03-10T01:16:42Z'
     release_evidence:
-      description: 'Use the later macOS rebuild asset publication time (Intel upload completed 2026-10-23T22:33:00Z; ARM completed 2026-10-23T22:32:33Z). Release 2.8.0 was published 2026-10-21T21:57:23Z and its signed tag resolves to 1c2f23ef5914c0f442a00533def1689857afb5a7. The maintainer-reported rebuild revision 82ab2fd could not be resolved to a public commit; the recorded Homebrew recipe and DMG digests bind artifact selection. Both rebuilt DMG checksums independently match GitHub and both PGP signatures verify against the published KeePassXC release key; both apps pass strict signature and Gatekeeper checks with Developer ID G2S7P7J672, and both DMGs have valid notarization tickets.'
-      reference: https://github.com/keepassxreboot/keepassxc/releases/tag/2.8.0
-    adopted_at: '2026-10-30T04:40:22Z'
-    adoption_commit: a9533d4833ca5972db183814d42a1384ff1f052f
-    adoption_reason: 'Fix browser entry-reference injection and other 2.7.x security issues using the 2.8.0-1 macOS rebuild, which also fixes the original 2.8.0 Qt crash. Preserve quarantine and the existing macOS installation behavior.'
+      description: GitHub release published_at
+      reference: https://github.com/keepassxreboot/keepassxc/releases/tag/2.7.12
+    adopted_at: '2026-10-30T04:55:13Z'
+    adoption_commit: 46e6bf2bd4873aaa0407dc52b168de60c5f376c3
+    adoption_reason: 'Restore 2.7.12 after crashes with 2.8.0-1; this rollback temporarily restores known browser-integration and legacy KDB-import vulnerabilities.'
     cooldown_exception:
-      reason: 'Verified vulnerability fix: 2.7.12 is affected by browser entry-reference injection that can disclose data from other entries; 2.8.0 fixes it. Adopt the reviewed macOS rebuild before 14 days to deliver this fix; both artifacts are older than 48 hours.'
-      reference: https://github.com/keepassxreboot/keepassxc/security/advisories/GHSA-2vm2-vmc3-vccr
     legacy_baseline:
-    local_changes:
-    - Retain the macOS-only cask without the upstream Linux AppImage branch.
-    - Retain the verified GitHub source declaration and existing install, uninstall, and zap directives.
-    - Restrict the upstream asset-aware livecheck to macOS DMGs, preserving rebuild discovery.
+    local_changes: []
     artifacts:
-      arm: 85f0e75e258ef513f0fc7f5bf470cad0943b7d7e8191b2171f9898ad32e62b9c
-      intel: 28492c5535570020179150b2871b3c54abd032cbb8cdee2f1b3fa7c46cdba43e
+      arm: 65f4f63607180c0a15794b4a4068f85e99ed5391c87c1fb9312648f1b36fed40
+      intel: f55737bf759b7ea622967ae979e8fd0ef06a8133104124c24861fd11a3fe14b5
   knockknock:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
