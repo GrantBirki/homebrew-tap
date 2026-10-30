@@ -1,8 +1,8 @@
 class Vector < Formula
   desc "High-performance observability data pipeline"
   homepage "https://vector.dev/"
-  url "https://github.com/vectordotdev/vector/releases/download/v0.56.0/vector-0.56.0-arm64-apple-darwin.tar.gz"
-  sha256 "9aa8b6772d7c887734d38c84eb721d3a067e08a4aa4dc0dcc809365da242ec16"
+  url "https://github.com/vectordotdev/vector/releases/download/v0.60.0/vector-0.60.0-arm64-apple-darwin.tar.gz"
+  sha256 "aa5c9d89416b39f1a90a7f1a088a9ecbb8c8c3a5669fb86609c9d4a958fe1a28"
   license "MPL-2.0"
 
   depends_on arch: :arm64

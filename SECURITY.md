@@ -52,6 +52,27 @@ The provenance exception references this decision. All artifact, signing,
 quarantine, and review requirements remain in force; other releases retain
 the normal cooldown and exception policy.
 
+### One-time October 2026 security review
+
+For this security review, the owner authorized a minimum release age of 24
+complete hours for the exact releases below. This is a one-time owner override
+for this batch, including maintenance updates reviewed alongside security
+fixes. It is not a claim that every release has a security advisory. No release
+under 24 hours qualifies. Future releases retain the normal 14-day cooldown.
+All checksum, provenance, signing, quarantine, and review requirements remain
+in force.
+
+| Release | Published (UTC) | Reviewed source or release-asset SHA-256 |
+| --- | --- | --- |
+| [hugo 0.168.0](https://github.com/gohugoio/hugo/releases/tag/v0.168.0) | 2026-10-13T17:24:15Z | `45ba430ac86cfe8e5fb07b81eaef78769973af9b4d1c51f1d88195e0d438be3e` |
+| [imagemagick 7.1.2-34](https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.2-34) | 2026-10-14T20:45:10Z | `a376053195cbab4618855e1a7d90f85f41b95ec2240a91e9c0fe5815d231960d` |
+| [nmap 7.992](https://nmap.org/dist/nmap-7.992.tar.bz2) | 2026-10-12T19:27:22Z | `0c12660eddbf7eabeff6996cb0c044a4eadf2bb0c6fbcb340d6cf72b1caee402` |
+| [osv-scanner 2.7.0](https://github.com/google/osv-scanner/releases/tag/v2.7.0) | 2026-10-12T01:32:07Z | `acd8ebbf345a9a04eb299cb8e1339512fd4f2ad402f8f40972edcffa3eb45109` |
+| [swiftformat 0.64.0](https://github.com/nicklockwood/SwiftFormat/releases/tag/0.64.0) | 2026-10-16T22:27:52Z | `064d59b03f9c5d10971198dda3d9b05e301c1ada8e3d4c1a5132babc6b31a563` |
+| [gh 2.102.1](https://github.com/cli/cli/releases/tag/v2.102.1) | 2026-10-20T19:35:51Z | `08bfef98b50c553df122bb34ee8dcf415cae7d3b108891488964a0df07aa2aeb`<br>`91c5fbd493274b545b03ef32a89c2a21238393c0c0b1108210967199b3230d9d` |
+| [vector 0.60.0](https://github.com/vectordotdev/vector/releases/tag/v0.60.0) | 2026-10-19T17:55:58Z | `aa5c9d89416b39f1a90a7f1a088a9ecbb8c8c3a5669fb86609c9d4a958fe1a28` |
+| [osquery 5.24.0](https://github.com/osquery/osquery/releases/tag/5.24.0) | 2026-10-09T22:50:20Z (pkg: 2026-10-11T02:40:42Z) | `41c56afaa8dfa0e83ac7f47c0ce325e69cf20813327bee592b1a13ee9e3393f6` |
+
 ### Update review
 
 For a vendored formula update:
@@ -78,9 +99,37 @@ script/provenance verify-formula <token>
 script/provenance verify-formula --all
 ```
 
+Core recipe-local patches may be recorded in `recipe_patches`. Each exact
+`Patches/<formula>/<filename>.patch` must match its recorded Git blob and
+SHA-256, and the same upstream recipe commit. Offline checks validate static
+declarations and their local bytes before evaluating a formula. Parsed patch
+objects must then match the recorded set and bytes before patch application.
+Adoption verifies the upstream patch before checking bottles. Symlinks, path
+traversal, unsupported declarations, and unrecorded patch files are rejected.
+
 The command requires an existing compatible `gh` installation and an
 authenticated GitHub session. It never installs or upgrades `gh`. The offline
 `script/provenance check` remains the CI-safe policy gate.
+
+### Ncat certificate bundle
+
+The Nmap 7.992 source still ships Ncat's obsolete CA bundle, which accepts
+the incident's alternate AAA certificate chains. The tap's declarative
+post-install step
+replaces only the exact known upstream bundle with a link to Homebrew's
+maintained `ca-certificates` file (2026-10-20 or newer). That file retains
+local CA additions managed through Homebrew. An unrecognized bundle or link
+is left untouched and reported as an error. The stock bundle is backed up
+under Homebrew's `var/homebrew-tap/ncat-ca-backups` before atomic replacement.
+
+For an existing Nmap installation, `script/ncat-trust` previews this repair;
+`script/ncat-trust --apply` applies it. The step binds the just-installed keg
+explicitly, denies network access, and declares writes only to its Ncat data
+directory and the backup directory. An explicit `--prefix` must name an
+installed Nmap keg; it cannot target an arbitrary path. The step applies to
+future tap bottle and source installations. No source URL, version, or bottle
+digest changes as part of this local trust-file repair. Ncat still requires `--ssl-verify`
+to verify a TLS peer; this does not enable verification for `--ssl` alone.
 
 Prefer one formula update per pull request unless formulae are inseparably
 coupled. Do not vendor a transitive dependency merely because a direct root

@@ -1,29 +1,25 @@
 class Swiftformat < Formula
   desc "Formatting tool for reformatting Swift code"
   homepage "https://github.com/nicklockwood/SwiftFormat"
-  url "https://github.com/nicklockwood/SwiftFormat/archive/refs/tags/0.61.1.tar.gz"
-  sha256 "c889e21e823313f67bfb4f364afaffc0141e3143fdea44e90d752a3d5cedc9c8"
+  url "https://github.com/nicklockwood/SwiftFormat/archive/refs/tags/0.64.0.tar.gz"
+  sha256 "064d59b03f9c5d10971198dda3d9b05e301c1ada8e3d4c1a5132babc6b31a563"
   license "MIT"
 
   bottle do
     root_url "https://ghcr.io/v2/homebrew/core"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "3f9ee68bb4d447ebf6e3c7816dc67577a5cee498614a55064add2224e278ed52"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "078438fe8be63c0dcb3a02cf4a0abbfa45c1b8218be3f4097e8d44857147979d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "2beb2997ce08de9e04a4cebc8363d2fc94eac1b34bf023b547f2747d056e3ca8"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1fbaf5f42c75735beafad0dbed2370d58eedc679b4cc1165f64b9d5cfb9f8257"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "cc3672c5a1460afcccaa6f66c3b160846da93edd945a2816fec55dd83cf1f1c4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2e834c12c65ffeb4d2a049ab17a761277ea0f23ae2389d68cff5501e4a9b26ee"
+    sha256 cellar: :any_skip_relocation, arm64_golden_gate: "524cf77a7a47841ebfe01943a7421bfed0117b11b5a9ccc833a67e365900dfb7"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:       "871e56b300ad9ae1df9ef97a8297ccd921e976b9f0c3065dbffd13ce0972664c"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia:     "97133daaee1ccbf7319848d2b5230f21cb63f0c0946cc908e04f516f51c8f44a"
+    sha256 cellar: :any,                 arm64_linux:       "a69ac20335c16ecdda108a9db1a15ef5dfc69ff231e145f73a01dfdfd0a793fb"
+    sha256 cellar: :any,                 x86_64_linux:      "cbdbf8894844230b749a20b2f883fee7e88085faf002e2f0aaf17cdd787bbba4"
   end
 
   uses_from_macos "swift" => :build
 
+  deny_network_access!
+
   def install
-    args = if OS.mac?
-      ["--disable-sandbox"]
-    else
-      ["--static-swift-stdlib"]
-    end
-    system "swift", "build", *args, "--configuration", "release"
+    system "swift", "build", *std_swift_args
     bin.install ".build/release/swiftformat"
   end
 

@@ -160,6 +160,117 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     described_class.new(root: @root)
   end
 
+  def local_patch_data
+    data = base_data
+    path = "Patches/foo/build.patch"
+    content = "--- a/source\n+++ b/source\n@@ -1 +1 @@\n-old\n+new\n"
+    write(path, content)
+    source = formula_source.sub(/\nend\n\z/, "\n  patch do\n    file \"#{path}\"\n  end\nend\n")
+    formula = write("Formula/foo.rb", source)
+    data["formulae"]["foo"].merge!(
+      "local_file_sha256" => Digest::SHA256.file(formula).hexdigest,
+      "recipe_patches" => {
+        path => {
+          "blob" => Digest::SHA1.hexdigest("blob #{content.bytesize}\0" + content),
+          "sha256" => Digest::SHA256.hexdigest(content)
+        }
+      },
+    )
+    data
+  end
+
+  it "binds local patch paths, Git blobs and SHA-256 bytes before recipe parsing" do
+    data = local_patch_data
+    expect(manifest(data).validate).to eq(true)
+
+    write("Patches/foo/build.patch", "changed bytes")
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error) do |error|
+      expect(error.message).to include("blob does not match the local patch", "sha256 does not match the local patch")
+    end
+  end
+
+  it "rejects missing, unrecorded, unreferenced, and dynamic local patches" do
+    data = local_patch_data
+    data["formulae"]["foo"].delete("recipe_patches")
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /do not match local patch declarations/)
+
+    data = local_patch_data
+    FileUtils.rm(File.join(@root, "Patches/foo/build.patch"))
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /regular file without symlinks/)
+
+    data = local_patch_data
+    write("Patches/foo/unrecorded.patch", "unrecorded")
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /unrecorded local patch file/)
+    FileUtils.rm(File.join(@root, "Patches/foo/unrecorded.patch"))
+
+    source = formula_source
+    path = write("Formula/foo.rb", source)
+    data["formulae"]["foo"]["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /do not match local patch declarations/)
+
+    source = source.sub(/\nend\n\z/, "\n  patch do\n    file ENV.fetch(\"PATCH\")\n  end\nend\n")
+    path = write("Formula/foo.rb", source)
+    data["formulae"]["foo"]["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /unsupported local patch declarations/)
+  end
+
+  it "rejects malformed patch metadata, traversal, cross-formula paths, and symlinks" do
+    data = local_patch_data
+    entry = data["formulae"]["foo"]
+    entry["recipe_patches"] = "bad"
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /recipe_patches must be a mapping/)
+
+    metadata = local_patch_data["formulae"]["foo"]["recipe_patches"].values.first
+    ["/tmp/build.patch", "Patches/foo/../build.patch", "Patches/bar/build.patch", 1].each do |invalid|
+      entry["recipe_patches"] = { invalid => metadata }
+      expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /contains an invalid path/)
+    end
+    entry["recipe_patches"] = { "Patches/foo/build.patch" => { "extra" => "unbound" } }
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /must contain only blob and sha256/)
+    entry["recipe_patches"]["Patches/foo/build.patch"] = { "blob" => "bad", "sha256" => "bad" }
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /blob is invalid/)
+
+    data = local_patch_data
+    path = File.join(@root, "Patches/foo/build.patch")
+    FileUtils.mv(path, File.join(@root, "outside.patch"))
+    File.symlink(File.join(@root, "outside.patch"), path)
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /regular file without symlinks/)
+    FileUtils.rm(path)
+    FileUtils.mkdir_p(File.join(@root, "alternate"))
+    FileUtils.mv(File.join(@root, "outside.patch"), File.join(@root, "alternate/build.patch"))
+    FileUtils.rmdir(File.join(@root, "Patches/foo"))
+    File.symlink(File.join(@root, "alternate"), File.join(@root, "Patches/foo"))
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /regular file without symlinks/)
+  end
+
+  it "rejects inline, parenthesized, dynamic, and extra unrecorded file patch declarations" do
+    data = base_data
+    [
+      'patch do; file "unrecorded.patch"; end',
+      'patch do; file ENV.fetch("PATCH"); end',
+      'patch do; if true; file "unrecorded.patch"; end; end',
+      'patch do; file("unrecorded.patch"); end'
+    ].each do |declaration|
+      source = formula_source.sub(/\nend\n\z/, "\n  #{declaration}\nend\n")
+      path = write("Formula/foo.rb", source)
+      data["formulae"]["foo"]["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+      expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /unsupported local patch declarations/)
+    end
+
+    data = local_patch_data
+    source = File.read(File.join(@root, "Formula/foo.rb"))
+    source = source.sub(/\nend\n\z/, "\n  patch do\n    file \"Patches/foo/unrecorded.patch\"\n  end\nend\n")
+    path = write("Formula/foo.rb", source)
+    data["formulae"]["foo"]["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /do not match local patch declarations/)
+  end
+
+  it "limits local patch provenance to core-derived formulae" do
+    data = local_patch_data
+    data["formulae"]["foo"]["source_type"] = "upstream-release"
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /recipe_patches require homebrew-core provenance/)
+  end
+
   it "validates direct artifact provenance and records verification time" do
     subject = manifest
 
@@ -418,15 +529,77 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
                   ])
   end
 
-  def setup_manifest(bottle_path: nil, core_version: "1.0.0", source_type: "homebrew-core", bottles: true)
-    bottle_sha = bottle_path ? Digest::SHA256.file(bottle_path).hexdigest : "a" * 64
+  def core_info_command
+    ["env", "HOMEBREW_NO_AUTO_UPDATE=1", "brew", "ruby", "-e", described_class::CORE_INFO_SCRIPT, "foo"]
+  end
+
+  def core_fetch_command(recipe, sha:, version: "1.0.0", extra_bottles: {})
+    digests = { "arm64_tahoe" => sha }.merge(extra_bottles)
+    [
+      "env", "HOMEBREW_NO_AUTO_UPDATE=1", "brew", "ruby", "-e", described_class::CORE_FETCH_SCRIPT,
+      "foo", version, JSON.generate(digests), Digest::SHA256.hexdigest(recipe.unpack1("m0"))
+    ]
+  end
+
+  def bottle_cache_path(tag)
+    name = tag == "arm64_tahoe" ? "foo.bottle.tar.gz" : "foo.#{tag}.bottle.tar.gz"
+    File.join(@root, "cache", name)
+  end
+
+  def core_fetch_payload(sha:, extra_bottles: {})
+    bottles = { "arm64_tahoe" => sha }.merge(extra_bottles).map do |tag, digest|
+      { "tag" => tag, "digest" => digest, "path" => bottle_cache_path(tag) }
+    end
+    JSON.generate(bottles)
+  end
+
+  def bottle_attestation_command(tag = "arm64_tahoe")
+    ["gh", "attestation", "verify", bottle_cache_path(tag), "--repo", "Homebrew/homebrew-core", "--format", "json"]
+  end
+
+  def fake_core_api
+    <<~RUBY
+      require "digest"
+      require "json"
+      $LOADED_FEATURES.concat(%w[formulary.rb api/formula.rb])
+      module Formulary
+        def self.factory(_name) = nil
+      end
+      module Homebrew
+        module API
+          module Formula
+            def self.source_download(_formula)
+              Struct.new(:symlink_location).new(ARGV.fetch(4))
+            end
+            def self.source_download_formula(_formula)
+              mode = ARGV.fetch(5)
+              abort "UNREVIEWED RECIPE EVALUATED" if mode == "checksum"
+              tap = Object.new
+              tap.define_singleton_method(:core_tap?) { mode != "tap" }
+              version = mode == "version" ? "2.0.0" : "1.0.0"
+              files = mode == "map" ? {} : JSON.parse(ARGV.fetch(2)).transform_values { |sha| { "sha256" => sha } }
+              Struct.new(:tap, :pkg_version, :bottle_hash).new(tap, version, { "files" => files })
+            end
+          end
+        end
+      end
+    RUBY
+  end
+
+  def setup_manifest(bottle_path: nil, core_version: "1.0.0", revision: 0, core_revision: 0, extra_bottles: {}, source_type: "homebrew-core", bottles: true)
+    bottle_path ||= write("cache/foo.bottle.tar.gz", "bottle")
+    bottle_sha = Digest::SHA256.file(bottle_path).hexdigest
+    bottle_shas = { "arm64_tahoe" => bottle_sha }.merge(extra_bottles)
+    bottle_lines = bottle_shas.map { |tag, digest| "sha256 #{tag}: \"#{digest}\"" }.join("\n    ")
+    version = revision.positive? ? "1.0.0_#{revision}" : "1.0.0"
     formula = <<~RUBY
       class Foo < Formula
         url "https://example.com/foo-1.0.0.tar.gz"
         sha256 "#{'e' * 64}"
+        revision #{revision}
         bottle do
           root_url "https://ghcr.io/v2/homebrew/core"
-          sha256 arm64_tahoe: "#{bottle_sha}"
+          #{bottle_lines}
         end
       end
     RUBY
@@ -439,7 +612,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
       "recipe_path" => "Formula/f/foo.rb",
       "recipe_blob" => "d" * 40,
       "local_file_sha256" => Digest::SHA256.file(formula_path).hexdigest,
-      "version" => "1.0.0",
+      "version" => version,
       "release_published_at" => "2026-01-01T00:00:00Z",
       "release_evidence" => { "description" => "Release", "reference" => "https://example.com/foo/1.0.0" },
       "adopted_at" => "2026-02-01T00:00:00Z",
@@ -447,7 +620,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
       "adoption_reason" => "Pin",
       "cooldown_exception" => nil,
       "legacy_baseline" => {
-        "version" => "1.0.0",
+        "version" => version,
         "artifact_fingerprint_sha256" => Digest::SHA256.hexdigest(digests.join("\n"))
       },
       "local_changes" => [],
@@ -455,7 +628,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
                      {
                        "repository" => "Homebrew/homebrew-core",
                        "verified_at" => "2026-06-11T00:00:00Z",
-                       "digests" => { "arm64_tahoe" => bottle_sha }
+                       "digests" => bottle_shas
                      }
                    else
                      { "repository" => "Homebrew/homebrew-core", "verified_at" => "2026-06-11T00:00:00Z", "digests" => {} }
@@ -472,21 +645,70 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     info = JSON.generate(
       "formulae" => [{
         "versions" => { "stable" => core_version },
-        "bottle" => { "stable" => { "files" => { "arm64_tahoe" => { "sha256" => bottle_sha } } } }
+        "revision" => core_revision,
+        "bottle" => { "stable" => { "files" => bottle_shas.transform_values { |digest| { "sha256" => digest } } } }
       }],
     )
     [HomebrewTap::ProvenanceManifest.new(root: @root), bottle_sha, recipe, info]
   end
 
-  it "uses brew verify when the current core bottle set matches" do
+  def setup_local_patch_manifest
+    manifest, sha, recipe, info = setup_manifest
+    path = "Patches/foo/build.patch"
+    patch = "--- a/source\n+++ b/source\n@@ -1 +1 @@\n-old\n+new\n"
+    write(path, patch)
+    source = recipe.unpack1("m0").sub(/\nend\n\z/, "\n  patch do\n    file \"#{path}\"\n  end\nend\n")
+    formula_path = write("Formula/foo.rb", source)
+    data = manifest.load!
+    metadata = {
+      "blob" => Digest::SHA1.hexdigest("blob #{patch.bytesize}\0" + patch),
+      "sha256" => Digest::SHA256.hexdigest(patch)
+    }
+    data["formulae"]["foo"].merge!(
+      "local_file_sha256" => Digest::SHA256.file(formula_path).hexdigest,
+      "recipe_patches" => { path => metadata },
+    )
+    write("provenance.yml", YAML.dump(data))
+    patch_api = ["gh", "api", "repos/Homebrew/homebrew-core/contents/#{path}?ref=#{'c' * 40}"]
+    payload = { "type" => "file", "sha" => metadata.fetch("blob"), "content" => [patch].pack("m0") }
+    [HomebrewTap::ProvenanceManifest.new(root: @root), sha, [source].pack("m0"), info, patch_api, payload]
+  end
+
+  it "verifies local patches at the recorded recipe commit before bottle work" do
+    manifest, sha, recipe, info, patch_api, payload = setup_local_patch_manifest
+    captures = {
+      ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
+      patch_api => JSON.generate(payload),
+      core_info_command => info,
+      core_fetch_command(recipe, sha: sha) => core_fetch_payload(sha: sha),
+      bottle_attestation_command => attestation_payload(sha)
+    }
+    expect(described_class.new(manifest: manifest, runner: FakeRunner.new(captures: captures), out: StringIO.new).verify!(["foo"])).to eq(true)
+
+    mutations = [
+      payload.merge("sha" => "f" * 40),
+      payload.merge("content" => ["changed patch bytes"].pack("m0")),
+      payload.merge("type" => "symlink")
+    ]
+    mutations.each do |changed|
+      fake = FakeRunner.new(captures: captures.merge(patch_api => JSON.generate(changed)))
+      allow(fake).to receive(:capture).and_call_original
+      expect(fake).not_to receive(:capture).with(*core_info_command)
+      expect { described_class.new(manifest: manifest, runner: fake).verify!(["foo"]) }.to raise_error(HomebrewTap::Error, /differs from the recorded upstream patch/)
+    end
+    ["not json", JSON.generate(payload.except("content"))].each do |invalid|
+      fake = FakeRunner.new(captures: captures.merge(patch_api => invalid))
+      expect { described_class.new(manifest: manifest, runner: fake).verify!(["foo"]) }.to raise_error(HomebrewTap::Error, /invalid recipe metadata/)
+    end
+  end
+
+  it "uses native core verification when the current core bottle set matches" do
     manifest, sha, recipe, info = setup_manifest
     runner = FakeRunner.new(captures: {
                               ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
-                              ["brew", "info", "--json=v2", "homebrew/core/foo"] => info,
-                              [
-                                "env", "HOMEBREW_NO_AUTO_UPDATE=1",
-                                "brew", "verify", "--os", "all", "--arch", "all", "--quiet", "--json", "homebrew/core/foo"
-                              ] => attestation_payload(sha)
+                              core_info_command => info,
+                              core_fetch_command(recipe, sha: sha) => core_fetch_payload(sha: sha),
+                              bottle_attestation_command => attestation_payload(sha)
                             })
     out = StringIO.new
     verifier = described_class.new(manifest: manifest, runner: runner, out: out, verified_at: Time.utc(2026, 6, 13))
@@ -494,6 +716,94 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     expect(verifier.verify!(["foo"])).to eq(true)
     expect(runner.commands).to include(["gh", "auth", "status", "--hostname", "github.com"])
     expect(out.string).to include("Verified bottle provenance: foo")
+  end
+
+  it "uses native core verification when the current core formula revision matches" do
+    manifest, sha, recipe, info = setup_manifest(revision: 1, core_revision: 1)
+    verify_command = core_fetch_command(recipe, sha: sha, version: "1.0.0_1")
+    runner = FakeRunner.new(captures: {
+                              ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
+                              core_info_command => info,
+                              verify_command => core_fetch_payload(sha: sha),
+                              bottle_attestation_command => attestation_payload(sha)
+                            })
+    allow(runner).to receive(:capture).and_call_original
+    expect(runner).to receive(:capture).with(*verify_command).and_call_original
+
+    expect(described_class.new(manifest: manifest, runner: runner).verify!(["foo"])).to eq(true)
+  end
+
+  it "merges all platform bottle variations before using native core verification" do
+    linux_path = write("cache/foo.x86_64_linux.bottle.tar.gz", "linux bottle")
+    linux_sha = Digest::SHA256.file(linux_path).hexdigest
+    manifest, sha, recipe, info = setup_manifest(extra_bottles: { "x86_64_linux" => linux_sha })
+    payload = JSON.parse(info)
+    formula = payload.fetch("formulae").first
+    files = formula.dig("bottle", "stable", "files")
+    linux_file = files.delete("x86_64_linux")
+    formula["variations"] = {
+      "x86_64_linux" => { "bottle" => { "stable" => { "files" => { "x86_64_linux" => linux_file } } } },
+      "arm64_tahoe" => { "bottle" => { "stable" => { "files" => files } } },
+      "arm64_linux" => { "dependencies" => ["example"] }
+    }
+    verify_command = core_fetch_command(recipe, sha: sha, extra_bottles: { "x86_64_linux" => linux_sha })
+    runner = FakeRunner.new(captures: {
+                              ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
+                              core_info_command => JSON.generate(payload),
+                              verify_command => core_fetch_payload(sha: sha, extra_bottles: { "x86_64_linux" => linux_sha }),
+                              bottle_attestation_command => attestation_payload(sha),
+                              bottle_attestation_command("x86_64_linux") => attestation_payload(linux_sha)
+                            })
+    allow(runner).to receive(:capture).and_call_original
+    expect(runner).to receive(:capture).with(*verify_command).and_call_original
+
+    expect(described_class.new(manifest: manifest, runner: runner).verify!(["foo"])).to eq(true)
+  end
+
+  it "rejects conflicting bottle digests across core variations" do
+    manifest, _sha, recipe, info = setup_manifest
+    payload = JSON.parse(info)
+    payload.fetch("formulae").first["variations"] = {
+      "x86_64_linux" => {
+        "bottle" => { "stable" => { "files" => { "arm64_tahoe" => { "sha256" => "b" * 64 } } } }
+      }
+    }
+    runner = FakeRunner.new(captures: {
+                              ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
+                              core_info_command => JSON.generate(payload)
+                            })
+
+    expect { described_class.new(manifest: manifest, runner: runner).verify!(["foo"]) }.to raise_error(
+      HomebrewTap::Error,
+      /conflicting homebrew\/core bottle digests for foo arm64_tahoe/,
+    )
+  end
+
+  it "rejects changed cached recipe bytes before evaluating the core recipe" do
+    source_path = write("cache/foo.rb", "unreviewed recipe")
+    _stdout, stderr, status = Open3.capture3(
+      RbConfig.ruby, "-e", fake_core_api + described_class::CORE_FETCH_SCRIPT,
+      "foo", "1.0.0", JSON.generate("arm64_tahoe" => "a" * 64), "e" * 64, source_path, "checksum",
+    )
+
+    expect(status.success?).to eq(false)
+    expect(stderr).to include("foo current core recipe differs from the reviewed recipe")
+    expect(stderr).not_to include("UNREVIEWED RECIPE EVALUATED")
+  end
+
+  it "rejects a non-core recipe and changed versions or incomplete bottle maps in the child" do
+    source_path = write("cache/foo.rb", "reviewed recipe")
+    source_sha = Digest::SHA256.file(source_path).hexdigest
+    %w[tap version map].each do |mode|
+      _stdout, stderr, status = Open3.capture3(
+        RbConfig.ruby, "-e", fake_core_api + described_class::CORE_FETCH_SCRIPT,
+        "foo", "1.0.0", JSON.generate("arm64_tahoe" => "a" * 64), source_sha, source_path, mode,
+      )
+
+      expect(status.success?).to eq(false)
+      message = mode == "tap" ? "did not load from homebrew/core" : "current core version or bottle map changed"
+      expect(stderr).to include(message)
+    end
   end
 
   it "verifies an older pinned bottle and attested digest" do
@@ -508,12 +818,33 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     ]
     runner = FakeRunner.new(captures: {
                               api_command => JSON.generate("sha" => "d" * 40, "content" => recipe),
-                              ["brew", "info", "--json=v2", "homebrew/core/foo"] => info,
+                              core_info_command => info,
                               cache_command => bottle_path,
                               attestation_command => attestation_payload(bottle_sha)
                             })
 
     expect(described_class.new(manifest: manifest, runner: runner).verify!(["--all"])).to eq(true)
+    expect(runner.commands).to include([
+                                         "env", "HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST=1",
+                                         "brew", "fetch", "--force", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"
+                                       ])
+  end
+
+  it "verifies the pinned bottle when only the current core revision differs" do
+    bottle_path = write("cache/foo.bottle.tar.gz", "bottle")
+    manifest, bottle_sha, recipe, info = setup_manifest(bottle_path: bottle_path, revision: 1, core_revision: 2)
+    runner = FakeRunner.new(captures: {
+                              ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
+                              core_info_command => info,
+                              ["brew", "--cache", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"] => bottle_path,
+                              [
+                                "gh", "attestation", "verify", bottle_path,
+                                "--repo", "Homebrew/homebrew-core",
+                                "--format", "json"
+                              ] => attestation_payload(bottle_sha)
+                            })
+
+    expect(described_class.new(manifest: manifest, runner: runner).verify!(["foo"])).to eq(true)
     expect(runner.commands).to include([
                                          "env", "HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST=1",
                                          "brew", "fetch", "--force", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"
@@ -538,7 +869,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
 
     manifest, _sha, recipe, info = setup_manifest(core_version: "2.0.0")
     base = {
-      ["brew", "info", "--json=v2", "homebrew/core/foo"] => info,
+      core_info_command => info,
       ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "wrong", "content" => recipe)
     }
     expect { described_class.new(manifest: manifest, runner: FakeRunner.new(captures: base)).verify!(["foo"]) }.to raise_error(HomebrewTap::Error, /recipe blob/)
@@ -554,7 +885,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     expect { described_class.new(manifest: manifest, runner: FakeRunner.new(captures: base)).verify!(["foo"]) }.to raise_error(HomebrewTap::Error, /bottle digest is absent/)
 
     base[base.keys.last] = JSON.generate("sha" => "d" * 40, "content" => recipe)
-    base[["brew", "info", "--json=v2", "homebrew/core/foo"]] = "bad"
+    base[core_info_command] = "bad"
     expect { described_class.new(manifest: manifest, runner: FakeRunner.new(captures: base)).verify!(["foo"]) }.to raise_error(HomebrewTap::Error, /invalid homebrew\/core metadata/)
 
     empty_bottle = YAML.safe_load_file(File.join(@root, "provenance.yml"), aliases: false)
@@ -571,7 +902,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     manifest, _bottle_sha, recipe, info = setup_manifest(bottle_path: bottle_path, core_version: "2.0.0")
     runner = FakeRunner.new(captures: {
                               ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
-                              ["brew", "info", "--json=v2", "homebrew/core/foo"] => info,
+                              core_info_command => info,
                               ["brew", "--cache", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"] => bottle_path,
                               [
                                 "gh", "attestation", "verify", bottle_path,
@@ -586,14 +917,11 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
   it "rejects recipe input drift and malformed current-core attestation output" do
     manifest, bottle_sha, recipe, info = setup_manifest
     api_command = ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"]
-    verify_command = [
-      "env", "HOMEBREW_NO_AUTO_UPDATE=1",
-      "brew", "verify", "--os", "all", "--arch", "all", "--quiet", "--json", "homebrew/core/foo"
-    ]
+    verify_command = core_fetch_command(recipe, sha: bottle_sha)
     drifted = recipe.unpack1("m0").sub("e" * 64, "f" * 64).then { |content| [content].pack("m0") }
     runner = FakeRunner.new(captures: {
                               api_command => JSON.generate("sha" => "d" * 40, "content" => drifted),
-                              ["brew", "info", "--json=v2", "homebrew/core/foo"] => info
+                              core_info_command => info
                             })
     expect { described_class.new(manifest: manifest, runner: runner).verify!(["foo"]) }.to raise_error(
       HomebrewTap::Error,
@@ -602,7 +930,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
 
     runner = FakeRunner.new(captures: {
                               api_command => JSON.generate("sha" => "d" * 40, "content" => recipe),
-                              ["brew", "info", "--json=v2", "homebrew/core/foo"] => info,
+                              core_info_command => info,
                               verify_command => "not-json"
                             })
     expect { described_class.new(manifest: manifest, runner: runner).verify!(["foo"]) }.to raise_error(
@@ -610,10 +938,23 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
       /invalid attestation metadata/,
     )
 
+    [[], JSON.parse(core_fetch_payload(sha: bottle_sha)) * 2].each do |fetched|
+      runner = FakeRunner.new(captures: {
+                                api_command => JSON.generate("sha" => "d" * 40, "content" => recipe),
+                                core_info_command => info,
+                                verify_command => JSON.generate(fetched)
+                              })
+      expect { described_class.new(manifest: manifest, runner: runner).verify!(["foo"]) }.to raise_error(
+        HomebrewTap::Error,
+        /fetched core bottle map differs/,
+      )
+    end
+
     runner = FakeRunner.new(captures: {
                               api_command => JSON.generate("sha" => "d" * 40, "content" => recipe),
-                              ["brew", "info", "--json=v2", "homebrew/core/foo"] => info,
-                              verify_command => attestation_payload(bottle_sha, repository: "attacker/repo", workflow: "release.yml")
+                              core_info_command => info,
+                              verify_command => core_fetch_payload(sha: bottle_sha),
+                              bottle_attestation_command => attestation_payload(bottle_sha, repository: "attacker/repo", workflow: "release.yml")
                             })
     expect { described_class.new(manifest: manifest, runner: runner).verify!(["foo"]) }.to raise_error(
       HomebrewTap::Error,

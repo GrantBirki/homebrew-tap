@@ -1,33 +1,39 @@
 class Rustup < Formula
   desc "Rust toolchain installer"
   homepage "https://rust-lang.github.io/rustup/"
-  url "https://github.com/rust-lang/rustup/archive/refs/tags/1.29.0.tar.gz"
-  sha256 "de73d1a62f4d5409a2f6bdb1c523d8dc08aa6d9d63588db62493c19ca8f8bf55"
+  # TODO: Remove curl when release has following:
+  # https://github.com/rust-lang/rustup/commit/747057342d4616d6cd2cda6b00826c0ebdd0e671
+  url "https://github.com/rust-lang/rustup/archive/refs/tags/1.29.2.tar.gz"
+  sha256 "ba43980f0651730631174635a0e7764831e810be08a06ae53f9c0620caef019d"
   license any_of: ["Apache-2.0", "MIT"]
-  revision 1
   compatibility_version 1
 
   bottle do
     root_url "https://ghcr.io/v2/homebrew/core"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "1adfcf92959af43b31eb55007ec19dccb0236b9e44804025aeda84f931d7a427"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "39caad94c4db4d5bc3ca121a7dfcdc41281281088b36b11afb24a92de653b5c7"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "00e1f91ea9c03796a1808726abe397935567903a8dbcd22e2f3db3c9ee0d2bbf"
-    sha256 cellar: :any_skip_relocation, sonoma:        "282513938fc4e7cbb73d1c29ec969295b021cf725036b571f701bee2b25f38f8"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2e9c1c73a958abd26ba816d34fa017e762cf048db5a9664ba0a6e404c44f5320"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bff7c94142160615a5919c3c673b36c62093bd19290e053f3b4738ebda500665"
+    sha256 cellar: :any, arm64_golden_gate: "27bbc67ff56c010b5ae02abd09456d513e6ccb4b54d0818915c1d49e32075cbe"
+    sha256 cellar: :any, arm64_tahoe:       "4a777627c17a11cd1f907e2bbe68095baa247ca27d29745f5d03dd99c3a5b4a3"
+    sha256 cellar: :any, arm64_sequoia:     "4a14a4be824bc9a7f39869350c1cb1f91468ee35586f8dd70fc7dae3020484e7"
+    sha256 cellar: :any, arm64_linux:       "f2cb1c2104d13d32dba4cb2803d46a711b167e3c6606132ccdae9623387bcd40"
+    sha256 cellar: :any, x86_64_linux:      "03b2c1db2e4fac2f1cc365de392a3ddc56603a8abdb7c9aefed572aa4ef60878"
   end
 
   keg_only "it conflicts with rust"
 
+  depends_on "pkgconf" => :build
   depends_on "rust" => :build
+  depends_on "xz"
 
   uses_from_macos "curl"
-  uses_from_macos "xz"
 
   on_linux do
-    depends_on "pkgconf" => :build
-    depends_on "openssl@3"
+    depends_on "openssl@4"
+  end
+
+  # Test downloads a Rust toolchain
+  allow_network_access! :test
+
+  def fetch
+    system "cargo", "fetch", *std_cargo_fetch_args
   end
 
   def install
@@ -48,15 +54,11 @@ class Rustup < Formula
     pkgetc.install "settings.toml"
     bin.env_script_all_files libexec/"bin", RUSTUP_OVERRIDE_UNIX_FALLBACK_SETTINGS: pkgetc/"settings.toml"
 
-    generate_completions_from_executable(libexec/"bin/rustup", "completions")
-    {
-      bash: bash_completion/"cargo",
-      zsh:  zsh_completion/"_cargo",
-    }.each do |shell, completion_path|
-      completion_path.dirname.mkpath
-      completion_path.write Utils.safe_popen_read(
-        { "SHELL" => shell.to_s },
-        libexec/"bin/rustup", "completions", shell.to_s, "cargo"
+    generate_completions_from_executable(libexec/"bin/rustup", "completions", shells: [:bash, :zsh, :fish, :pwsh])
+    [:bash, :zsh].each do |shell|
+      generate_completions_from_executable(
+        libexec/"bin/rustup", "completions", shell.to_s, "cargo",
+        shells: [shell], base_name: "cargo", shell_parameter_format: :none
       )
     end
   end
@@ -72,9 +74,9 @@ class Rustup < Formula
   def caveats
     <<~EOS
       To use rustup, ensure you have "$(brew --prefix rustup)/bin" in your $PATH:
-        #{Formatter.url("https://rust-lang.github.io/rustup/installation/already-installed-rust.html")}
+        https://rust-lang.github.io/rustup/installation/already-installed-rust.html
 
-      This formula does not provide `rustup-init`.
+      This formula no longer provides `rustup-init`.
     EOS
   end
 

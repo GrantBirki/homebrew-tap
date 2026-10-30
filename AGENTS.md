@@ -218,6 +218,14 @@ Core formula entries also record:
 - verified_at
 - The exact retained bottle tag-to-digest map
 
+Core formulae may additionally record `recipe_patches`, mapping exact
+`Patches/<formula>/<filename>.patch` paths to Git blob and SHA-256 values.
+The files must match static recipe declarations, contain no symlinks or
+traversal, and bind to the same upstream recipe commit. Validate static patch
+bytes before formula evaluation, then cross-check the parsed patch objects
+and bytes before application. Verify the upstream patch before bottles.
+Unrecorded local patch files and unsupported declarations must fail closed.
+
 Important invariants:
 
 - **local_file_sha256** binds the whole checked-in formula or cask file. Even a
@@ -732,6 +740,8 @@ script/test
 script/provenance check
 script/provenance verify-formula <token>
 script/provenance verify-formula --all
+script/ncat-trust
+script/ncat-trust --apply
 script/install --dry-run
 script/vulns
 ~~~
@@ -744,6 +754,8 @@ Mutation and network characteristics:
 | script/test | No | No | Parses local recipes and runs policy/unit tests. |
 | script/provenance check | No | No | Local manifest and content-loader policy gate. |
 | script/provenance verify-formula | Yes | No | Fetches bottles, verifies attestations, and updates verified_at. |
+| script/ncat-trust | No | No | Previews a known-stock Ncat CA repair; requires installed packages. |
+| script/ncat-trust --apply | No | No | Backs up the exact stock bundle and links the corrected CA file; refuses custom files. |
 | script/install --dry-run | No expected | No | Reads receipts and reports planned operations. |
 | script/install | Yes | Yes | Explicit operator action only. |
 | script/vulns | Yes | No | Live OSV-backed operator scan. |

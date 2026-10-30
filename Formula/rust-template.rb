@@ -1,29 +1,29 @@
 class RustTemplate < Formula
   desc "Minimal hello-world Rust CLI template"
   homepage "https://github.com/GrantBirki/rust-template"
-  version "0.2.0"
+  version "0.4.0"
   license "MIT"
 
   on_macos do
     on_intel do
       url "https://github.com/GrantBirki/rust-template/releases/download/v#{version}/rust-template_v#{version}_darwin-universal.tar.gz"
-      sha256 "0e92863648891e58be2f668439550526b12e6867b8dbeea1d70ea05a7dcf300c"
+      sha256 "3de93c15e1b7f9f06eb4680e1ace37eb53d2e1b020b5d88494688128906d43ed"
     end
 
     on_arm do
       url "https://github.com/GrantBirki/rust-template/releases/download/v#{version}/rust-template_v#{version}_darwin-universal.tar.gz"
-      sha256 "0e92863648891e58be2f668439550526b12e6867b8dbeea1d70ea05a7dcf300c"
+      sha256 "3de93c15e1b7f9f06eb4680e1ace37eb53d2e1b020b5d88494688128906d43ed"
     end
   end
 
   on_linux do
     on_intel do
       url "https://github.com/GrantBirki/rust-template/releases/download/v#{version}/rust-template_v#{version}_linux-amd64.tar.gz"
-      sha256 "9ed344b2eaec47f1820de277f13bfab0cf611c6d2511203f13727172142e7352"
+      sha256 "e718214ad30759e8b237ace1ce242470cfcd3bd7415d8d7411e6643156267b7a"
     end
     on_arm do
       url "https://github.com/GrantBirki/rust-template/releases/download/v#{version}/rust-template_v#{version}_linux-arm64.tar.gz"
-      sha256 "c2a75a054d1655944f971de81ca5230a651a355713894ef671d08bc754ba912e"
+      sha256 "b91b6aef3af32084b537be990ea085a9d20b7e6737bf8b4554bda0c28617af93"
     end
   end
 

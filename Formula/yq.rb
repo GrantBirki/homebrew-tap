@@ -1,8 +1,8 @@
 class Yq < Formula
   desc "Process YAML, JSON, XML, CSV and properties documents from the CLI"
   homepage "https://github.com/mikefarah/yq"
-  url "https://github.com/mikefarah/yq/archive/refs/tags/v4.53.2.tar.gz"
-  sha256 "1bc19bb8b1029148afa3465a9383f6dcccb1ecce28a0af1d81f07c93396ce37d"
+  url "https://github.com/mikefarah/yq/archive/refs/tags/v4.54.1.tar.gz"
+  sha256 "0cec36e7035dd56c508bda56245cbd71e4495d2317bc2528165c4162bce79335"
   license "MIT"
   compatibility_version 1
 
@@ -13,12 +13,11 @@ class Yq < Formula
 
   bottle do
     root_url "https://ghcr.io/v2/homebrew/core"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d17c2839ee1777042fee74ea12ae4b208ad185b7568736848056fca2c280ae10"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d17c2839ee1777042fee74ea12ae4b208ad185b7568736848056fca2c280ae10"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d17c2839ee1777042fee74ea12ae4b208ad185b7568736848056fca2c280ae10"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f286c6fe05ab3414f9698d81d59d36209980c63b3937e2e4e9437981e1fec8f7"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2fb220286c54f661e9779d91eff29f46055ff544995b8beffacd7e6486df5fb7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8c30770b766c4be4264aaab9e3d901451cb8465d6e34cd42480b3088446ea1dd"
+    sha256 cellar: :any_skip_relocation, arm64_golden_gate: "69b698c900cb0458e22e9b2261f67fb665b448b131f788f7611f1773431ad95b"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:       "69b698c900cb0458e22e9b2261f67fb665b448b131f788f7611f1773431ad95b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia:     "69b698c900cb0458e22e9b2261f67fb665b448b131f788f7611f1773431ad95b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:       "271d4524ae546930ae4540094f5e1a8807e33f0e531018c542f97594b78489cd"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:      "edf7c42fc120d260de08df774b9372461c2b4bdeef9f062b9a00b3b94e49e268"
   end
 
   depends_on "go" => :build
@@ -26,9 +25,15 @@ class Yq < Formula
 
   conflicts_with "python-yq", because: "both install `yq` executables"
 
+  deny_network_access!
+
+  def fetch
+    system "go", "mod", "download"
+  end
+
   def install
     ENV["CGO_ENABLED"] = OS.mac? ? "1" : "0"
-    system "go", "build", *std_go_args(ldflags: "-s -w")
+    system "go", "build", *std_go_args
 
     # Install shell completions
     generate_completions_from_executable(bin/"yq", "shell-completion")
