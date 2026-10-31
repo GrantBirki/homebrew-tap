@@ -754,7 +754,7 @@ formulae:
     release_evidence:
       description: GitHub release publication and ARM macOS asset 689234977; independently verified SHA-256 matches the API digest and release checksums. Asset updated at 2026-10-29T16:51:18Z; its 48-hour execution minimum ends at 2026-10-31T16:51:18Z.
       reference: https://api.github.com/repos/vectordotdev/vector/releases/tags/v0.61.0
-    adopted_at: '2026-10-31T04:58:12Z'
+    adopted_at: '2026-10-31T17:53:27Z'
     adoption_commit: fe437fd78d227b5266f16c0b929541bf8e733e27
     adoption_reason: Adopt the TLS certificate fixes in Vector 0.61.0 while preserving ARM macOS support. Existing dependency advisory matches remain; no clean vulnerability scan or verified SLSA attestation is claimed.
     cooldown_exception:
