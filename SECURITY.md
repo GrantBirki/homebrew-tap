@@ -29,7 +29,7 @@ enable `HOMEBREW_SBOM=1` locally when they need a machine-specific snapshot.
 
 ## Update policy
 
-Ordinary formula and cask releases must age for 14 complete days after their primary-source publication time before adoption. The `uninstall` formula and the `espresso`, `oneshot`, and `shit` casks are explicitly owner-controlled and may be adopted immediately only when the provenance source type is `personal-release` and the upstream repository matches the exact token-to-repository pair in the executable allowlist. Other personal releases are not automatically exempt.
+Ordinary formula and cask releases must age for 7 complete days after their primary-source publication time before adoption. The `uninstall` formula and the `espresso`, `oneshot`, and `shit` casks are explicitly owner-controlled and may be adopted immediately only when the provenance source type is `personal-release` and the upstream repository matches the exact token-to-repository pair in the executable allowlist. Other personal releases are not automatically exempt.
 
 Owner-controlled releases still require an immutable tag and commit, primary-source release evidence, publication and adoption timestamps, an independently verified asset SHA-256, a whole-file hash, and review of installation behavior. Casks additionally require review of signing and quarantine behavior. Discovery is separate from adoption: livecheck may report a release immediately, but it does not change a pin. Their normal updates keep `cooldown_exception` empty because this is a standing ownership policy, not an incident exception.
 
@@ -41,26 +41,11 @@ version available" is not an exception.
 
 ### One-time Secretive 4.0.0 override
 
-On September 30, 2026, the owner explicitly authorized early adoption of
-[Secretive 4.0.0](https://github.com/maxgoedjen/secretive/releases/tag/v4.0.0)
-before its October 5, 2026 03:08:01 UTC cooldown deadline. This is an owner
-override for this release only, not a security advisory or incident exception.
-It applies only to upstream commit `54e0d00d87e207377101b0ea6ddfa624cd1a1c16`
-and the `Secretive.zip` SHA-256
-`877517e212938ffb7048bc7b6811e992194ba4b3eaa4dae36405b6303d1ac1fa`.
-The provenance exception references this decision. All artifact, signing,
-quarantine, and review requirements remain in force; other releases retain
-the normal cooldown and exception policy.
+On September 30, 2026, the owner explicitly authorized early adoption of [Secretive 4.0.0](https://github.com/maxgoedjen/secretive/releases/tag/v4.0.0) before its October 5, 2026 03:08:01 UTC cooldown deadline under the 14-day policy then in effect. This is an owner override for this release only, not a security advisory or incident exception. It applies only to upstream commit `54e0d00d87e207377101b0ea6ddfa624cd1a1c16` and the `Secretive.zip` SHA-256 `877517e212938ffb7048bc7b6811e992194ba4b3eaa4dae36405b6303d1ac1fa`. The provenance exception references this decision. All artifact, signing, quarantine, and review requirements remain in force; other releases retain the normal cooldown and exception policy.
 
 ### One-time October 2026 security review
 
-For this security review, the owner authorized a minimum release age of 24
-complete hours for the exact releases below. This is a one-time owner override
-for this batch, including maintenance updates reviewed alongside security
-fixes. It is not a claim that every release has a security advisory. No release
-under 24 hours qualifies. Future releases retain the normal 14-day cooldown.
-All checksum, provenance, signing, quarantine, and review requirements remain
-in force.
+For this security review, the owner authorized a minimum release age of 24 complete hours for the exact releases below. This is a one-time owner override for this batch, including maintenance updates reviewed alongside security fixes. It is not a claim that every release has a security advisory. No release under 24 hours qualifies. Future releases retain the normal 7-day cooldown. All checksum, provenance, signing, quarantine, and review requirements remain in force.
 
 | Release | Published (UTC) | Reviewed source or release-asset SHA-256 |
 | --- | --- | --- |
