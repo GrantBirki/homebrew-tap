@@ -486,7 +486,6 @@ module HomebrewTap
     def verify!(tokens) # rubocop:disable Naming/PredicateMethod
       manifest.validate(allow_unverified: true)
       require_commands!
-      runner.run_quiet!("gh", "auth", "status", "--hostname", "github.com")
       tokens = manifest.core_formula_tokens if tokens == ["--all"]
       raise Error, "no formula token supplied" if tokens.empty?
 
