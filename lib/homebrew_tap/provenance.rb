@@ -9,7 +9,7 @@ require "yaml"
 module HomebrewTap
   class ProvenanceManifest
     SCHEMA_VERSION = 1
-    COOLDOWN_SECONDS = 14 * 24 * 60 * 60
+    COOLDOWN_SECONDS = 7 * 24 * 60 * 60
     OWNER_CONTROLLED_FORMULAE = {
       "uninstall" => "grantbirki/uninstall"
     }.freeze
@@ -223,7 +223,7 @@ module HomebrewTap
 
       return if exception.is_a?(Hash) && present?(exception["reason"]) && https_url?(exception["reference"])
 
-      failures << "#{label} violates the 14-day cooldown without a documented exception"
+      failures << "#{label} violates the 7-day cooldown without a documented exception"
     end
 
     def owner_controlled_personal_release?(section, token, entry)

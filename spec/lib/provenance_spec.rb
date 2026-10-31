@@ -351,7 +351,7 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     entry["adopted_at"] = "2026-06-12T00:00:00Z"
     entry["cooldown_exception"] = { "reason" => "", "reference" => "" }
     write_manifest(data)
-    expect { described_class.new(root: @root).validate }.to raise_error(HomebrewTap::Error, /14-day cooldown/)
+    expect { described_class.new(root: @root).validate }.to raise_error(HomebrewTap::Error, /7-day cooldown/)
 
     entry["cooldown_exception"] = { "reason" => "Security fix", "reference" => "https://example.com/advisory" }
     write_manifest(data)
@@ -360,6 +360,23 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     entry["legacy_baseline"] = legacy_baseline
     write_manifest(data)
     expect { described_class.new(root: @root).validate }.to raise_error(HomebrewTap::Error, /legacy_baseline/)
+  end
+
+  { "formulae" => "foo", "casks" => "app" }.each do |section, token|
+    it "requires seven complete days before adopting ordinary #{section}" do
+      data = base_data
+      entry = data[section][token]
+      entry.merge!(
+        "legacy_baseline" => nil,
+        "release_published_at" => "2026-06-12T12:00:00Z",
+        "adopted_at" => "2026-06-19T11:59:59Z",
+      )
+
+      expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /7-day cooldown/)
+
+      entry["adopted_at"] = "2026-06-19T12:00:00Z"
+      expect(manifest(data).validate).to eq(true)
+    end
   end
 
   it "allows immediate adoption of owner-controlled personal formulae" do
@@ -372,19 +389,19 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
 
   it "keeps unlisted personal releases on the cooldown" do
     expect { manifest(owner_controlled_formula_data("uninstall", "example/uninstall")).validate }
-      .to raise_error(HomebrewTap::Error, /14-day cooldown/)
+      .to raise_error(HomebrewTap::Error, /7-day cooldown/)
 
     expect { manifest(owner_controlled_formula_data("rust-template", "GrantBirki/rust-template")).validate }
-      .to raise_error(HomebrewTap::Error, /14-day cooldown/)
+      .to raise_error(HomebrewTap::Error, /7-day cooldown/)
   end
 
   it "binds owner-controlled personal releases to their source type and matching token" do
     wrong_repository = owner_controlled_formula_data("uninstall", "GrantBirki/renamed-uninstall")
-    expect { manifest(wrong_repository).validate }.to raise_error(HomebrewTap::Error, /14-day cooldown/)
+    expect { manifest(wrong_repository).validate }.to raise_error(HomebrewTap::Error, /7-day cooldown/)
 
     wrong_source = owner_controlled_formula_data("uninstall", "GrantBirki/uninstall")
     wrong_source["formulae"]["uninstall"]["source_type"] = "upstream-release"
-    expect { manifest(wrong_source).validate }.to raise_error(HomebrewTap::Error, /14-day cooldown/)
+    expect { manifest(wrong_source).validate }.to raise_error(HomebrewTap::Error, /7-day cooldown/)
   end
 
   it "keeps timestamp and exception validation for owner-controlled personal releases" do

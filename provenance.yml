@@ -229,7 +229,7 @@ formulae:
     cooldown_exception:
       reason: One-time owner authorization for a 24-complete-hour minimum in the October
         2026 security review, including maintenance updates. Exact release and retained
-        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+        artifacts exceed that minimum; future releases follow the normal cooldown policy.
       reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
     legacy_baseline:
     local_changes: []
@@ -336,7 +336,7 @@ formulae:
     cooldown_exception:
       reason: One-time owner authorization for a 24-complete-hour minimum in the October
         2026 security review, including maintenance updates. Exact release and retained
-        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+        artifacts exceed that minimum; future releases follow the normal cooldown policy.
       reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   libyaml:
     source_type: homebrew-core
@@ -406,7 +406,7 @@ formulae:
     cooldown_exception:
       reason: One-time owner authorization for a 24-complete-hour minimum in the October
         2026 security review, including maintenance updates. Exact release and retained
-        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+        artifacts exceed that minimum; future releases follow the normal cooldown policy.
       reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   osv-scanner:
     source_type: homebrew-core
@@ -440,7 +440,7 @@ formulae:
     cooldown_exception:
       reason: One-time owner authorization for a 24-complete-hour minimum in the October
         2026 security review, including maintenance updates. Exact release and retained
-        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+        artifacts exceed that minimum; future releases follow the normal cooldown policy.
       reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   pinentry-mac:
     source_type: homebrew-core
@@ -601,7 +601,7 @@ formulae:
     cooldown_exception:
       reason: One-time owner authorization for a 24-complete-hour minimum in the October
         2026 security review, including maintenance updates. Exact release and retained
-        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+        artifacts exceed that minimum; future releases follow the normal cooldown policy.
       reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   swiftlint:
     source_type: homebrew-core
@@ -1018,7 +1018,7 @@ casks:
     cooldown_exception:
       reason: One-time owner authorization for a 24-complete-hour minimum in the October
         2026 security review, including maintenance updates. Exact release and retained
-        artifacts exceed that minimum; future releases retain the normal 14-day policy.
+        artifacts exceed that minimum; future releases follow the normal cooldown policy.
       reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
   santa:
     source_type: homebrew-cask
