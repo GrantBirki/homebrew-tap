@@ -747,32 +747,25 @@ formulae:
   vector:
     source_type: upstream-release
     upstream_repository: vectordotdev/vector
-    upstream_tag: v0.60.0
-    upstream_commit: 0d0b35865036f8b5c2f0104d9744fa84985ffff1
-    local_file_sha256: f84520076260c2f11c43ef15106a94c0bb8799fa9ad64dd83f7f6b574703419c
-    version: 0.60.0
-    release_published_at: '2026-10-19T17:55:58Z'
+    upstream_tag: v0.61.0
+    upstream_commit: 17e017e3c07bca3f2048f7cc4ec618a23d9289c5
+    local_file_sha256: fa2030d64f9529b431bd1496519f8d698ad3c74e8ffe438c0c58faeaa60841da
+    version: 0.61.0
+    release_published_at: '2026-10-29T16:51:24Z'
     release_evidence:
-      description: GitHub release API published_at; exact tag commit and independently
-        hashed ARM macOS release archive reviewed
-      reference: https://github.com/vectordotdev/vector/releases/tag/v0.60.0
-    adopted_at: '2026-10-22T05:43:45Z'
-    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
-    adoption_reason: Adopt exact Vector 0.60.0 to move beyond the three upstream 0.57.0
-      security fixes for templated file-sink writes and logstash denial of service,
-      preserving ARM macOS support and independently verifying its release checksum.
-      Residual source and binary dependency advisory matches remain documented; no
-      clean vulnerability or verified SLSA claim is made.
+      description: GitHub release publication and ARM macOS asset 689234977; independently verified SHA-256 matches the API digest and release checksums. Asset updated at 2026-10-29T16:51:18Z; its 48-hour execution minimum ends at 2026-10-31T16:51:18Z.
+      reference: https://api.github.com/repos/vectordotdev/vector/releases/tags/v0.61.0
+    adopted_at: '2026-10-31T04:58:12Z'
+    adoption_commit: fe437fd78d227b5266f16c0b929541bf8e733e27
+    adoption_reason: Adopt the TLS certificate fixes in Vector 0.61.0 while preserving ARM macOS support. Existing dependency advisory matches remain; no clean vulnerability scan or verified SLSA attestation is claimed.
     cooldown_exception:
-      reason: One-time owner authorization for a 24-complete-hour minimum in the October
-        2026 security review, including maintenance updates. Exact release and retained
-        artifacts exceed that minimum; future releases retain the normal 14-day policy.
-      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
+      reason: Security-fix exception for the compromised emSign intermediate certificate rejection in rustls-webpki 0.103.16, included in Vector 0.61.0.
+      reference: https://rustsec.org/advisories/RUSTSEC-2026-0382.html
     legacy_baseline:
     local_changes:
     - Made post-install directories explicitly relative to Homebrew's var directory.
     artifacts:
-      asset_01: aa5c9d89416b39f1a90a7f1a088a9ecbb8c8c3a5669fb86609c9d4a958fe1a28
+      asset_01: 5e747594bb12c8d9ab85c16f2fb5e9fa35bc92911e17099a9721f7d833ae3503
   yq:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
