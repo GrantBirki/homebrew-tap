@@ -269,39 +269,40 @@ formulae:
     cooldown_exception:
   hugo:
     source_type: homebrew-core
-    recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
+    recipe_commit: 58d221dd9c7acd496ec17d85c6077fdc798a3105
     recipe_path: Formula/h/hugo.rb
-    recipe_blob: dd64e8d83e71d92aecd7f877683b6bd3fc65319e
-    local_file_sha256: 52c966569f9c4d3c1a8dbf66f32f4196b32dd6236bddc657929f97e585cbff17
-    release_published_at: '2026-10-13T17:24:15Z'
+    recipe_blob: df1023fa4961e4f245941ca6c4dda0f09ae3b5e5
+    local_file_sha256: 7d2e2ea4dbfdfe1ca1d1fffe71843e7286b62b98c66075332fb5b29f8cf7c8da
+    release_published_at: '2026-10-27T16:24:46Z'
     release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/gohugoio/hugo/releases/tag/v0.168.0
+      description: GitHub release publication and source commit 1da10fc44701c566b1669cdb2d12638f155138bd.
+        Homebrew publish run 40559735712 completed all retained bottle uploads at
+        2026-10-27T18:28:08Z; the 48-hour minimum ended at 2026-10-29T18:28:08Z. See https://github.com/Homebrew/homebrew-core/actions/runs/40559735712.
+      reference: https://github.com/gohugoio/hugo/releases/tag/v0.169.0
     local_changes:
     - Removed the mutable head spec.
     - Pinned the Homebrew core bottle root explicitly.
     recipe_repository: Homebrew/homebrew-core
-    version: 0.168.0
+    version: 0.169.0
     legacy_baseline:
-    adoption_reason: Adopt Hugo 0.168.0 to fix theme-defined module replacement confinement,
-      previous filesystem boundary issues, and HTML/JavaScript escaping. The OpenPGP
-      module advisory has no importing caller in the reviewed selected sources.
+    adoption_reason: Adopt Hugo 0.169.0 security fixes. Existing x/net HTML and go-jose
+      advisory matches remain at unchanged versions and calling paths; no clean vulnerability
+      scan is claimed.
     bottles:
       repository: Homebrew/homebrew-core
-      verified_at: '2026-10-22T05:56:16Z'
+      verified_at: '2026-10-31T18:15:40Z'
       digests:
-        arm64_golden_gate: 28d739b37e6a0f8e164a26b8c4f97a11e486a878698e3a93f3710caf9eb29929
-        arm64_tahoe: 4a3e5ea5f9d2bcb3a53de8e653336071bdfce83a98f8249925f61ef906a97cbd
-        arm64_sequoia: 045eb666297b94bdaeb10e1b230199fe2e02fa047b127cd569978e26df2fb321
-        arm64_linux: be39811fef5a418dd10df0b36bf75bb213673a5c8a6d0db18276fc0628248ddf
-        x86_64_linux: 23ea9272eff90d0538d45eff0f780d0655583e6a7c18c7cd0b21bcd5b8ea6a1b
-    adopted_at: '2026-10-22T05:43:45Z'
-    adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
+        arm64_golden_gate: 177a467f6b2dc87cede65f4df66d391f5b4a50cc8279ccf65566d98e71544a71
+        arm64_tahoe: 837660dfd994c09fb36cd94e506faf104b90ce0d8f8e13ba45ff4b167ef4ecb4
+        arm64_sequoia: f661934f403796464f9ceca5883c4f9143ce365eebfa77d593c8abe6bfd9329a
+        arm64_linux: ffc4820f7f6ea573469fe562d7e59cf48ceb268e7fd6decb1e18044eb5a476c4
+        x86_64_linux: 44df4ac5eb0ad10659a621bc5c3e8718c0fb4c6efef569c3f409de282c73fb24
+    adopted_at: '2026-10-31T18:12:45Z'
+    adoption_commit: bd9119e0731cc8f4352daae14556cc0bbc00026e
     cooldown_exception:
-      reason: One-time owner authorization for a 24-complete-hour minimum in the October
-        2026 security review, including maintenance updates. Exact release and retained
-        artifacts exceed that minimum; future releases retain the normal 14-day policy.
-      reference: https://github.com/GrantBirki/homebrew-tap/blob/785772913588e032fc491fd1ee22b7aa8b54b065/SECURITY.md#one-time-october-2026-security-review
+      reason: Security-fix exception for rejection of compromised eMudhra intermediate
+        certificates in the Go 1.27.3-built bottles.
+      reference: https://go.dev/blog/emudhra-incident
   imagemagick:
     source_type: homebrew-core
     recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
@@ -1022,28 +1023,27 @@ casks:
   santa:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: 284bb9ad3b9df8e729b2b55396b7760b2705c63e
+    recipe_commit: 9654046215532dd26074eb271eef7ce8ef26cb45
     recipe_path: Casks/s/santa.rb
-    recipe_blob: 5293bae375a06d6e221b940892f93bb19985e771
-    local_file_sha256: 2928518b934892c2486590ace471d83780d0b17932b80eb72230cfb3eff645b0
-    version: '2026.8'
-    release_published_at: '2026-09-16T17:07:58Z'
+    recipe_blob: 0e089e2570f00ef397b299e616a5aa6a8185afa6
+    local_file_sha256: 18a7d427a1acb295c1063d52993a0db4258cd87f3b700f5d5cdd4cc896628d42
+    version: '2026.9'
+    release_published_at: '2026-10-27T15:40:44Z'
     release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/northpolesec/santa/releases/tag/2026.8
-    adopted_at: '2026-09-20T18:47:10Z'
-    adoption_commit: b4cc57f1ffef989a895d340d07e4f22d2a0c904e
-    adoption_reason: Adopt Santa 2026.8 to fix execution inspection races, stale cached
-      decisions, and universal binary classification bypasses.
+      description: GitHub release and tag commit d59f6b134323a940686c1b3135c5990ea93efd3d. DMG asset updated at 2026-10-27T15:30:47Z; independently calculated SHA-256 matches the release API. Developer ID ZMCG7MLDV9, Gatekeeper, notarization, embedded package identity, and both system extension signatures verified. No GitHub artifact attestation is published.
+      reference: https://api.github.com/repos/northpolesec/santa/releases/tags/2026.9
+    adopted_at: '2026-10-31T18:10:32Z'
+    adoption_commit: d6c2200582712de520bff2bbe2bdc169308797ee
+    adoption_reason: Fix cached execution decisions and universal-binary policy bypasses in Santa 2026.9. Require macOS 14 to match the signed payload.
     cooldown_exception:
-      reason: Santa 2026.8 fixes an execution inspection race affecting 2026.7 and
-        earlier that lets local users bypass execution policy.
-      reference: https://github.com/northpolesec/santa/security/advisories/GHSA-qwrh-7hrj-mppm
-    legacy_baseline:
+      reason: 'Security-fix exception: Santa 2026.9 prevents a cached execution allow from being reused after executable contents change; 2026.8 and earlier are affected.'
+      reference: https://github.com/northpolesec/santa/security/advisories/GHSA-rprw-5v8q-77cc
+    legacy_baseline: null
     local_changes:
-    - Added an active GitHub release livecheck without changing the pin.
+    - Added an active GitHub release livecheck.
+    - Raised the minimum macOS version to Sonoma to match the signed application and system extensions.
     artifacts:
-      default: 229cbfca5a8ec31075dd71b38e82f5e14230ba3551e8f33c2d8dc998b0ebf1a6
+      default: 512821a1bb2a1a1b6e0ebce5e4dab3fc1b4e244de37855455027aaf8c8b07470
   secretive:
     source_type: upstream-release
     upstream_repository: maxgoedjen/secretive
