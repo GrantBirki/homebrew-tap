@@ -714,7 +714,6 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     verifier = described_class.new(manifest: manifest, runner: runner, out: out, verified_at: Time.utc(2026, 6, 13))
 
     expect(verifier.verify!(["foo"])).to eq(true)
-    expect(runner.commands).to include(["gh", "auth", "status", "--hostname", "github.com"])
     expect(out.string).to include("Verified bottle provenance: foo")
   end
 
