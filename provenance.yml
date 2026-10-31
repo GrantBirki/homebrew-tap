@@ -1022,28 +1022,27 @@ casks:
   santa:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: 284bb9ad3b9df8e729b2b55396b7760b2705c63e
+    recipe_commit: 9654046215532dd26074eb271eef7ce8ef26cb45
     recipe_path: Casks/s/santa.rb
-    recipe_blob: 5293bae375a06d6e221b940892f93bb19985e771
-    local_file_sha256: 2928518b934892c2486590ace471d83780d0b17932b80eb72230cfb3eff645b0
-    version: '2026.8'
-    release_published_at: '2026-09-16T17:07:58Z'
+    recipe_blob: 0e089e2570f00ef397b299e616a5aa6a8185afa6
+    local_file_sha256: 18a7d427a1acb295c1063d52993a0db4258cd87f3b700f5d5cdd4cc896628d42
+    version: '2026.9'
+    release_published_at: '2026-10-27T15:40:44Z'
     release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/northpolesec/santa/releases/tag/2026.8
-    adopted_at: '2026-09-20T18:47:10Z'
-    adoption_commit: b4cc57f1ffef989a895d340d07e4f22d2a0c904e
-    adoption_reason: Adopt Santa 2026.8 to fix execution inspection races, stale cached
-      decisions, and universal binary classification bypasses.
+      description: GitHub release and tag commit d59f6b134323a940686c1b3135c5990ea93efd3d. DMG asset updated at 2026-10-27T15:30:47Z; independently calculated SHA-256 matches the release API. Developer ID ZMCG7MLDV9, Gatekeeper, notarization, embedded package identity, and both system extension signatures verified. No GitHub artifact attestation is published.
+      reference: https://api.github.com/repos/northpolesec/santa/releases/tags/2026.9
+    adopted_at: '2026-10-31T18:10:32Z'
+    adoption_commit: d6c2200582712de520bff2bbe2bdc169308797ee
+    adoption_reason: Fix cached execution decisions and universal-binary policy bypasses in Santa 2026.9. Require macOS 14 to match the signed payload.
     cooldown_exception:
-      reason: Santa 2026.8 fixes an execution inspection race affecting 2026.7 and
-        earlier that lets local users bypass execution policy.
-      reference: https://github.com/northpolesec/santa/security/advisories/GHSA-qwrh-7hrj-mppm
-    legacy_baseline:
+      reason: 'Security-fix exception: Santa 2026.9 prevents a cached execution allow from being reused after executable contents change; 2026.8 and earlier are affected.'
+      reference: https://github.com/northpolesec/santa/security/advisories/GHSA-rprw-5v8q-77cc
+    legacy_baseline: null
     local_changes:
-    - Added an active GitHub release livecheck without changing the pin.
+    - Added an active GitHub release livecheck.
+    - Raised the minimum macOS version to Sonoma to match the signed application and system extensions.
     artifacts:
-      default: 229cbfca5a8ec31075dd71b38e82f5e14230ba3551e8f33c2d8dc998b0ebf1a6
+      default: 512821a1bb2a1a1b6e0ebce5e4dab3fc1b4e244de37855455027aaf8c8b07470
   secretive:
     source_type: upstream-release
     upstream_repository: maxgoedjen/secretive
