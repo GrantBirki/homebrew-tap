@@ -1091,19 +1091,17 @@ casks:
   shit:
     source_type: personal-release
     upstream_repository: grantbirki/shit
-    upstream_tag: v0.2.8
-    upstream_commit: e269c9e372e391b45c6b3bb712d2df5431a80fb8
-    local_file_sha256: 37abad8c0efd4a7f503a2907f14c0cc8c8b85732cbfeb57133dd9aa71e0e44fc
-    version: 0.2.8
-    release_published_at: '2026-09-02T19:03:03Z'
+    upstream_tag: v0.3.0
+    upstream_commit: 6de8bd5dc7c38a976b2dd7c7c8959de7028ffdcf
+    local_file_sha256: d06fefc5033f0a933082be9a71400b317d0d95d08ae825fd3b45b415ec226e75
+    version: 0.3.0
+    release_published_at: '2026-11-03T19:17:13Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/shit/releases/tag/v0.2.8
-    adopted_at: '2026-09-02T19:06:01Z'
-    adoption_commit: 7fde0c180d19c41d0da43a1b46eb686050ec3fac
-    adoption_reason: Adopt Shit v0.2.8 so displayed meeting times follow system timezone
-      changes, with verified Developer ID signing, notarization, a stapled ticket,
-      hardened runtime, and release provenance.
+      reference: https://github.com/GrantBirki/shit/releases/tag/v0.3.0
+    adopted_at: '2026-11-03T19:20:26Z'
+    adoption_commit: 80bf4481b7b981d50285e65a91937d3ee2fb0834
+    adoption_reason: Adopt v0.3.0 to open meeting links from reminders and keep overlapping reminders in the queue.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -1111,4 +1109,4 @@ casks:
       Gatekeeper and quarantine.
     - Restricted installation to Apple silicon.
     artifacts:
-      default: a4bc40b16e298f10fe0a9142d7bd8f8392a2b05f0f7877a2f3e0aa9368ee666a
+      default: 22e3820aa8ac4fd7bf0716bae0484b138d2b11486a45e9d4556dcd2ad0719385
