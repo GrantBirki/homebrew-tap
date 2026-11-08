@@ -849,18 +849,17 @@ casks:
   espresso:
     source_type: personal-release
     upstream_repository: grantbirki/espresso
-    upstream_tag: v0.1.2
-    upstream_commit: 84935d1efaefa89bb2aff8cca9e3051b37c8b6e1
-    local_file_sha256: 7b2061bc0dfaba75c5446b7f0991626562eee69a6b109add9d6680406f69f5c5
-    version: 0.1.2
-    release_published_at: '2026-08-04T15:32:27Z'
+    upstream_tag: v0.1.3
+    upstream_commit: df64cc1be9dacc054691417301553151220cc81f
+    local_file_sha256: 29fe55fc01606e2978eab876a81eec8d77a2ceedbb5ac0c7b0b164912ae9b526
+    version: 0.1.3
+    release_published_at: '2026-11-08T02:18:28Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/espresso/releases/tag/v0.1.2
-    adopted_at: '2026-08-15T17:16:57Z'
-    adoption_commit: d34bc12c64f5d98ea9ad69831a742dcf7c010c2c
-    adoption_reason: Adopt Espresso v0.1.2 with Developer ID signing, Apple notarization,
-      a stapled ticket, hardened runtime, and provenance-attested release packaging.
+      reference: https://github.com/GrantBirki/espresso/releases/tag/v0.1.3
+    adopted_at: '2026-11-08T02:28:42Z'
+    adoption_commit: cc76230933298500f9629aefd924d5f70f5b84fe
+    adoption_reason: Adopt Espresso v0.1.3 with session timing and launch-at-login fixes, verified Developer ID signing, Apple notarization, and release attestation.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -868,7 +867,7 @@ casks:
       Gatekeeper and quarantine.
     - Restricted installation to Apple silicon.
     artifacts:
-      default: a1bdc059e50c255922a201fe65b0ac5105d979604aa3b5248d2502c93b53213e
+      default: 1931cbb3abdba4377a54dc90fcf45382ca81fadd42037095081d1959f0b098ff
   imageoptim:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
