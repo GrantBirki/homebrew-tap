@@ -969,19 +969,19 @@ casks:
   oneshot:
     source_type: personal-release
     upstream_repository: grantbirki/oneshot
-    upstream_tag: v1.2.12
-    upstream_commit: da0d0825dbcb748dd22a6c51b1f30045169fe442
-    local_file_sha256: 273d4d0e91ca4bee3fe3da3b7837ae13d8c383ed810a146321673cc02f905bc6
-    version: 1.2.12
-    release_published_at: '2026-09-06T15:58:43Z'
+    upstream_tag: v1.2.13
+    upstream_commit: 126fc77822289279b4e2d40524c2d6974799d494
+    local_file_sha256: aed5fe35217ba9f833c55fdc549826071362c6d1bedea525bc78851c1a27399e
+    version: 1.2.13
+    release_published_at: '2026-11-08T03:20:21Z'
     release_evidence:
       description: GitHub release published_at
-      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.12
-    adopted_at: '2026-09-06T16:19:11Z'
-    adoption_commit: 30de61e3d87e1de28174fb2c8a8c276640425743
-    adoption_reason: Adopt OneShot v1.2.12 to fix invalid volume crashes and speed
-      up long filename truncation, with verified Developer ID signing, notarization,
-      a stapled ticket, hardened runtime, and artifact provenance.
+      reference: https://github.com/GrantBirki/oneshot/releases/tag/v1.2.13
+    adopted_at: '2026-11-08T03:36:52Z'
+    adoption_commit: 895f5c521d77dcc53d7eb9d7a28bb0151e8c3172
+    adoption_reason: Adopt OneShot v1.2.13 for scrolling capture, preview, and drag-export
+      fixes, with verified checksum, Developer ID signature, and artifact provenance.
+      Notarization and Gatekeeper passed in upstream release CI.
     cooldown_exception:
     legacy_baseline:
     local_changes:
@@ -989,7 +989,7 @@ casks:
       Gatekeeper and quarantine.
     - Restricted installation to Apple silicon.
     artifacts:
-      default: 7818d61530ed0dfabff8c78b1c91fb00da6e5ac0b698b5c069db874d603c784c
+      default: 18332039dff3e4a3ce7a9a3886ab9d6881f009649be808aaa06620dd029b1620
   osquery:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
