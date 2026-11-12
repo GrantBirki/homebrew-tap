@@ -828,7 +828,7 @@ casks:
     recipe_commit: f63a0886713b8b7eb4fbc3c5c08228eecd99be52
     recipe_path: Casks/b/blockblock.rb
     recipe_blob: 4fbd7f20b1bc329695c8110a5b4be3b7a57129f7
-    local_file_sha256: d2c7e35609a7614493723fa4a751a129cd8e6ab36b2acbab915f3572ee195eaa
+    local_file_sha256: 0579f64de25f904c53390c9b19bd6839a2b92692259c265b1b06267ee34876c9
     version: 2.5.2
     release_published_at: '2026-09-14T09:36:33Z'
     release_evidence:
@@ -840,7 +840,7 @@ casks:
     cooldown_exception:
     legacy_baseline:
     local_changes:
-    - Retain the verified GitHub source declaration and active release livecheck.
+    - Removed the deprecated verified URL parameter. Retain active release livecheck.
     artifacts:
       default: 7e5a332a4da6a22e8b494418c3cac241d24b43176c8bfc4bb2ef8bdc640bd4c7
   espresso:
@@ -896,10 +896,10 @@ casks:
     recipe_commit: f06ec02f5bd3ea26cc01c2a39f6a8823a7ae455d
     recipe_path: Casks/k/karabiner-elements.rb
     recipe_blob: f0fc80893c515bc6129f6909e3a8e703688a0b75
-    local_file_sha256: 253a234a964ec9a51e698c431e3e635f8a210ba13e6d325a3c6994da9e322836
+    local_file_sha256: bce1e615fc0537c207057a52abf61dacb9fe45ecc40198637f1ca63346ab313f
     release_published_at: '2026-09-06T07:49:45Z'
     local_changes:
-    - Retain local verified GitHub source declaration.
+    - Removed the deprecated verified URL parameter.
     - Retain the macOS-only cask and existing livecheck/install/uninstall/zap declarations.
     - Retain the existing macOS Ventura minimum; omit upstream legacy branches that
       would expand this tap cask platform support.
@@ -923,7 +923,7 @@ casks:
     recipe_commit: b16e020e108e15c2c3b9d9bb8eada361171c2d04
     recipe_path: Casks/k/keepassxc.rb
     recipe_blob: e2a397275b1d7fbe7264dde124b1490ce4a92e7a
-    local_file_sha256: 308765ba78cbdd7bb8280b760bcda644f2281c2089f57ccc47a5776c9bd1aa38
+    local_file_sha256: 58cd8773193f5c848feae4039d0a602b37876e668e27a38ee4023dd7cdc0b574
     version: 2.7.12
     release_published_at: '2026-03-10T01:16:42Z'
     release_evidence:
@@ -934,7 +934,8 @@ casks:
     adoption_reason: 'Restore 2.7.12 after crashes with 2.8.0-1; this rollback temporarily restores known browser-integration and legacy KDB-import vulnerabilities.'
     cooldown_exception:
     legacy_baseline:
-    local_changes: []
+    local_changes:
+    - Removed the deprecated verified URL parameter.
     artifacts:
       arm: 65f4f63607180c0a15794b4a4068f85e99ed5391c87c1fb9312648f1b36fed40
       intel: f55737bf759b7ea622967ae979e8fd0ef06a8133104124c24861fd11a3fe14b5
@@ -944,10 +945,10 @@ casks:
     recipe_commit: f06ec02f5bd3ea26cc01c2a39f6a8823a7ae455d
     recipe_path: Casks/k/knockknock.rb
     recipe_blob: 6af189f146e1a4fb43f747b21c92a55d62b14bdf
-    local_file_sha256: 62fbdb97f1464ed9a1480f868b79353a6d4ccdbbe1498817205f2445f93bb868
+    local_file_sha256: a0658b53128cf05973212fe56c9fbad02fccacb81cbf041f90970969a9559c16
     release_published_at: '2026-09-15T08:53:55Z'
     local_changes:
-    - Retain local verified GitHub source declaration.
+    - Removed the deprecated verified URL parameter.
     - Retain the macOS-only cask and existing livecheck/install/uninstall/zap declarations.
     version: 4.1.0
     release_evidence:
@@ -993,10 +994,10 @@ casks:
     recipe_commit: f06ec02f5bd3ea26cc01c2a39f6a8823a7ae455d
     recipe_path: Casks/o/osquery.rb
     recipe_blob: aeec4bc1d71a502958393186426fab1baf3cc3b9
-    local_file_sha256: 310536b6d0dc07e5417e16282f14219ab79127a21f850aa2787d371e87c00247
+    local_file_sha256: 436a0456b24a09744d33471864baae679ad381033c49625ef63a4fb4926abf45
     release_published_at: '2026-10-09T22:50:20Z'
     local_changes:
-    - Retain local verified GitHub source declaration.
+    - Removed the deprecated verified URL parameter.
     - Retain existing macOS-only pkg artifact and uninstall launchctl/pkgutil rules.
     version: 5.24.0
     release_evidence:
