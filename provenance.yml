@@ -825,27 +825,25 @@ casks:
   blockblock:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
-    recipe_commit: a4a71323a882423554837a5d7f7c36ad6fd51e29
+    recipe_commit: f63a0886713b8b7eb4fbc3c5c08228eecd99be52
     recipe_path: Casks/b/blockblock.rb
-    recipe_blob: 30b53607795b7287a888d5438296f80dee137b0e
-    local_file_sha256: 35857c816fde7f638e72a5dac61cb3355505a705ae3123dec23532481875766c
-    version: 2.4.4
-    release_published_at: '2026-04-13T00:23:17Z'
+    recipe_blob: 4fbd7f20b1bc329695c8110a5b4be3b7a57129f7
+    local_file_sha256: d2c7e35609a7614493723fa4a751a129cd8e6ab36b2acbab915f3572ee195eaa
+    version: 2.5.2
+    release_published_at: '2026-09-14T09:36:33Z'
     release_evidence:
-      description: GitHub release published_at
-      reference: https://github.com/objective-see/BlockBlock/releases/tag/v2.4.4
-    adopted_at: '2026-05-29T05:30:18Z'
-    adoption_commit: 8ac476f1272859878cf0404c76a356aa52592c08
-    adoption_reason: 'Legacy baseline: retain the existing user-selected cask pin
-      without changing its version or digests.'
+      description: GitHub release published_at; asset uploaded 2026-09-14T09:36:08Z and last updated 2026-09-14T09:36:11Z; upstream tag commit 9d53e2230633a5a692bd82717c678c50ca98f30c; independent SHA-256, Developer ID signature and codesign notarization checks passed.
+      reference: https://github.com/objective-see/BlockBlock/releases/tag/v2.5.2
+    adopted_at: '2026-11-12T06:37:28Z'
+    adoption_commit: 135dfe77d2a91ff2b7f3118b6bae101c99b691fe
+    adoption_reason: Adopt BlockBlock 2.5.2 for macOS 27 compatibility and installer startup checks. Upstream now removes quarantine from installed components; spctl and stapler assessments were unavailable in the verification environment, while codesign --check-notarization passed for the installer, daemon and helper.
     cooldown_exception:
     legacy_baseline:
-      version: 2.4.4
-      artifact_fingerprint_sha256: e834bcb269324e4c05bf94183f7f69399eef7f6fe012872a84177e86cfe57146
     local_changes:
-    - Added an active GitHub release livecheck without changing the pin.
+    - Retain the verified GitHub source declaration and active release livecheck.
+    - Preserve existing macOS, installation, uninstall and zap declarations.
     artifacts:
-      default: e2eb6ab6acef0e4fc563d5596e7dcee8c3d2797896f0d976a8ae27e5faea8ccf
+      default: 7e5a332a4da6a22e8b494418c3cac241d24b43176c8bfc4bb2ef8bdc640bd4c7
   espresso:
     source_type: personal-release
     upstream_repository: grantbirki/espresso
