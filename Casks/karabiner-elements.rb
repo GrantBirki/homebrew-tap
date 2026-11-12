@@ -2,8 +2,7 @@ cask "karabiner-elements" do
   version "16.3.0"
   sha256 "19cce7bed3d48a722242ca683bd1bae406b6a87fed520728d1c91dee175b75e4"
 
-  url "https://github.com/pqrs-org/Karabiner-Elements/releases/download/v#{version}/Karabiner-Elements-#{version}.dmg",
-      verified: "github.com/pqrs-org/Karabiner-Elements/"
+  url "https://github.com/pqrs-org/Karabiner-Elements/releases/download/v#{version}/Karabiner-Elements-#{version}.dmg"
   name "Karabiner Elements"
   desc "Keyboard customiser"
   homepage "https://karabiner-elements.pqrs.org/"
