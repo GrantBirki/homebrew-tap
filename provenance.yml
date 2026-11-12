@@ -828,7 +828,7 @@ casks:
     recipe_commit: f63a0886713b8b7eb4fbc3c5c08228eecd99be52
     recipe_path: Casks/b/blockblock.rb
     recipe_blob: 4fbd7f20b1bc329695c8110a5b4be3b7a57129f7
-    local_file_sha256: 41de35e43dc57ed2123f8ac9381904286602172c8550e45fed22bbc84dd8b499
+    local_file_sha256: 484779ebd8f47151cedd9f6d0a66ed60ace560400d0a12bd1b9e43dd97459be1
     version: 2.5.2
     release_published_at: '2026-09-14T09:36:33Z'
     release_evidence:

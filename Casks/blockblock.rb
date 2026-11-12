@@ -31,7 +31,7 @@ cask "blockblock" do
         [[ ${actual%% *} == "e9979b47433693c8df6d650ae79b5182c0ad289bb7ae094ea7396878cb11fccc" ]] || { echo 'BlockBlock installer helper checksum mismatch.' >&2; exit 1; }
         /bin/bash "$work/install-blockblock.sh" "$2"
       BASH
-      "blockblock-install", "#{__dir__}/../libexec/install-blockblock.sh", "#{staged_path}/BlockBlock Installer.app",
+      "blockblock-install", "#{__dir__}/../libexec/install-blockblock.sh", "#{staged_path}/BlockBlock Installer.app"
     ],
     sudo:       true,
   }
