@@ -30,6 +30,8 @@ brew "grantbirki/tap/bat", trusted: true
 brew "grantbirki/tap/dfu-programmer", trusted: true
 # Modern, maintained replacement for ls
 brew "grantbirki/tap/eza", trusted: true
+# Git extension for large files
+brew "grantbirki/tap/git-lfs", trusted: true
 # GitHub command-line tool
 brew "grantbirki/tap/gh", trusted: true
 # Audio/video processing toolkit
@@ -77,6 +79,9 @@ brew "pyenv"
 brew "rbenv"
 
 ### Casks ###
+
+# Release automation
+cask "grantbirki/tap/goreleaser", trusted: true
 
 # GPU-accelerated terminal emulator
 cask "grantbirki/tap/alacritty", trusted: true

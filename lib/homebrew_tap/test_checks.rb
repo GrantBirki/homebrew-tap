@@ -14,12 +14,12 @@ module HomebrewTap
     LOCAL_CONTENT_ENV = (HOMEBREW_ENV + ["HOMEBREW_NO_INSTALL_FROM_API=1"]).freeze
 
     FORMULA_TOKENS = %w[
-      ansible bash bat dfu-programmer eza ffmpeg gh gnupg hugo imagemagick libyaml nmap
+      ansible bash bat dfu-programmer eza ffmpeg gh git-lfs gnupg hugo imagemagick libyaml nmap
       osv-scanner pinentry-mac ripgrep rustup swiftformat swiftlint tart tfenv tree
       uninstall vector yq
     ].freeze
     CASK_TOKENS = %w[
-      alacritty blockblock imageoptim karabiner-elements keepassxc knockknock osquery santa secretive
+      alacritty blockblock goreleaser imageoptim karabiner-elements keepassxc knockknock osquery santa secretive
     ].freeze
     RUBOCOP_PATHS = %w[lib spec].freeze
 

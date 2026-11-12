@@ -39,6 +39,10 @@ malicious-version withdrawal. The provenance entry and pull request must name
 the primary-source advisory or revocation and explain the exception. "Latest
 version available" is not an exception.
 
+### GoReleaser 2.20.2 security-fix adoption
+
+GoReleaser 2.20.2 is adopted before the ordinary seven-day cooldown because it includes fixes for [credential exposure](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-7qv4-9g3j-wvq8), [secret logging](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-gvxm-cvj4-qwvp), and [RPM macro injection](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-rjp9-h7gp-wr7q), plus the [2.20.2 credential-redaction follow-up](https://github.com/goreleaser/goreleaser/releases/tag/v2.20.2). The macOS artifacts and full source commit are bound in `provenance.yml`. The selected binaries must not be executed before November 14, 2026 14:02:54 UTC, which is 48 hours after the later macOS artifact upload; repository parser checks do not execute them.
+
 ### One-time Secretive 4.0.0 override
 
 On September 30, 2026, the owner explicitly authorized early adoption of [Secretive 4.0.0](https://github.com/maxgoedjen/secretive/releases/tag/v4.0.0) before its October 5, 2026 03:08:01 UTC cooldown deadline under the 14-day policy then in effect. This is an owner override for this release only, not a security advisory or incident exception. It applies only to upstream commit `54e0d00d87e207377101b0ea6ddfa624cd1a1c16` and the `Secretive.zip` SHA-256 `877517e212938ffb7048bc7b6811e992194ba4b3eaa4dae36405b6303d1ac1fa`. The provenance exception references this decision. All artifact, signing, quarantine, and review requirements remain in force; other releases retain the normal cooldown and exception policy.
