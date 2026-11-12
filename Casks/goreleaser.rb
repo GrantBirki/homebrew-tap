@@ -15,8 +15,9 @@ cask "goreleaser" do
     strategy :github_latest
   end
 
-  depends_on :macos
   conflicts_with cask: "goreleaser-pro"
+
+  depends_on :macos
 
   binary "goreleaser"
   manpage "manpages/goreleaser.1.gz"
