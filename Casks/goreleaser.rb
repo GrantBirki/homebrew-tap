@@ -16,7 +16,6 @@ cask "goreleaser" do
   end
 
   conflicts_with cask: "goreleaser-pro"
-
   depends_on :macos
 
   binary "goreleaser"

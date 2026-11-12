@@ -906,7 +906,7 @@ casks:
     upstream_repository: goreleaser/goreleaser
     upstream_tag: v2.20.2
     upstream_commit: 1bf59683fabedd7b446d089ec31b1e343b472ce6
-    local_file_sha256: f3be4fc6a264ff0875c4fae7527a1e13e87684a783fdfe80fc1d5746d91bd346
+    local_file_sha256: 5a73252c8ac1f5ab14a552b55a704e2cc9510fa4a9b0499da978c1f0c65d1be5
     version: 2.20.2
     release_published_at: '2026-11-12T14:03:16Z'
     release_evidence:
