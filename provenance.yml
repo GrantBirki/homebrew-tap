@@ -236,6 +236,42 @@ formulae:
     artifacts:
       asset_01: '08bfef98b50c553df122bb34ee8dcf415cae7d3b108891488964a0df07aa2aeb'
       asset_02: 91c5fbd493274b545b03ef32a89c2a21238393c0c0b1108210967199b3230d9d
+  git-lfs:
+    source_type: homebrew-core
+    recipe_repository: Homebrew/homebrew-core
+    recipe_commit: 992f71ee136a299466ad747cfcbd5a5c3582751c
+    recipe_path: Formula/g/git-lfs.rb
+    recipe_blob: f506e0cb31669bf9c5bbc5e053371f0c59f4646b
+    local_file_sha256: f0b3ca69a2e384d42c105972ee8d05a2b0d912b7253957652be32076b10aff43
+    version: 3.8.1
+    release_published_at: '2026-10-22T18:30:55Z'
+    release_evidence:
+      description: GitHub release publication; upstream commit a662a6dbfedf706cfa9fc7a5b7bcc7ba2e2c8a65;
+        independently downloaded source archive matches the release API SHA-256 and
+        published checksums. Source asset last updated 2026-10-22T16:17:33Z.
+      reference: https://github.com/git-lfs/git-lfs/releases/tag/v3.8.1
+    adopted_at: '2026-11-12T22:19:31Z'
+    adoption_commit: 38af9917934f2967bacc15263ec02e13fafb1d0d
+    adoption_reason: Bring Git LFS 3.8.1 under reviewed tap updates, retaining the
+      upstream security fixes for CVE-2026-69260, CVE-2026-69261, CVE-2026-105802
+      and CVE-2026-105803. This recipe does not change Git configuration automatically.
+      Dependency advisory matches remain for github.com/klauspost/compress, golang.org/x/net,
+      golang.org/x/crypto and golang.org/x/text; the selected 3.8.1 code is unchanged
+      from the core release, and this pin is not a claim that all bundled dependencies
+      are vulnerability-free.
+    cooldown_exception:
+    legacy_baseline:
+    local_changes:
+    - Pinned the Homebrew core bottle root explicitly.
+    bottles:
+      repository: Homebrew/homebrew-core
+      verified_at: '2026-11-12T22:20:25Z'
+      digests:
+        arm64_golden_gate: eeebeea7809cebc90dc539f5c72fe607f5418f346e855a159c08d6b453f8b088
+        arm64_tahoe: eeebeea7809cebc90dc539f5c72fe607f5418f346e855a159c08d6b453f8b088
+        arm64_sequoia: eeebeea7809cebc90dc539f5c72fe607f5418f346e855a159c08d6b453f8b088
+        arm64_linux: 8f482de6c05507eafc2132cc82400f73687f8768b6d43c6002571eb045f4c158
+        x86_64_linux: 16986c189e2c86839c171a8ce1d6d05baebf5bf34825cfbe6db5cf821306a308
   gnupg:
     source_type: homebrew-core
     recipe_commit: e1ddd75136fa3871d59788e99e7db761b55fcd09
@@ -865,6 +901,46 @@ casks:
     - Restricted installation to Apple silicon.
     artifacts:
       default: 5e2b848467918487b42b91622ebbaebbedb649a5b7908f667e1f423fd5179702
+  goreleaser:
+    source_type: upstream-release
+    upstream_repository: goreleaser/goreleaser
+    upstream_tag: v2.20.2
+    upstream_commit: 1bf59683fabedd7b446d089ec31b1e343b472ce6
+    local_file_sha256: 5a73252c8ac1f5ab14a552b55a704e2cc9510fa4a9b0499da978c1f0c65d1be5
+    version: 2.20.2
+    release_published_at: '2026-11-12T14:03:16Z'
+    release_evidence:
+      description: 'GitHub release publication and independent archive SHA-256 verification
+        for ARM64 and Intel. GitHub attestations verify the exact source commit and
+        .github/workflows/release.yml at refs/tags/v2.20.2. Native macOS codesign --verify
+        --strict --check-notarization passed for both binaries; hardened runtime and
+        Team ID SRV7USCUUN. ARM64 archive last updated 2026-11-12T14:02:54Z; Intel archive
+        last updated 2026-11-12T14:02:51Z. Earliest execution after the 48-hour artifact
+        gate: 2026-11-14T14:02:54Z.'
+      reference: https://github.com/goreleaser/goreleaser/releases/tag/v2.20.2
+    adopted_at: '2026-11-12T22:19:31Z'
+    adoption_commit: 38af9917934f2967bacc15263ec02e13fafb1d0d
+    adoption_reason: 'Bring GoReleaser under reviewed tap updates with the 2.20.1 security
+      fixes and 2.20.2 credential-redaction follow-up. Dependency review retains GO-2026-6225
+      (Azure credential helper) and GO-2026-5932 (legacy OpenPGP), already present in
+      2.18.3: the Azure helper version is identical and golang.org/x/crypto has no OpenPGP
+      source changes between v0.57.0 and v0.58.0. GO-2026-6905 affects ar.Reader.Read,
+      whose symbol is absent from both inspected ARM64 binaries. This pin does not certify
+      the absence of vulnerabilities.'
+    cooldown_exception:
+      reason: Security-fix exception for GHSA-7qv4-9g3j-wvq8, GHSA-gvxm-cvj4-qwvp and
+        GHSA-rjp9-h7gp-wr7q, including the 2.20.2 redaction follow-up. No execution
+        of the selected binaries before 2026-11-14T14:02:54Z.
+      reference: https://github.com/goreleaser/goreleaser/security/advisories/GHSA-7qv4-9g3j-wvq8
+    legacy_baseline:
+    local_changes:
+    - Retained upstream binary, manual page and completion installation for macOS ARM64
+      and Intel.
+    - Added active release discovery instead of the generated upstream livecheck skip.
+    - Preserved quarantine; no install-time commands or Git configuration changes.
+    artifacts:
+      arm: 4e68482f6bbdb2d3ce7f835be50a4eb7287ee999cefc563c49c5f42ad3778c78
+      intel: 58814536817f6ad787607ed7dfc9e774b3f1334dcffc87002ae2a54fd7b5c5c1
   imageoptim:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask

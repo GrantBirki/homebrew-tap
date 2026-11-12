@@ -22,6 +22,8 @@ brew install grantbirki/tap/bash
 
 Formulae in this tap are vendored direct roots. They do not move automatically with `homebrew/core`; transitive dependencies still do. Formula and cask updates use a 7-day release cooldown. The explicitly owner-controlled `uninstall` formula and `espresso`, `oneshot`, and `shit` casks may be adopted immediately, but still require exact upstream provenance, checksums, and explicit adoption reasons. See [SECURITY.md](SECURITY.md) before changing a version, checksum, resource, or bottle.
 
+GoReleaser and Git LFS are included as tap-qualified, checksum-pinned bootstrap packages.
+
 ## Vendor a Formula
 
 Import the direct formula recipe from an exact upstream commit, preserve its
