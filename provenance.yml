@@ -828,22 +828,19 @@ casks:
     recipe_commit: f63a0886713b8b7eb4fbc3c5c08228eecd99be52
     recipe_path: Casks/b/blockblock.rb
     recipe_blob: 4fbd7f20b1bc329695c8110a5b4be3b7a57129f7
-    local_file_sha256: 484779ebd8f47151cedd9f6d0a66ed60ace560400d0a12bd1b9e43dd97459be1
+    local_file_sha256: d2c7e35609a7614493723fa4a751a129cd8e6ab36b2acbab915f3572ee195eaa
     version: 2.5.2
     release_published_at: '2026-09-14T09:36:33Z'
     release_evidence:
       description: GitHub release published_at; asset uploaded 2026-09-14T09:36:08Z and last updated 2026-09-14T09:36:11Z; upstream tag commit 9d53e2230633a5a692bd82717c678c50ca98f30c; independent SHA-256 and Developer ID checks passed; Gatekeeper accepted the installer, daemon and helper as Notarized Developer ID in a fresh macOS 27.2.1 VM with assessments enabled.
       reference: https://github.com/objective-see/BlockBlock/releases/tag/v2.5.2
-    adopted_at: '2026-11-12T18:32:28Z'
-    adoption_commit: 91dbc8ac2fe3f83b929cf26bd3a9543e6e956e54
-    adoption_reason: Adopt BlockBlock 2.5.2 for macOS 27 compatibility using a hash-bound tap installer that preserves quarantine and unchanged signed bundles. Fresh install, 2.4.4 payload-fixture upgrade, real persistence alerts, restart, failure recovery and upstream uninstall were verified in a fresh macOS 27.2.1 VM with Gatekeeper enabled; normal Open and Full Disk Access approvals remain required.
+    adopted_at: '2026-11-12T20:49:39Z'
+    adoption_commit: 135dfe77d2a91ff2b7f3118b6bae101c99b691fe
+    adoption_reason: Bump BlockBlock to 2.5.2 using the unchanged upstream installer. The owner explicitly approved its quarantine-clearing behavior and possible settings/rules reset for this version on November 12, 2026. The standard Homebrew upgrade flow was not tested.
     cooldown_exception:
     legacy_baseline:
     local_changes:
     - Retain the verified GitHub source declaration and active release livecheck.
-    - Preserve the macOS requirement and upstream uninstall and zap declarations.
-    - Replace the quarantine-clearing install branch with a protected, hash-bound local helper; retain signed payloads, login registration, preferences and rules, and author fixed local launchd configuration.
-    - Require normal first-launch approval before starting the root daemon; open the helper for user setup and preserve original bundle identities during rollback.
     artifacts:
       default: 7e5a332a4da6a22e8b494418c3cac241d24b43176c8bfc4bb2ef8bdc640bd4c7
   espresso:

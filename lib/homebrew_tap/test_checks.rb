@@ -250,7 +250,7 @@ module HomebrewTap
       end
 
       def scripts
-        Dir[File.join(@root, "{script,libexec}/**/*")].select do |path|
+        Dir[File.join(@root, "script/*")].select do |path|
           File.file?(path) && File.open(path, &:readline).include?("bash")
         rescue EOFError
           false

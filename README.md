@@ -47,8 +47,6 @@ development and CI. Use `script/install` for Homebrew lifecycle management.
 
 Personal casks such as Espresso, OneShot, and Shit are intentionally outside the default Brewfile and preserve macOS quarantine. OneShot and Shit are Apple silicon-only, Developer ID signed, and notarized, so they pass Gatekeeper normally; unsigned releases require manual approval.
 
-BlockBlock keeps quarantine and uses normal macOS Open and Full Disk Access approvals. See [BlockBlock installation](docs/blockblock.md) for setup and verification details.
-
 ## Development
 
 Run the same checks used by CI:
