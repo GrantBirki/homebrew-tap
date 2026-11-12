@@ -160,6 +160,7 @@ RSpec.describe HomebrewTap::TestChecks do
     write("Brewfile", %(tap "grantbirki/tap"\n))
     write("script/install", "#!/usr/bin/env bash\n")
     write("script/lint", "#!/usr/bin/env bash\n")
+    write("libexec/example.sh", "#!/bin/bash\n")
     write("script/empty", "")
     fake = FakeRunner.new
 
@@ -168,6 +169,7 @@ RSpec.describe HomebrewTap::TestChecks do
 
     expect(described_class::ShellSyntax.new(root: @root, runner: fake).validate).to eq(true)
     expect(fake.commands).to include(["bash", "-n", File.join(@root, "script/install")])
+    expect(fake.commands).to include(["bash", "-n", File.join(@root, "libexec/example.sh")])
 
     provenance = instance_double(HomebrewTap::ProvenanceManifest, validate: true)
     allow(HomebrewTap::ProvenanceManifest).to receive(:new).with(root: @root).and_return(provenance)

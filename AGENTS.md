@@ -145,6 +145,10 @@ the same change. Do not weaken a check merely to make stale metadata pass.
   - Vendored Homebrew cask DSL.
   - Pinned casks may intentionally differ from current homebrew/cask.
   - Personal unsigned casks preserve quarantine.
+- **libexec/install-blockblock.sh**
+  - Privileged BlockBlock installation from unchanged signed payloads.
+  - Its SHA-256 is pinned in the cask and checked after protected root copying.
+  - Preserve quarantine, normal first-launch approval, settings, login registration and rollback. Test installation only in an explicitly authorized disposable VM; see **docs/blockblock.md**.
 - **Brewfile**
   - Default bootstrap inventory.
   - Grants trust to exact tap items and globally requires cask SHA-256.
@@ -230,6 +234,7 @@ Important invariants:
 
 - **local_file_sha256** binds the whole checked-in formula or cask file. Even a
   comment or livecheck-only edit requires recalculating it.
+- Cask artifact digests come from `sha256` declarations, including architecture variants. A local installer helper hash is bound by the whole cask hash and verified after protected root copying; it is not a second download variant.
 - The legacy artifact fingerprint binds the pre-policy direct digest set. A
   legacy baseline cannot be carried forward to a later version or digest
   adoption.

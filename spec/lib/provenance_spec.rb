@@ -415,6 +415,39 @@ RSpec.describe HomebrewTap::ProvenanceManifest do
     end
   end
 
+  it "distinguishes cask download checksums from local helper pins without hiding download drift" do
+    data = base_data
+    helper_sha = "e" * 64
+    source = cask_source.sub("  app ", %(  helper_sha256 = "#{helper_sha}"\n  app ))
+    path = write("Casks/app.rb", source)
+    entry = data["casks"]["app"]
+    entry["legacy_baseline"] = nil
+    entry["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    expect(manifest(data).validate).to eq(true)
+
+    source = source.sub(%(sha256 "#{ProvenanceSpecFixtures::CASK_SHA}"), %(sha256 "#{helper_sha}"))
+    source = source.sub("  app ", %(  old_download_sha256 = "#{ProvenanceSpecFixtures::CASK_SHA}"\n  app ))
+    write("Casks/app.rb", source)
+    entry["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /artifacts do not match the cask/)
+  end
+
+  it "checks every checksum in a multiline cask architecture declaration" do
+    data = base_data
+    intel_sha = "e" * 64
+    source = cask_source.sub(%(sha256 "#{ProvenanceSpecFixtures::CASK_SHA}"),
+                             %(sha256 arm: "#{ProvenanceSpecFixtures::CASK_SHA}",\n         intel: "#{intel_sha}"))
+    path = write("Casks/app.rb", source)
+    entry = data["casks"]["app"]
+    entry["legacy_baseline"] = nil
+    entry["local_file_sha256"] = Digest::SHA256.file(path).hexdigest
+    entry["artifacts"] = { "arm" => ProvenanceSpecFixtures::CASK_SHA, "intel" => intel_sha }
+    expect(manifest(data).validate).to eq(true)
+
+    entry["artifacts"].delete("intel")
+    expect { manifest(data).validate }.to raise_error(HomebrewTap::Error, /artifacts do not match the cask/)
+  end
+
   it "rejects mutable inputs and formula or cask digest drift" do
     data = base_data
     formula_path = File.join(@root, "Formula/foo.rb")

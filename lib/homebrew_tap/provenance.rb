@@ -376,7 +376,8 @@ module HomebrewTap
         failures << "#{label}.artifacts must map variants to SHA-256 values"
         return
       end
-      actual = content.scan(/\b[0-9a-f]{64}\b/i).map(&:downcase).uniq.sort
+      declarations = content.scan(/^\s*sha256\s+(?:"[0-9a-f]{64}"|(?:\w+:\s*"[0-9a-f]{64}"(?:,\s*)?)+)/i)
+      actual = declarations.flat_map { |declaration| declaration.scan(/[0-9a-f]{64}/i) }.map(&:downcase).uniq.sort
       failures << "#{label}.artifacts do not match the cask" unless actual == expected.values.map(&:downcase).uniq.sort
 
       platform_versions = entry["platform_versions"]
