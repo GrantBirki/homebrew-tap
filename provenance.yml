@@ -835,7 +835,7 @@ casks:
       description: GitHub release published_at; asset uploaded 2026-09-14T09:36:08Z and last updated 2026-09-14T09:36:11Z; upstream tag commit 9d53e2230633a5a692bd82717c678c50ca98f30c; independent SHA-256 and Developer ID checks passed; Gatekeeper accepted the installer, daemon and helper as Notarized Developer ID in a fresh macOS 27.2.1 VM with assessments enabled.
       reference: https://github.com/objective-see/BlockBlock/releases/tag/v2.5.2
     adopted_at: '2026-11-12T18:32:28Z'
-    adoption_commit: 135dfe77d2a91ff2b7f3118b6bae101c99b691fe
+    adoption_commit: 91dbc8ac2fe3f83b929cf26bd3a9543e6e956e54
     adoption_reason: Adopt BlockBlock 2.5.2 for macOS 27 compatibility using a hash-bound tap installer that preserves quarantine and unchanged signed bundles. Fresh install, 2.4.4 payload-fixture upgrade, real persistence alerts, restart, failure recovery and upstream uninstall were verified in a fresh macOS 27.2.1 VM with Gatekeeper enabled; normal Open and Full Disk Access approvals remain required.
     cooldown_exception:
     legacy_baseline:
