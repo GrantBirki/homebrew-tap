@@ -771,7 +771,7 @@ formulae:
       description: GitHub release published_at; archive independently rehashed against the API digest and release checksum, contents compared with the exact tag commit, and GitHub Actions attestation verified.
       reference: https://github.com/GrantBirki/uninstall/releases/tag/v1.3.6
     adopted_at: '2026-11-13T06:13:23Z'
-    adoption_commit:
+    adoption_commit: cda4462817ea94f37060a9d8e3a02faa680a0b0c
     adoption_reason: Adopt the owner-controlled v1.3.6 release for retryable cleanup, exact bundle ID cleanup after app removal, and visible Finder errors.
     cooldown_exception:
     legacy_baseline:
