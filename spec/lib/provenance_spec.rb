@@ -547,13 +547,13 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
   end
 
   def core_info_command
-    ["env", "HOMEBREW_NO_AUTO_UPDATE=1", "brew", "ruby", "-e", described_class::CORE_INFO_SCRIPT, "foo"]
+    [*described_class::HOMEBREW_ENV, "brew", "ruby", "-e", described_class::CORE_INFO_SCRIPT, "foo"]
   end
 
   def core_fetch_command(recipe, sha:, version: "1.0.0", extra_bottles: {})
     digests = { "arm64_tahoe" => sha }.merge(extra_bottles)
     [
-      "env", "HOMEBREW_NO_AUTO_UPDATE=1", "brew", "ruby", "-e", described_class::CORE_FETCH_SCRIPT,
+      *described_class::HOMEBREW_ENV, "brew", "ruby", "-e", described_class::CORE_FETCH_SCRIPT,
       "foo", version, JSON.generate(digests), Digest::SHA256.hexdigest(recipe.unpack1("m0"))
     ]
   end
@@ -826,7 +826,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     bottle_path = write("cache/foo.bottle.tar.gz", "bottle")
     manifest, bottle_sha, recipe, info = setup_manifest(bottle_path: bottle_path, core_version: "2.0.0")
     api_command = ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"]
-    cache_command = ["brew", "--cache", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"]
+    cache_command = [*described_class::HOMEBREW_ENV, "brew", "--cache", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"]
     attestation_command = [
       "gh", "attestation", "verify", bottle_path,
       "--repo", "Homebrew/homebrew-core",
@@ -841,7 +841,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
 
     expect(described_class.new(manifest: manifest, runner: runner).verify!(["--all"])).to eq(true)
     expect(runner.commands).to include([
-                                         "env", "HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST=1",
+                                         *described_class::HOMEBREW_ENV,
                                          "brew", "fetch", "--force", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"
                                        ])
   end
@@ -852,7 +852,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     runner = FakeRunner.new(captures: {
                               ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
                               core_info_command => info,
-                              ["brew", "--cache", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"] => bottle_path,
+                              [*described_class::HOMEBREW_ENV, "brew", "--cache", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"] => bottle_path,
                               [
                                 "gh", "attestation", "verify", bottle_path,
                                 "--repo", "Homebrew/homebrew-core",
@@ -862,7 +862,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
 
     expect(described_class.new(manifest: manifest, runner: runner).verify!(["foo"])).to eq(true)
     expect(runner.commands).to include([
-                                         "env", "HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST=1",
+                                         *described_class::HOMEBREW_ENV,
                                          "brew", "fetch", "--force", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"
                                        ])
   end
@@ -919,7 +919,7 @@ RSpec.describe HomebrewTap::ProvenanceVerifier do
     runner = FakeRunner.new(captures: {
                               ["gh", "api", "repos/Homebrew/homebrew-core/contents/Formula/f/foo.rb?ref=#{'c' * 40}"] => JSON.generate("sha" => "d" * 40, "content" => recipe),
                               core_info_command => info,
-                              ["brew", "--cache", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"] => bottle_path,
+                              [*described_class::HOMEBREW_ENV, "brew", "--cache", "--bottle-tag=arm64_tahoe", "--formula", "grantbirki/tap/foo"] => bottle_path,
                               [
                                 "gh", "attestation", "verify", bottle_path,
                                 "--repo", "Homebrew/homebrew-core",

@@ -175,7 +175,7 @@ RSpec.describe HomebrewTap::TestChecks do
     formula_command = fake.commands.last
     expect(formula_command).to include(
       "HOMEBREW_NO_AUTO_UPDATE=1",
-      "HOMEBREW_REQUIRE_TAP_TRUST=1",
+      "HOMEBREW_REQUIRE_TAP_TRUST", "HOMEBREW_NO_REQUIRE_TAP_TRUST",
       "HOMEBREW_NO_INSTALL_FROM_API=1",
     )
     expect(formula_command.join(" ")).to include("Formulary.from_contents", "Homebrew::SimulateSystem.with")
@@ -185,7 +185,7 @@ RSpec.describe HomebrewTap::TestChecks do
     expect(cask_command[0]).to eq("env")
     expect(cask_command).to include(
       "HOMEBREW_NO_AUTO_UPDATE=1",
-      "HOMEBREW_REQUIRE_TAP_TRUST=1",
+      "HOMEBREW_REQUIRE_TAP_TRUST", "HOMEBREW_NO_REQUIRE_TAP_TRUST",
       "HOMEBREW_NO_INSTALL_FROM_API=1",
     )
     expect(cask_command.any? { |part| part.start_with?("HOMEBREW_CACHE=") }).to eq(true)
@@ -196,7 +196,7 @@ RSpec.describe HomebrewTap::TestChecks do
     expect(described_class::HomebrewStyle.new(root: @root, runner: fake).validate).to eq(true)
     style_command = fake.commands.last
     expect(style_command[0]).to eq("env")
-    expect(style_command).to include("HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST=1")
+    expect(style_command).to include("HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST", "HOMEBREW_NO_REQUIRE_TAP_TRUST")
     expect(style_command.any? { |part| part.start_with?("HOMEBREW_CACHE=") }).to eq(true)
     brew_index = style_command.index("brew")
     expect(style_command[brew_index, 2]).to eq(["brew", "style"])
@@ -215,7 +215,7 @@ RSpec.describe HomebrewTap::TestChecks do
     expect(described_class::BrewfileParsing.new(root: @root, runner: fake).validate).to eq(true)
     brewfile_command = fake.commands.last
     expect(brewfile_command[0]).to eq("env")
-    expect(brewfile_command).to include("HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST=1")
+    expect(brewfile_command).to include("HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST", "HOMEBREW_NO_REQUIRE_TAP_TRUST")
     expect(brewfile_command.any? { |part| part.start_with?("HOMEBREW_CACHE=") }).to eq(true)
     brew_index = brewfile_command.index("brew")
     expect(brewfile_command[brew_index, 3]).to eq(["brew", "ruby", "-e"])

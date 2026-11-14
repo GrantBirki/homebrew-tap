@@ -136,6 +136,8 @@ The installer does not modify application preferences.
 casks it installs. It does not trust the entire tap, so a future item added to
 the repository does not become executable merely because the tap is present.
 
+Homebrew 6 and newer enforce tap trust by default. The installer and validation commands clear both `HOMEBREW_REQUIRE_TAP_TRUST` and `HOMEBREW_NO_REQUIRE_TAP_TRUST` so inherited settings cannot disable enforcement or trigger the deprecated opt-in warning.
+
 For a machine that already trusts the whole tap, migrate once:
 
 ```bash

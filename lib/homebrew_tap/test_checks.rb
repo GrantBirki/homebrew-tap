@@ -7,8 +7,9 @@ require "yaml"
 module HomebrewTap
   module TestChecks
     HOMEBREW_ENV = [
+      "-u", "HOMEBREW_REQUIRE_TAP_TRUST",
+      "-u", "HOMEBREW_NO_REQUIRE_TAP_TRUST",
       "HOMEBREW_NO_AUTO_UPDATE=1",
-      "HOMEBREW_REQUIRE_TAP_TRUST=1",
       "HOMEBREW_CACHE=#{File.join(Dir.tmpdir, "homebrew-tap-cache")}"
     ].freeze
     LOCAL_CONTENT_ENV = (HOMEBREW_ENV + ["HOMEBREW_NO_INSTALL_FROM_API=1"]).freeze

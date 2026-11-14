@@ -433,6 +433,10 @@ module HomebrewTap
   end
 
   class ProvenanceVerifier
+    HOMEBREW_ENV = [
+      "env", "-u", "HOMEBREW_REQUIRE_TAP_TRUST", "-u", "HOMEBREW_NO_REQUIRE_TAP_TRUST",
+      "HOMEBREW_NO_AUTO_UPDATE=1"
+    ].freeze
     CORE_REPOSITORY = "Homebrew/homebrew-core"
     CORE_SIGNER_WORKFLOWS = %w[
       dispatch-build-bottle.yml
@@ -573,7 +577,7 @@ module HomebrewTap
 
     def core_info(token)
       payload = JSON.parse(runner.capture(
-                             "env", "HOMEBREW_NO_AUTO_UPDATE=1", "brew", "ruby", "-e", CORE_INFO_SCRIPT, token,
+                             *HOMEBREW_ENV, "brew", "ruby", "-e", CORE_INFO_SCRIPT, token,
                            ))
       formula = payload.fetch("formulae").fetch(0)
       digests = [formula, *formula.fetch("variations", {}).values].each_with_object({}) do |variation, merged|
@@ -598,7 +602,7 @@ module HomebrewTap
 
     def verify_current_core!(token, version, digests, recipe_sha256)
       output = runner.capture(
-        "env", "HOMEBREW_NO_AUTO_UPDATE=1",
+        *HOMEBREW_ENV,
         "brew", "ruby", "-e", CORE_FETCH_SCRIPT, token, version, JSON.generate(digests), recipe_sha256,
       )
       json = output.lines.reverse.find { |line| line.lstrip.start_with?("[") } || output
@@ -618,10 +622,10 @@ module HomebrewTap
     def verify_pinned_bottle!(token, tag, digest)
       full_name = "#{TAP_NAME}/#{token}"
       runner.run!(
-        "env", "HOMEBREW_NO_AUTO_UPDATE=1", "HOMEBREW_REQUIRE_TAP_TRUST=1",
+        *HOMEBREW_ENV,
         "brew", "fetch", "--force", "--bottle-tag=#{tag}", "--formula", full_name,
       )
-      cache_path = runner.capture("brew", "--cache", "--bottle-tag=#{tag}", "--formula", full_name).strip
+      cache_path = runner.capture(*HOMEBREW_ENV, "brew", "--cache", "--bottle-tag=#{tag}", "--formula", full_name).strip
       verify_bottle_attestation!(token, tag, digest, cache_path)
     end
 
