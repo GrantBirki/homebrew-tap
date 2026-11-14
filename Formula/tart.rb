@@ -6,7 +6,7 @@ class Tart < Formula
   url "https://github.com/openai/tart/releases/download/2.41.1/tart.tar.gz"
   version "2.41.1"
   sha256 "e680a734febccfce7d4e910c1f7f13fc3b00f19a181c945e2d746de3214c32c2"
-  license "Fair Source"
+  license "FSL-1.1-ALv2"
 
   depends_on macos: :ventura
 
