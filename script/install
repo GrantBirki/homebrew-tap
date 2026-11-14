@@ -9,7 +9,7 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 export HOMEBREW_NO_AUTO_UPDATE=1
-export HOMEBREW_REQUIRE_TAP_TRUST=1
+unset HOMEBREW_REQUIRE_TAP_TRUST HOMEBREW_NO_REQUIRE_TAP_TRUST
 readonly TAP_BREW_BIN="$(command -v brew)"
 
 readonly RUBY_ENTRYPOINT='ENV.delete("HOMEBREW_NO_INSTALL_FROM_API")

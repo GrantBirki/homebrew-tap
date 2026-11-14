@@ -20,7 +20,7 @@ module HomebrewTap
       hooks, sudo prompts, or application restarts.
     USAGE
 
-    HOMEBREW_ENV = { "HOMEBREW_REQUIRE_TAP_TRUST" => "1" }.freeze
+    HOMEBREW_ENV = { "HOMEBREW_REQUIRE_TAP_TRUST" => nil, "HOMEBREW_NO_REQUIRE_TAP_TRUST" => nil }.freeze
     UPDATE_ENV = HOMEBREW_ENV.merge("HOMEBREW_UPDATE_TO_TAG" => "1").freeze
     MIN_HOMEBREW_MAJOR = 6
     PRIVILEGED_CASKS = %w[blockblock karabiner-elements osquery santa].freeze

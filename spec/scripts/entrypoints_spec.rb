@@ -17,11 +17,14 @@ RSpec.describe "script entrypoints" do
     end
   end
 
-  it "runs the install entrypoint through brew ruby" do
+  it "runs the install entrypoint through brew ruby with default trust enforcement" do
     bin = File.join(@root, "bin")
     FileUtils.mkdir_p(bin)
     write("bin/brew", <<~SH)
       #!/usr/bin/env bash
+      set -eu
+      test "${HOMEBREW_REQUIRE_TAP_TRUST+x}" != x
+      test "${HOMEBREW_NO_REQUIRE_TAP_TRUST+x}" != x
       test "$1" = "ruby"
       shift
       exec "#{RbConfig.ruby}" "$@"
@@ -29,7 +32,11 @@ RSpec.describe "script entrypoints" do
     FileUtils.chmod("u+x", File.join(bin, "brew"))
 
     stdout, stderr, status = Open3.capture3(
-      { "PATH" => "#{bin}:#{ENV.fetch("PATH")}" },
+      {
+        "PATH" => "#{bin}:#{ENV.fetch("PATH")}",
+        "HOMEBREW_REQUIRE_TAP_TRUST" => "1",
+        "HOMEBREW_NO_REQUIRE_TAP_TRUST" => "1"
+      },
       File.join(ROOT, "script", "install"),
       "--help",
     )
@@ -37,6 +44,21 @@ RSpec.describe "script entrypoints" do
     expect(status).to be_success
     expect(stdout).to include("Usage: script/install")
     expect(stderr).to be_empty
+  end
+
+  it "removes inherited trust flags from installer and validation child processes" do
+    inherited = { "HOMEBREW_REQUIRE_TAP_TRUST" => "1", "HOMEBREW_NO_REQUIRE_TAP_TRUST" => "1" }
+    environments = [
+      [HomebrewTap::Installer::HOMEBREW_ENV, []],
+      [{}, ["env", *HomebrewTap::TestChecks::HOMEBREW_ENV]],
+      [{}, HomebrewTap::ProvenanceVerifier::HOMEBREW_ENV]
+    ]
+    check = 'abort "trust flag inherited" if ENV.keys.any? { |key| key.match?(/\AHOMEBREW_(NO_)?REQUIRE_TAP_TRUST\z/) }'
+
+    environments.each do |overrides, prefix|
+      _stdout, stderr, status = Open3.capture3(inherited.merge(overrides), *prefix, RbConfig.ruby, "-e", check)
+      expect(status).to be_success, stderr
+    end
   end
 
   it "fails clearly when Homebrew is unavailable" do
