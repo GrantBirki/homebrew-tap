@@ -407,39 +407,6 @@ formulae:
         arm64_tahoe: 5cd5a1875da18599e25283465b2fb8735eb8717ee7158ef17f8f4260205404f2
         arm64_sequoia: 0ec9bf8082245c008803b42dcae3e6a0c8cd7a67aed589d9b6482b115c0a543b
         arm64_linux: c725eb08fc7ab6aad7f744a30b230f9b9efa33f8d694849a2d4aadfabb203df3
-  nmap:
-    source_type: homebrew-core
-    recipe_repository: Homebrew/homebrew-core
-    recipe_commit: b7828b1f5b8af35f2d7899a6501908ec2af5c735
-    recipe_path: Formula/n/nmap.rb
-    recipe_blob: 4c1721e0a6705917e5ee8617a75353f2304c03d0
-    release_published_at: '2026-10-23T14:29:58Z'
-    release_evidence:
-      description: Primary-source publication; changed source archives and external
-        patches independently hashed against the exact core recipe.
-      reference: https://nmap.org/dist/nmap-7.993.tar.bz2
-    version: '7.993'
-    local_file_sha256: 75417c077b091586398d18ffc9f8e23d4c9103ed073362bd08cef734a6c7fbaf
-    legacy_baseline:
-    local_changes:
-    - Removed the mutable head spec.
-    - Pinned the Homebrew core bottle root explicitly.
-    - Retained the ca-certificates dependency and guarded declarative Ncat CA repair,
-      recognizing the exact 7.992 and 7.993 stock bundles.
-    adoption_reason: Adopt Nmap 7.993 security and maintenance fixes while preserving
-      the guarded Ncat CA link and per-digest stock backups.
-    bottles:
-      repository: Homebrew/homebrew-core
-      verified_at: '2026-11-14T05:16:35Z'
-      digests:
-        arm64_golden_gate: 224b7bc076c6dc0f138c257625c4d8ac29d13f35b5f03bf49adc2677617e9970
-        arm64_tahoe: d73f46bc48f88239668916175d56817240f6e8673b1411b55560d9e9828dc067
-        arm64_sequoia: 8f09090b946adaf527925c0a837250fc791166fbc5263e21774a067cb5079ce6
-        arm64_linux: f18f36e19b5254ba6a2c92b0f701319d0d9043c706763382763fc681fb20b637
-        x86_64_linux: 8d0587a88a10f7fee0d7f73716116003e1fbbe85ed9e440f0cee9b7b8bf782ed
-    adopted_at: '2026-11-14T05:16:02Z'
-    adoption_commit: efa378f6193f90b035cdeb3b63c64ffd5ce09399
-    cooldown_exception:
   osv-scanner:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core

@@ -77,17 +77,13 @@ exactly once.
 
 The current formula provenance families are:
 
-- Core recipe snapshots:
-  ansible, bash, bat, dfu-programmer, eza, ffmpeg, git-lfs, gnupg, hugo, imagemagick, libyaml,
-  nmap, osv-scanner, pinentry-mac, ripgrep, rustup, swiftformat,
-  swiftlint, tfenv, tree, and yq.
+- Core recipe snapshots: ansible, bash, bat, dfu-programmer, eza, ffmpeg, git-lfs, gnupg, hugo, imagemagick, libyaml, osv-scanner, pinentry-mac, ripgrep, rustup, swiftformat, swiftlint, tfenv, tree, and yq.
 - Direct upstream release assets:
   gh, tart, and vector.
 - Personal upstream release assets:
   uninstall and rust-template.
 
-The default Brewfile contains 25 tap formulae. **rust-template** remains
-available from the tap but intentionally stays outside the default Brewfile.
+The default Brewfile contains 24 tap formulae. **rust-template** remains available from the tap but intentionally stays outside the default Brewfile.
 
 The ten tap casks in the default Brewfile are:
 
@@ -118,8 +114,7 @@ When the intentional inventory changes, update all relevant policy surfaces:
   **lib/homebrew_tap/test_checks.rb**.
 - Tests and documentation that describe the boundary.
 
-The Brewfile policy rejects missing, extra, or duplicate tap entries so the
-35-item trust boundary cannot widen silently.
+The Brewfile policy rejects missing, extra, or duplicate tap entries so the 34-item trust boundary cannot widen silently.
 
 ## Sources of Truth
 
@@ -740,8 +735,6 @@ script/test
 script/provenance check
 script/provenance verify-formula <token>
 script/provenance verify-formula --all
-script/ncat-trust
-script/ncat-trust --apply
 script/install --dry-run
 script/vulns
 ~~~
@@ -754,8 +747,6 @@ Mutation and network characteristics:
 | script/test | No | No | Parses local recipes and runs policy/unit tests. |
 | script/provenance check | No | No | Local manifest and content-loader policy gate. |
 | script/provenance verify-formula | Yes | No | Fetches bottles, verifies attestations, and updates verified_at. |
-| script/ncat-trust | No | No | Previews a known-stock Ncat CA repair; requires installed packages. |
-| script/ncat-trust --apply | No | No | Backs up the exact stock bundle and links the corrected CA file; refuses custom files. |
 | script/install --dry-run | No expected | No | Reads receipts and reports planned operations. |
 | script/install | Yes | Yes | Explicit operator action only. |
 | script/vulns | Yes | No | Live OSV-backed operator scan. |
