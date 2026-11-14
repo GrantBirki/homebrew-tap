@@ -109,19 +109,6 @@ The command requires an existing compatible `gh` installation and an
 authenticated GitHub session. It never installs or upgrades `gh`. The offline
 `script/provenance check` remains the CI-safe policy gate.
 
-### Ncat certificate bundle
-
-The Nmap 7.992 source ships Ncat's obsolete CA bundle, which accepts the incident's alternate AAA certificate chains. Nmap 7.993 replaces it with Mozilla's October 21, 2026 bundle. The tap's declarative post-install step recognizes the exact stock SHA-256 for either release and links it to Homebrew's maintained `ca-certificates` file (2026-10-20 or newer). That file retains local CA additions managed through Homebrew. An unrecognized bundle or link is left untouched and reported as an error. Each stock bundle is backed up under Homebrew's `var/homebrew-tap/ncat-ca-backups` using its own digest before atomic replacement.
-
-For an existing Nmap installation, `script/ncat-trust` previews this repair;
-`script/ncat-trust --apply` applies it. The step binds the just-installed keg
-explicitly, denies network access, and declares writes only to its Ncat data
-directory and the backup directory. An explicit `--prefix` must name an
-installed Nmap keg; it cannot target an arbitrary path. The step applies to
-future tap bottle and source installations. No source URL, version, or bottle
-digest changes as part of this local trust-file repair. Ncat still requires `--ssl-verify`
-to verify a TLS peer; this does not enable verification for `--ssl` alone.
-
 Prefer one formula update per pull request unless formulae are inseparably
 coupled. Do not vendor a transitive dependency merely because a direct root
 uses it.

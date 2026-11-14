@@ -42,8 +42,6 @@ brew "grantbirki/tap/imagemagick", trusted: true
 brew "grantbirki/tap/gnupg", trusted: true
 # Static site generator
 brew "grantbirki/tap/hugo", trusted: true
-# Network discovery and security scanner
-brew "grantbirki/tap/nmap", trusted: true
 # Vulnerability scanner backed by OSV
 brew "grantbirki/tap/osv-scanner", trusted: true
 # Pinentry for GPG on Mac
