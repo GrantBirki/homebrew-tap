@@ -43,6 +43,15 @@ version available" is not an exception.
 
 GoReleaser 2.20.2 is adopted before the ordinary seven-day cooldown because it includes fixes for [credential exposure](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-7qv4-9g3j-wvq8), [secret logging](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-gvxm-cvj4-qwvp), and [RPM macro injection](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-rjp9-h7gp-wr7q), plus the [2.20.2 credential-redaction follow-up](https://github.com/goreleaser/goreleaser/releases/tag/v2.20.2). The macOS artifacts and full source commit are bound in `provenance.yml`. The selected binaries must not be executed before November 14, 2026 14:02:54 UTC, which is 48 hours after the later macOS artifact upload; repository parser checks do not execute them.
 
+### One-time November 2026 update override
+
+For this batch only, the owner authorized a minimum release age of four complete days for the exact releases below. This is an owner override for maintenance updates, not a security-incident exception. Future releases retain the normal seven-day cooldown. All checksum, provenance, signing, and artifact review requirements remain in force.
+
+| Release | Published (UTC) | Upstream commit | Source SHA-256 |
+| --- | --- | --- | --- |
+| [osv-scanner 2.7.1](https://github.com/google/osv-scanner/releases/tag/v2.7.1) | 2026-11-09T04:15:04Z | `02f96a40691c2d155fdda799af436e111231e365` | `35472c072bca6571df8019843c3d2c2c7379160cc2c32fa1fe4c68f86cdd7704` |
+| [yq 4.54.3](https://github.com/mikefarah/yq/releases/tag/v4.54.3) | 2026-11-09T04:51:53Z | `f2944b823f84906a127dbd29e4c2a3e60c4e550e` | `93143d49b2a3bd6cb723477f585366b29f70c636af4653191d61b49b0c47de7f` |
+
 ### One-time Secretive 4.0.0 override
 
 On September 30, 2026, the owner explicitly authorized early adoption of [Secretive 4.0.0](https://github.com/maxgoedjen/secretive/releases/tag/v4.0.0) before its October 5, 2026 03:08:01 UTC cooldown deadline under the 14-day policy then in effect. This is an owner override for this release only, not a security advisory or incident exception. It applies only to upstream commit `54e0d00d87e207377101b0ea6ddfa624cd1a1c16` and the `Secretive.zip` SHA-256 `877517e212938ffb7048bc7b6811e992194ba4b3eaa4dae36405b6303d1ac1fa`. The provenance exception references this decision. All artifact, signing, quarantine, and review requirements remain in force; other releases retain the normal cooldown and exception policy.
@@ -102,14 +111,7 @@ authenticated GitHub session. It never installs or upgrades `gh`. The offline
 
 ### Ncat certificate bundle
 
-The Nmap 7.992 source still ships Ncat's obsolete CA bundle, which accepts
-the incident's alternate AAA certificate chains. The tap's declarative
-post-install step
-replaces only the exact known upstream bundle with a link to Homebrew's
-maintained `ca-certificates` file (2026-10-20 or newer). That file retains
-local CA additions managed through Homebrew. An unrecognized bundle or link
-is left untouched and reported as an error. The stock bundle is backed up
-under Homebrew's `var/homebrew-tap/ncat-ca-backups` before atomic replacement.
+The Nmap 7.992 source ships Ncat's obsolete CA bundle, which accepts the incident's alternate AAA certificate chains. Nmap 7.993 replaces it with Mozilla's October 21, 2026 bundle. The tap's declarative post-install step recognizes the exact stock SHA-256 for either release and links it to Homebrew's maintained `ca-certificates` file (2026-10-20 or newer). That file retains local CA additions managed through Homebrew. An unrecognized bundle or link is left untouched and reported as an error. Each stock bundle is backed up under Homebrew's `var/homebrew-tap/ncat-ca-backups` using its own digest before atomic replacement.
 
 For an existing Nmap installation, `script/ncat-trust` previews this repair;
 `script/ncat-trust --apply` applies it. The step binds the just-installed keg
