@@ -9,7 +9,10 @@ require_relative "../homebrew_tap"
 
 module HomebrewTap
   class NcatTrust
-    STOCK_SHA256 = "099733ca62e3a7009701e68bf2de0ce6c19075c1371795e0d2f911b2d1ead7ba"
+    STOCK_SHA256S = %w[
+      099733ca62e3a7009701e68bf2de0ce6c19075c1371795e0d2f911b2d1ead7ba
+      34794192e5e6ca988ded6886266c98173d440a02d4be820c25b00f2b544f3571
+    ].freeze
     MIN_CA_VERSION = "2026-10-20"
     Result = Struct.new(:status, :backup, keyword_init: true)
 
@@ -29,13 +32,14 @@ module HomebrewTap
       end
 
       data, identity = read_regular_file(@bundle)
-      raise Error, "Refusing to replace a custom Ncat CA file: #{@bundle}" unless Digest::SHA256.hexdigest(data) == STOCK_SHA256
+      digest = Digest::SHA256.hexdigest(data)
+      raise Error, "Refusing to replace a custom Ncat CA file: #{@bundle}" unless STOCK_SHA256S.include?(digest)
       raise Error, "Ncat CA file and replacement must be different files" if File.identical?(@bundle, @ca_file)
 
       return Result.new(status: :planned) if dry_run
 
-      backup = back_up(data)
-      replace_bundle(identity)
+      backup = back_up(data, digest)
+      replace_bundle(identity, digest)
       Result.new(status: :repaired, backup: backup)
     rescue SystemCallError, IOError => e
       raise Error, "Ncat CA repair failed: #{e.message}"
@@ -74,12 +78,12 @@ module HomebrewTap
       end
     end
 
-    def back_up(data)
+    def back_up(data, digest)
       FileUtils.mkdir_p(@backup_dir)
-      backup = @backup_dir / "ca-bundle-#{STOCK_SHA256}.crt"
+      backup = @backup_dir / "ca-bundle-#{digest}.crt"
       if backup.exist? || backup.symlink?
         saved, = read_regular_file(backup)
-        raise Error, "Existing Ncat CA backup does not match the stock bundle: #{backup}" unless Digest::SHA256.hexdigest(saved) == STOCK_SHA256
+        raise Error, "Existing Ncat CA backup does not match the stock bundle: #{backup}" unless Digest::SHA256.hexdigest(saved) == digest
       else
         File.open(backup, File::WRONLY | File::CREAT | File::EXCL, 0o600) do |file|
           file.write(data)
@@ -90,14 +94,14 @@ module HomebrewTap
       backup
     end
 
-    def replace_bundle(identity)
+    def replace_bundle(identity, digest)
       temporary = @bundle.dirname / ".ncat-ca-#{SecureRandom.hex(12)}"
       created = false
       begin
         File.symlink(@ca_file, temporary)
         created = true
         current, current_identity = read_regular_file(@bundle)
-        unless identity == current_identity && Digest::SHA256.hexdigest(current) == STOCK_SHA256
+        unless identity == current_identity && Digest::SHA256.hexdigest(current) == digest
           raise Error, "Ncat CA file changed before replacement: #{@bundle}"
         end
 

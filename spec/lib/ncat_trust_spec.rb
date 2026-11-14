@@ -10,7 +10,7 @@ RSpec.shared_context "stock Ncat CA fixture" do
     @bundle = Pathname(write("keg/share/ncat/ca-bundle.crt", @stock))
     @ca = Pathname(write("etc/ca-certificates/cert.pem", "corrected roots and custom local CA\n"))
     @backup_dir = Pathname(@root) / "var/ncat-ca-backups"
-    stub_const("HomebrewTap::NcatTrust::STOCK_SHA256", Digest::SHA256.hexdigest(@stock))
+    stub_const("HomebrewTap::NcatTrust::STOCK_SHA256S", [Digest::SHA256.hexdigest(@stock), Digest::SHA256.hexdigest("new stock bundle\n")])
   end
 
   def repairer(**)
@@ -33,6 +33,16 @@ RSpec.describe HomebrewTap::NcatTrust do
     expect(@bundle).not_to be_symlink
     expect(@backup_dir).not_to exist
     expect(@bundle.dirname.children).to eq([@bundle])
+  end
+
+  it "backs up and repairs another recognized stock bundle" do
+    @bundle.write("new stock bundle\n")
+
+    result = repairer.repair(dry_run: false)
+
+    expect(result.status).to eq(:repaired)
+    expect(result.backup.read).to eq("new stock bundle\n")
+    expect(@bundle.readlink).to eq(@ca)
   end
 
   it "backs up the stock file before atomically installing the link and preserves local CAs" do
@@ -318,8 +328,8 @@ RSpec.describe "Ncat trust entrypoint" do
       HOMEBREW_PREFIX = Pathname(ENV.fetch("TEST_BREW_PREFIX"))
       $LOAD_PATH.unshift(File.join(ENV.fetch("TEST_BREW_PREFIX"), "fake-lib"))
       require File.join(ENV.fetch("TEST_TAP_ROOT"), "lib/homebrew_tap/ncat_trust")
-      HomebrewTap::NcatTrust.send(:remove_const, :STOCK_SHA256)
-      HomebrewTap::NcatTrust.const_set(:STOCK_SHA256, Digest::SHA256.hexdigest("stock public CA bundle\\n"))
+      HomebrewTap::NcatTrust.send(:remove_const, :STOCK_SHA256S)
+      HomebrewTap::NcatTrust.const_set(:STOCK_SHA256S, [Digest::SHA256.hexdigest("stock public CA bundle\\n")])
     RUBY
     write("fake-lib/formulary.rb", <<~RUBY)
       raise "API launch override leaked" if ENV.key?("HOMEBREW_NO_INSTALL_FROM_API")
