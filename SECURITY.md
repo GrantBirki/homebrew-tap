@@ -132,6 +132,8 @@ Some applications can move independently of their cask pin:
 - Karabiner-Elements checks for updates on startup but does not currently
   install them silently. Its update check can be disabled in its settings.
 
+- The optional Llama menu bar app enables Sentry reporting without an in-app opt-out, checks for Sparkle updates by default, and can independently download an engine. It stays outside the default Brewfile; see [the release and control review](docs/llama-app.md) before first launch. Pinning this cask does not make its runtime or network behavior fully pinned.
+
 The installer does not modify application preferences.
 
 ## Homebrew 6 item trust
