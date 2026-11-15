@@ -49,6 +49,10 @@ development and CI. Use `script/install` for Homebrew lifecycle management.
 
 Personal casks such as Espresso, OneShot, and Shit are intentionally outside the default Brewfile and preserve macOS quarantine. OneShot and Shit are Apple silicon-only, Developer ID signed, and notarized, so they pass Gatekeeper normally; unsigned releases require manual approval.
 
+## Optional Llama menu bar app
+
+The pinned `llama-app` cask is available separately from `llama.cpp` and stays outside the default Brewfile. Read the [release, telemetry, and update review](docs/llama-app.md) before installing or launching it. The app enables error reporting and can download its own engine; the cask pin does not control those behaviors. Install explicitly with `brew install --cask grantbirki/tap/llama-app` after reviewing those controls.
+
 ## Development
 
 Run the same checks used by CI:

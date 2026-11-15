@@ -101,6 +101,8 @@ The ten tap casks in the default Brewfile are:
 The personal **espresso**, **oneshot**, and **shit** casks are also provenance
 tracked but intentionally remain outside the default Brewfile.
 
+The third-party **llama-app** cask is also provenance tracked but intentionally stays outside the default Brewfile. Its telemetry, updater, and managed-engine limits are documented in **docs/llama-app.md**. Do not add preference-writing or engine-install hooks to this cask.
+
 The official unqualified Brewfile entries are the version managers goenv,
 nodenv, pyenv, and rbenv, plus raspberry-pi-imager. Do not qualify those with
 this tap unless the owner explicitly decides to vendor them.
