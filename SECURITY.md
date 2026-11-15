@@ -39,6 +39,10 @@ malicious-version withdrawal. The provenance entry and pull request must name
 the primary-source advisory or revocation and explain the exception. "Latest
 version available" is not an exception.
 
+### llama.cpp 1.0.0 security-fix adoption
+
+llama.cpp 1.0.0 is adopted before the ordinary seven-day cooldown because it fixes [cross-origin requests and DNS rebinding](https://github.com/ggml-org/llama.cpp/pull/32098), [Hugging Face token exposure to arbitrary download hosts](https://github.com/ggml-org/llama.cpp/pull/31730), and [server-side requests to private addresses](https://github.com/ggml-org/llama.cpp/pull/32115). These fixes are included in [1.0.0](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) and absent from 0.9.0. The exact source commit, Homebrew recipe, and retained bottle digests are bound in `provenance.yml`; transitive dependencies continue to resolve through Homebrew.
+
 ### GoReleaser 2.20.2 security-fix adoption
 
 GoReleaser 2.20.2 is adopted before the ordinary seven-day cooldown because it includes fixes for [credential exposure](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-7qv4-9g3j-wvq8), [secret logging](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-gvxm-cvj4-qwvp), and [RPM macro injection](https://github.com/goreleaser/goreleaser/security/advisories/GHSA-rjp9-h7gp-wr7q), plus the [2.20.2 credential-redaction follow-up](https://github.com/goreleaser/goreleaser/releases/tag/v2.20.2). The macOS artifacts and full source commit are bound in `provenance.yml`. The selected binaries must not be executed before November 14, 2026 14:02:54 UTC, which is 48 hours after the later macOS artifact upload; repository parser checks do not execute them.
