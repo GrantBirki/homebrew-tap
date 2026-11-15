@@ -20,6 +20,8 @@ brew "grantbirki/tap/uninstall", trusted: true
 
 # YAML parser library
 brew "grantbirki/tap/libyaml", trusted: true
+# Local language model inference and browser chat UI
+brew "grantbirki/tap/llama.cpp", trusted: true
 # Display directories as trees
 brew "grantbirki/tap/tree", trusted: true
 # Infrastructure automation
