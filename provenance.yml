@@ -1065,6 +1065,29 @@ casks:
     adopted_at: '2026-10-22T05:43:45Z'
     adoption_commit: 785772913588e032fc491fd1ee22b7aa8b54b065
     cooldown_exception:
+  llama-app:
+    source_type: "homebrew-cask"
+    recipe_repository: "Homebrew/homebrew-cask"
+    recipe_commit: "ea3d8ef55e5335132747d194b486c4ce4104a3d7"
+    recipe_path: "Casks/l/llama-app.rb"
+    recipe_blob: "821e1ebe057c0449b21067250caf09426ea5e1ec"
+    local_file_sha256: "44a995ce9ab2124420a1d32442f869718d72ee928987da5c34b625798ed3138b"
+    version: "0.47.0"
+    release_published_at: "2026-11-05T11:25:07Z"
+    release_evidence:
+      description: "GitHub release and tag commit eadd54671e2dd61311e039852e8eba5cced2e463; DMG asset uploaded at 2026-11-05T11:25:06Z. Independent SHA-256 matches the GitHub API and exact Homebrew recipe. Native static checks verified Caret.io OOD Developer ID V89L745MNN, bundle app.llama.Llama, arm64, macOS 15 minimum, hardened runtime, secure timestamp, and empty entitlements. Gatekeeper accepted the app as Notarized Developer ID; no app ticket is stapled. Publisher and bundle match 0.46.1. GitHub returned no matching artifact attestation (HTTP 404). Neither app nor a model was launched."
+      reference: "https://github.com/ggml-org/Llama-macOS/releases/tag/0.47.0"
+    adopted_at: "2026-11-15T18:28:21Z"
+    adoption_commit: "3e408eaed9117a44206cf5a5648e2e533f247f4a"
+    adoption_reason: "Add an optional menu bar app around the separately reviewed llama.cpp engine, preserving quarantine and documenting telemetry, Sparkle preferences, fallback engine downloads, and lack of App Sandbox isolation."
+    cooldown_exception:
+    legacy_baseline:
+    local_changes:
+    - "Added active GitHub release livecheck and first-launch telemetry/update caveats."
+    - "Omitted the shared ~/.local/bin/llama zap path because it can contain an independently installed CLI."
+    - "Kept the cask outside the default Brewfile; added no launch, preference-writing, or engine-install hooks."
+    artifacts:
+      default: "7fa356591ab1f37639cfa1f5e50b2eba52940f578965c1427b2d4eaa1571350b"
   oneshot:
     source_type: personal-release
     upstream_repository: grantbirki/oneshot
