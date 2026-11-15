@@ -407,6 +407,42 @@ formulae:
         arm64_tahoe: 5cd5a1875da18599e25283465b2fb8735eb8717ee7158ef17f8f4260205404f2
         arm64_sequoia: 0ec9bf8082245c008803b42dcae3e6a0c8cd7a67aed589d9b6482b115c0a543b
         arm64_linux: c725eb08fc7ab6aad7f744a30b230f9b9efa33f8d694849a2d4aadfabb203df3
+  llama.cpp:
+    source_type: homebrew-core
+    recipe_repository: Homebrew/homebrew-core
+    recipe_commit: 2eeb70e4a67de47ede8857e1bf82a94d32a90a3f
+    recipe_path: Formula/l/llama.cpp.rb
+    recipe_blob: 7761f5722ebf1ff7a23948ef4cb1afbc07a24c4d
+    local_file_sha256: 4a2058a2d7eb42de68ea596201cb918292180d28e6b637eae81ed944284996fd
+    version: 1.0.0
+    release_published_at: '2026-11-13T10:20:19Z'
+    release_evidence:
+      description: GitHub release publication; annotated v1.0.0 tag resolves to source
+        commit b1b770d90d94cad9e9ea5b993bdbc383a522fb28. Security fixes in upstream
+        PRs 31730, 32098, and 32115 are ancestors of this commit.
+      reference: https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0
+    adopted_at: '2026-11-15T07:09:21Z'
+    adoption_commit: be2f26ea36c8c8848fcee9d10a5dcc45d1587fd2
+    adoption_reason: Add local inference and the built-in browser UI with the 1.0.0
+      cross-origin, DNS-rebinding, token-exposure, and private-address request fixes.
+    cooldown_exception:
+      reason: Security-fix exception for cross-origin requests and DNS rebinding fixed
+        in 1.0.0; 0.9.0 predates this fix and the token-exposure and private-address
+        request fixes recorded in SECURITY.md.
+      reference: https://github.com/ggml-org/llama.cpp/pull/32098
+    legacy_baseline:
+    local_changes:
+    - Removed the mutable head spec.
+    - Pinned the Homebrew core bottle root explicitly.
+    bottles:
+      repository: Homebrew/homebrew-core
+      verified_at: '2026-11-15T07:10:12Z'
+      digests:
+        arm64_golden_gate: ac523ec2b956e0a90ed0c573331607e564b08856a5f49130edb9abe8048b1f07
+        arm64_tahoe: 5b0b140c1b989db6f76f949e2e4de738b95d310de151776ca646f3c883450dec
+        arm64_sequoia: 6c2507c840fc8c0f92c87827e9512b087a75227d375114460bee275b22a81730
+        arm64_linux: 482009da5a636ad5f7819b9a373d37f2e6d5d65962edba6c173d6dfd36e6e8e8
+        x86_64_linux: 2e167c827a989e1131d44d1d87beb6fc520a2b250988c08c4a3172b70e36f4c3
   osv-scanner:
     source_type: homebrew-core
     recipe_repository: Homebrew/homebrew-core
