@@ -32,27 +32,11 @@ cask "blender" do
   depends_on macos: :ventura
 
   app "Blender.app"
+  command_wrapper "blender",
+                  executable: "#{appdir}/Blender.app/Contents/MacOS/Blender"
 
-  blender = "#{appdir}/Blender.app/Contents/MacOS/Blender"
-
-  if respond_to?(:command_wrapper)
-    command_wrapper "blender", executable: blender
-
-    preflight_steps do
-      set_permissions "*.app/**/__pycache__", "u+w", recursive: false
-    end
-  else
-    # Homebrew 6.0 still uses a staged script to wrap the executable.
-    wrapper = "#{staged_path}/blender.wrapper.sh"
-    binary wrapper, target: "blender"
-
-    preflight do # rubocop:disable Cask/InstallSteps -- Homebrew 6.0 lacks declarative permission and wrapper support.
-      FileUtils.chmod "u+w", Dir.glob("#{staged_path}/*.app/**/__pycache__")
-      File.write wrapper, <<~EOS
-        #!/bin/bash
-        exec #{Shellwords.shellescape(blender)} "$@"
-      EOS
-    end
+  preflight_steps do
+    set_permissions "*.app/**/__pycache__", "u+w", recursive: false
   end
 
   zap trash: [

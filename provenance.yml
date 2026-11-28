@@ -880,7 +880,7 @@ casks:
     recipe_commit: 02d3fa99b2488616f6946a8dc449ba59b548f573
     recipe_path: Casks/b/blender.rb
     recipe_blob: b1057fd3fc6e0b621e05fd3a663fdb1bbb9e5399
-    local_file_sha256: 0933cc9e0c7429551fee883c896cd2d9a0d6d91347b890b6a84645bfca1a8c49
+    local_file_sha256: 92f13dec14925d8475864efb52f45a7e553a61d99c7f549a3e14c5504118005e
     version: 5.3.0
     release_published_at: '2026-11-10T09:02:45Z'
     release_evidence:
@@ -902,8 +902,6 @@ casks:
     local_changes:
     - Restrict the cask to Apple Silicon. The Intel 4.5.16 and 4.5.17 source
       tags still specify Brotli 1.0.9.
-    - Preserve the Blender CLI and staged permission adjustment on Homebrew
-      6.0 using the earlier upstream wrapper pattern.
     artifacts:
       default: 2d802b54766741e612cead50b03ebbc8eb64dadc71eda932573d256b8a784720
   blockblock:
