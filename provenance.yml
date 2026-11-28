@@ -874,6 +874,38 @@ casks:
     - Order shell completion stanzas to match Homebrew style.
     artifacts:
       default: ad8d7de35fb38e43184776cac6dfee05ca325caa0b6639a06a55e54e4b026620
+  blender:
+    source_type: homebrew-cask
+    recipe_repository: Homebrew/homebrew-cask
+    recipe_commit: 02d3fa99b2488616f6946a8dc449ba59b548f573
+    recipe_path: Casks/b/blender.rb
+    recipe_blob: b1057fd3fc6e0b621e05fd3a663fdb1bbb9e5399
+    local_file_sha256: 2376065f4c581ee3feb4cef9dc120840958d743c95550cea5bfbde81bda79c81
+    version: 5.3.0
+    release_published_at: '2026-11-10T09:02:45Z'
+    release_evidence:
+      description: Blender released 5.3.0 on November 10, 2026. The timestamp
+        records the official Apple Silicon DMG's Last-Modified time. The v5.3.0
+        tag resolves to 02f0899d78e374b63e7181d9061e1f7ab03419cc, matching the
+        DMG's signing identifier. The independently calculated SHA-256 matches
+        Blender's published checksum. The DMG's Developer ID signature verifies
+        as Stichting Blender Foundation (68UA947AUU). Strict app signature
+        verification passed with the same Team ID. Gatekeeper accepted the
+        app as Notarized Developer ID.
+      reference: https://www.blender.org/releases/5-3/
+    adopted_at: '2026-11-28T01:02:01Z'
+    adoption_commit: b4d15b9e255163c49cbf368df9c5f678bba34492
+    adoption_reason: Add Blender 5.3.0 to the Apple Silicon bootstrap. This
+      release includes Blender's Brotli fix for CVE-2026-111497.
+    cooldown_exception:
+    legacy_baseline:
+    local_changes:
+    - Restrict the cask to Apple Silicon. The Intel 4.5.16 and 4.5.17 source
+      tags still specify Brotli 1.0.9.
+    - Preserve the Blender CLI and staged permission adjustment on Homebrew
+      6.0 using the earlier upstream wrapper pattern.
+    artifacts:
+      default: 2d802b54766741e612cead50b03ebbc8eb64dadc71eda932573d256b8a784720
   blockblock:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask
