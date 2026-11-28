@@ -8,7 +8,7 @@ formulae:
     recipe_commit: b7828b1f5b8af35f2d7899a6501908ec2af5c735
     recipe_path: Formula/a/ansible.rb
     recipe_blob: fe8ab7f2cd0cab5913930312a651059693108baa
-    local_file_sha256: 2272f5944de3ec3e6021d93ef9d2430ebda1ccd8eac86681371951070db76032
+    local_file_sha256: 80aa32375ddc0968751b716788ce324220673bdfeeca48be435b026bc316cdab
     version: 14.6.0
     release_published_at: '2026-11-04T20:12:16.828778Z'
     release_evidence:
@@ -28,6 +28,8 @@ formulae:
       network access.
     - Vendored the upstream passlib patch at its original recipe-local path, bound
       to the recorded recipe commit.
+    - Moved the test's Python version lookup out of string interpolation for
+      Homebrew style.
     recipe_patches:
       Patches/ansible/passlib-1.7.4.patch:
         blob: 3b8d6ccaae04f57ac7d5f1456da42615f50947d3
