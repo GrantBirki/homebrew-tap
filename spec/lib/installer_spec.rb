@@ -156,6 +156,30 @@ RSpec.describe HomebrewTap::Installer do
     expect(stderr.string).to include("Refusing to change Homebrew state", "receipt source.tap is missing")
   end
 
+  it "skips receipt inspection and repointing for Apple Silicon-only casks on Intel" do
+    write("Brewfile", %(cask "grantbirki/tap/blender", trusted: true\n))
+    write("Casks/blender.rb", <<~RUBY)
+      cask "blender" do
+        version "5.3.0"
+        depends_on arch: :arm64
+      end
+    RUBY
+    prefix = File.join(@root, "prefix")
+    receipt(prefix, :cask, "blender", body: cask_receipt("homebrew/cask", "4.5.17"))
+    allow(RbConfig::CONFIG).to receive(:[]).and_call_original
+    allow(RbConfig::CONFIG).to receive(:[]).with("host_cpu").and_return("x86_64", "arm64")
+
+    intel_out = StringIO.new
+    arm_out = StringIO.new
+    [intel_out, arm_out].each do |out|
+      installer = described_class.new(argv: ["--dry-run"], runner: runner(prefix: prefix), out: out, repo_root: @root)
+      expect(installer.run).to eq(0)
+    end
+
+    expect(intel_out.string).not_to include("blender")
+    expect(arm_out.string).to include("would run: brew reinstall --cask grantbirki/tap/blender")
+  end
+
   it "skips receipt inspection when there are no tap-qualified entries" do
     write("Brewfile", %(brew "gh"\ncask "visual-studio-code"\n))
     stdout = StringIO.new

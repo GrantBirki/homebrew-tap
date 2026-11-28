@@ -20,7 +20,7 @@ module HomebrewTap
       uninstall vector yq
     ].freeze
     CASK_TOKENS = %w[
-      alacritty blockblock goreleaser imageoptim karabiner-elements keepassxc knockknock osquery santa secretive
+      alacritty blender blockblock goreleaser imageoptim karabiner-elements keepassxc knockknock osquery santa secretive
     ].freeze
     RUBOCOP_PATHS = %w[lib spec].freeze
 

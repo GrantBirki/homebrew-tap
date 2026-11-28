@@ -8,7 +8,7 @@ formulae:
     recipe_commit: b7828b1f5b8af35f2d7899a6501908ec2af5c735
     recipe_path: Formula/a/ansible.rb
     recipe_blob: fe8ab7f2cd0cab5913930312a651059693108baa
-    local_file_sha256: 2272f5944de3ec3e6021d93ef9d2430ebda1ccd8eac86681371951070db76032
+    local_file_sha256: 80aa32375ddc0968751b716788ce324220673bdfeeca48be435b026bc316cdab
     version: 14.6.0
     release_published_at: '2026-11-04T20:12:16.828778Z'
     release_evidence:
@@ -28,6 +28,8 @@ formulae:
       network access.
     - Vendored the upstream passlib patch at its original recipe-local path, bound
       to the recorded recipe commit.
+    - Moved the test's Python version lookup out of string interpolation for
+      Homebrew style.
     recipe_patches:
       Patches/ansible/passlib-1.7.4.patch:
         blob: 3b8d6ccaae04f57ac7d5f1456da42615f50947d3
@@ -874,6 +876,36 @@ casks:
     - Order shell completion stanzas to match Homebrew style.
     artifacts:
       default: ad8d7de35fb38e43184776cac6dfee05ca325caa0b6639a06a55e54e4b026620
+  blender:
+    source_type: homebrew-cask
+    recipe_repository: Homebrew/homebrew-cask
+    recipe_commit: 02d3fa99b2488616f6946a8dc449ba59b548f573
+    recipe_path: Casks/b/blender.rb
+    recipe_blob: b1057fd3fc6e0b621e05fd3a663fdb1bbb9e5399
+    local_file_sha256: 92f13dec14925d8475864efb52f45a7e553a61d99c7f549a3e14c5504118005e
+    version: 5.3.0
+    release_published_at: '2026-11-10T09:02:45Z'
+    release_evidence:
+      description: Blender released 5.3.0 on November 10, 2026. The timestamp
+        records the official Apple Silicon DMG's Last-Modified time. The v5.3.0
+        tag resolves to 02f0899d78e374b63e7181d9061e1f7ab03419cc, matching the
+        DMG's signing identifier. The independently calculated SHA-256 matches
+        Blender's published checksum. The DMG's Developer ID signature verifies
+        as Stichting Blender Foundation (68UA947AUU). Strict app signature
+        verification passed with the same Team ID. Gatekeeper accepted the
+        app as Notarized Developer ID.
+      reference: https://www.blender.org/releases/5-3/
+    adopted_at: '2026-11-28T01:02:01Z'
+    adoption_commit: b4d15b9e255163c49cbf368df9c5f678bba34492
+    adoption_reason: Add Blender 5.3.0 to the Apple Silicon bootstrap. This
+      release includes Blender's Brotli fix for CVE-2026-111497.
+    cooldown_exception:
+    legacy_baseline:
+    local_changes:
+    - Restrict the cask to Apple Silicon. The Intel 4.5.16 and 4.5.17 source
+      tags still specify Brotli 1.0.9.
+    artifacts:
+      default: 2d802b54766741e612cead50b03ebbc8eb64dadc71eda932573d256b8a784720
   blockblock:
     source_type: homebrew-cask
     recipe_repository: Homebrew/homebrew-cask

@@ -85,9 +85,10 @@ The current formula provenance families are:
 
 The default Brewfile contains 25 tap formulae. **rust-template** remains available from the tap but intentionally stays outside the default Brewfile.
 
-The ten tap casks in the default Brewfile are:
+The eleven tap casks in the default Brewfile are:
 
 - alacritty
+- blender (Apple Silicon only)
 - blockblock
 - goreleaser
 - imageoptim
@@ -116,7 +117,7 @@ When the intentional inventory changes, update all relevant policy surfaces:
   **lib/homebrew_tap/test_checks.rb**.
 - Tests and documentation that describe the boundary.
 
-The Brewfile policy rejects missing, extra, or duplicate tap entries so the 35-item trust boundary cannot widen silently.
+The Brewfile policy rejects missing, extra, or duplicate tap entries so the 36-item trust boundary cannot widen silently.
 
 ## Sources of Truth
 

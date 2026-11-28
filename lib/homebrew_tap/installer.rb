@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "rbconfig"
 require "rubygems/version"
 
 module HomebrewTap
@@ -56,7 +57,11 @@ module HomebrewTap
       validate!
       ui.step("Using Brewfile: #{brewfile_path}")
       entries = Brewfile.new(path: brewfile_path).tap_entries
-      @target_versions = entries.to_h { |entry| [entry.full_name, target_version(entry)] }
+      @target_versions = entries.filter_map do |entry|
+        version = target_version(entry)
+        [entry.full_name, version] if version
+      end.to_h
+      entries.select! { |entry| @target_versions.key?(entry.full_name) }
       statuses = inspect_entries(entries)
       ensure_known_receipts!(statuses)
 
@@ -272,6 +277,8 @@ module HomebrewTap
 
     def target_version(entry)
       source = File.read(package_path(entry))
+      return if entry.type == :cask && RbConfig::CONFIG["host_cpu"] != "arm64" && source.match?(/^  depends_on arch: :arm64$/)
+
       version = entry.type == :cask ? cask_version(source) : formula_version(source)
       return version if version
 

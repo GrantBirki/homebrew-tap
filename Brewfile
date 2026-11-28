@@ -85,6 +85,10 @@ cask "grantbirki/tap/goreleaser", trusted: true
 
 # GPU-accelerated terminal emulator
 cask "grantbirki/tap/alacritty", trusted: true
+# 3D creation suite (Apple Silicon only)
+if OS.mac? && RbConfig::CONFIG["host_cpu"] == "arm64"
+  cask "grantbirki/tap/blender", trusted: true
+end
 # Persistence monitor
 cask "grantbirki/tap/blockblock", trusted: true
 # Endpoint instrumentation and scheduled host queries
