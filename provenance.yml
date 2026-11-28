@@ -880,7 +880,7 @@ casks:
     recipe_commit: 02d3fa99b2488616f6946a8dc449ba59b548f573
     recipe_path: Casks/b/blender.rb
     recipe_blob: b1057fd3fc6e0b621e05fd3a663fdb1bbb9e5399
-    local_file_sha256: 2376065f4c581ee3feb4cef9dc120840958d743c95550cea5bfbde81bda79c81
+    local_file_sha256: 0933cc9e0c7429551fee883c896cd2d9a0d6d91347b890b6a84645bfca1a8c49
     version: 5.3.0
     release_published_at: '2026-11-10T09:02:45Z'
     release_evidence:

@@ -32,6 +32,7 @@ cask "blender" do
   depends_on macos: :ventura
 
   app "Blender.app"
+
   blender = "#{appdir}/Blender.app/Contents/MacOS/Blender"
 
   if respond_to?(:command_wrapper)
@@ -45,7 +46,7 @@ cask "blender" do
     wrapper = "#{staged_path}/blender.wrapper.sh"
     binary wrapper, target: "blender"
 
-    preflight do
+    preflight do # rubocop:disable Cask/InstallSteps -- Homebrew 6.0 lacks declarative permission and wrapper support.
       FileUtils.chmod "u+w", Dir.glob("#{staged_path}/*.app/**/__pycache__")
       File.write wrapper, <<~EOS
         #!/bin/bash
